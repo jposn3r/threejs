@@ -1,9 +1,10 @@
 import './style.css'
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui'
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 5000);
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
@@ -12,28 +13,141 @@ const renderer = new THREE.WebGLRenderer({
 const gui = new dat.GUI()
 
 // Main Scene
+
 const scene = new THREE.Scene();
 
 // set up renderer
+
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // align camera
-camera.position.setZ(30);
+
+camera.position.set( 0, 25, 90 );
+
+// loader
+
+const loader = new GLTFLoader();
+
+// Load Goku resource
+
+loader.load(
+	// resource URL
+	'./models/goku/scene.gltf',
+	// called when the resource is loaded
+	function ( gltf ) {
+    gltf.scene.scale.set(10,10,10);
+    gltf.scene.position.x = -15;
+    gltf.scene.position.y = 0;
+    gltf.scene.position.z = -20;
+		scene.add( gltf.scene );
+	},
+	// called while loading is progressing
+	function ( xhr ) {
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+	},
+	// called when loading has errors
+	function ( error ) {
+
+		console.log( 'An error happened' );
+
+	}
+);
+
+// Load Goku Rigged resource
+
+loader.load(
+	// resource URL
+	'./models/goku-rigged-animated/scene.gltf',
+	// called when the resource is loaded
+	function ( gltf ) {
+    gltf.scene.scale.set(5,5,5);
+    gltf.scene.position.x = 0;
+    gltf.scene.position.y = 0;
+    gltf.scene.position.z = -20;
+
+    const mixer = new THREE.AnimationMixer( gltf.scene );
+    console.log(gltf.animations)
+    var action = mixer.clipAction( gltf.animations[0] );
+    action.play();
+		scene.add( gltf.scene );
+
+	},
+	// called while loading is progressing
+	function ( xhr ) {
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+	},
+	// called when loading has errors
+	function ( error ) {
+		console.log( 'An error happened' );
+	}
+);
+
+// Load Porsche 1975 resource
+
+loader.load(
+	// resource URL
+	'./models/porsche-1975/scene.gltf',
+	// called when the resource is loaded
+	function ( gltf ) {
+    gltf.scene.scale.set(2,2,2);
+    gltf.scene.position.x = 15;
+    gltf.scene.position.y = 0;
+    gltf.scene.position.z = -20;
+		scene.add( gltf.scene );
+	},
+	// called while loading is progressing
+	function ( xhr ) {
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+	},
+	// called when loading has errors
+	function ( error ) {
+		console.log( 'An error happened' );
+	}
+);
+
+// Load 2018 Tesla 3 resource
+
+loader.load(
+	// resource URL
+	'./models/tesla-3-2018/scene.gltf',
+	// called when the resource is loaded
+	function ( gltf ) {
+    gltf.scene.scale.set(.025,.025,.025);
+    gltf.scene.position.x = 0;
+    gltf.scene.position.y = 1;
+    gltf.scene.position.z = 0;
+    gltf.scene.rotation.y += 180;
+		scene.add( gltf.scene );
+	},
+	// called while loading is progressing
+	function ( xhr ) {
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+	},
+	// called when loading has errors
+	function ( error ) {
+		console.log( 'An error happened' );
+	}
+);
 
 // build and add torus rings
-const geometry = new THREE.TorusGeometry(16, 1, 16, 100);
+
+const geometry = new THREE.TorusGeometry(10, 0.5, 10, 100);
 const blueMaterial = new THREE.MeshStandardMaterial({ color: 0x00dadf});
 const torus = new THREE.Mesh(geometry, blueMaterial);
 
+torus.position.set(0, 20, -50);
 scene.add(torus);
 
 // build and add torus rings
-const torusTwo = new THREE.Mesh(geometry, blueMaterial);
-const torusThree = new THREE.Mesh(geometry, blueMaterial);
 
-scene.add(torusTwo);
-scene.add(torusThree);
+const torus2 = new THREE.Mesh(geometry, blueMaterial);
+const torus3 = new THREE.Mesh(geometry, blueMaterial);
+
+torus2.position.set(0, 20, -50);
+torus3.position.set(0, 20, -50);
+scene.add(torus2);
+scene.add(torus3);
 
 // build and add ambient light
 
@@ -99,18 +213,20 @@ sphereMaterial.metalness = 0.7
 sphereMaterial.roughness = 0.2
 sphereMaterial.color = new THREE.Color(0x292929)
 
-const sphereGeometry = new THREE.SphereGeometry(3, 32, 32)
+const sphereGeometry = new THREE.SphereGeometry(2, 16, 16)
 
 const moon = new THREE.Mesh(
   sphereGeometry,
   sphereMaterial
 );
 
-moon.position.set(0, 0, 0);
+moon.position.set(0, 20, -50);
 
 scene.add(moon);
 
 gui.add(moon.position, 'y');
+
+const clock = new THREE.Clock();
 
 // animate starts the scene by triggering requestAnimationFrame callback loop
 
@@ -121,13 +237,13 @@ function animate() {
   torus.rotation.y += 0.01;
   torus.rotation.z += 0.01;
 
-  torusTwo.rotation.x -= 0.01;
-  torusTwo.rotation.y -= 0.01;
-  torusTwo.rotation.z -= 0.01;
+  torus2.rotation.x -= 0.01;
+  torus2.rotation.y -= 0.01;
+  torus2.rotation.z -= 0.01;
 
-  torusThree.rotation.x -= 0.01;
-  torusThree.rotation.y += 0.01;
-  torusThree.rotation.z -= 0.01;
+  torus3.rotation.x -= 0.01;
+  torus3.rotation.y += 0.01;
+  torus3.rotation.z -= 0.01;
 
   fuboCube.rotation.x -= 0.005;
   fuboCube.rotation.y -= 0.005;
@@ -136,6 +252,10 @@ function animate() {
   moon.rotation.x -= 0.01;
   moon.rotation.y -= 0.01;
   moon.rotation.z -= 0.01;
+
+  // var delta = clock.getDelta();
+
+	// if ( mixer ) mixer.update( delta );
 
   controls.update();
 
