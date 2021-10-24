@@ -31,6 +31,8 @@ const loader = new GLTFLoader();
 
 // Load Goku Rigged resource
 
+let mixer;
+
 loader.load(
 	// resource URL
 	'./models/goku-rigged-animated/scene.gltf',
@@ -41,7 +43,7 @@ loader.load(
     gltf.scene.position.y = 0;
     gltf.scene.position.z = -20;
 
-    const mixer = new THREE.AnimationMixer( gltf.scene );
+    mixer = new THREE.AnimationMixer( gltf.scene );
     console.log(gltf.animations)
     var action = mixer.clipAction( gltf.animations[0] );
     action.play();
@@ -194,6 +196,8 @@ function updateMoon() {
   moon.material.needsUpdate = true;
 }
 
+let clock = new THREE.Clock();
+
 // animate starts the scene by triggering requestAnimationFrame callback loop
 
 function animate() {
@@ -204,6 +208,8 @@ function animate() {
   updateFuboCube()
 
   updateMoon()
+
+  mixer.update(clock.getDelta());
 
   controls.update();
 
