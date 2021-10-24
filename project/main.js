@@ -32,6 +32,7 @@ const loader = new GLTFLoader();
 // Load Goku Rigged resource
 
 let mixer;
+let loaded = false;
 
 loader.load(
 	// resource URL
@@ -52,6 +53,9 @@ loader.load(
 	},
 	// called while loading is progressing
 	function ( xhr ) {
+    if(xhr.loaded / xhr.total * 100 == 100) {
+      loaded = true
+    }
 		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
 	},
 	// called when loading has errors
@@ -209,7 +213,10 @@ function animate() {
 
   updateMoon()
 
-  mixer.update(clock.getDelta());
+  // update Goku idle animation
+  if(loaded && mixer) {
+    mixer.update(clock.getDelta());
+  }
 
   controls.update();
 
