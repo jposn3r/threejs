@@ -29,31 +29,6 @@ camera.position.set( 0, 25, 90 );
 
 const loader = new GLTFLoader();
 
-// Load Goku resource
-
-loader.load(
-	// resource URL
-	'./models/goku/scene.gltf',
-	// called when the resource is loaded
-	function ( gltf ) {
-    gltf.scene.scale.set(10,10,10);
-    gltf.scene.position.x = -15;
-    gltf.scene.position.y = 0;
-    gltf.scene.position.z = -20;
-		scene.add( gltf.scene );
-	},
-	// called while loading is progressing
-	function ( xhr ) {
-		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-	},
-	// called when loading has errors
-	function ( error ) {
-
-		console.log( 'An error happened' );
-
-	}
-);
-
 // Load Goku Rigged resource
 
 loader.load(
@@ -201,9 +176,9 @@ moon.position.set(0, 20, -50);
 
 scene.add(moon);
 
+// add items to gui
 gui.add(moon.position, 'y');
-
-const clock = new THREE.Clock();
+gui.add(fuboCube.position, 'y');
 
 // animate starts the scene by triggering requestAnimationFrame callback loop
 
@@ -214,25 +189,21 @@ function animate() {
   torus.rotation.y += 0.01;
   torus.rotation.z += 0.01;
 
-  torus2.rotation.x -= 0.01;
-  torus2.rotation.y -= 0.01;
-  torus2.rotation.z -= 0.01;
+  torus2.rotation.x -= 0.02;
+  torus2.rotation.y -= 0.02;
+  torus2.rotation.z -= 0.02;
 
-  torus3.rotation.x -= 0.01;
-  torus3.rotation.y += 0.01;
-  torus3.rotation.z -= 0.01;
+  torus3.rotation.x -= 0.02;
+  torus3.rotation.y += 0.02;
+  torus3.rotation.z -= 0.02;
 
   fuboCube.rotation.x -= 0.005;
   fuboCube.rotation.y -= 0.005;
   fuboCube.rotation.z -= 0.005;
 
-  moon.rotation.x -= 0.01;
-  moon.rotation.y -= 0.01;
-  moon.rotation.z -= 0.01;
-
-  // var delta = clock.getDelta();
-
-	// if ( mixer ) mixer.update( delta );
+  // moon.rotation.x -= 0.01;
+  // moon.rotation.y -= 0.01;
+  // moon.rotation.z -= 0.01;
 
   controls.update();
 
