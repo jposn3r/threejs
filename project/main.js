@@ -1,6 +1,7 @@
 import './style.css'
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui'
 
@@ -57,6 +58,26 @@ loader.load(
 		console.log( 'An error happened' );
 	}
 );
+
+// load this bitch
+
+const loader2 = new FBXLoader();
+    loader2.load("./models/vanguard.fbx", model => {
+        model.scale.set(0.1, 0.1, 0.1)
+        model.position.set(-10, 0, -10)
+        // model is a THREE.Group (THREE.Object3D)                              
+        const mixer = new THREE.AnimationMixer(model);
+        const anim = new FBXLoader();
+        anim.setPath('./models/');
+        anim.load('capoeira.fbx', (anim) => {
+          let dance = mixer.clipAction(anim.animations[0])
+          dance.play()
+        })
+        // animations is a list of THREE.AnimationClip      
+        // console.log(model.animations[0])                    
+        // mixer.clipAction(model.animations[0]).play();
+        scene.add(model);
+    });
 
 // build and add torus rings
 
@@ -194,6 +215,8 @@ function updateMoon() {
   moon.material.needsUpdate = true;
 }
 
+let clock = new THREE.Clock();
+
 // animate starts the scene by triggering requestAnimationFrame callback loop
 
 function animate() {
@@ -204,6 +227,8 @@ function animate() {
   updateFuboCube()
 
   updateMoon()
+
+  // mixer.update(clock.getDelta());
 
   controls.update();
 
