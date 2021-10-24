@@ -83,29 +83,6 @@ loader.load(
 	}
 );
 
-// Load Porsche 1975 resource
-
-loader.load(
-	// resource URL
-	'./models/porsche-1975/scene.gltf',
-	// called when the resource is loaded
-	function ( gltf ) {
-    gltf.scene.scale.set(2,2,2);
-    gltf.scene.position.x = 15;
-    gltf.scene.position.y = 0;
-    gltf.scene.position.z = -20;
-		scene.add( gltf.scene );
-	},
-	// called while loading is progressing
-	function ( xhr ) {
-		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-	},
-	// called when loading has errors
-	function ( error ) {
-		console.log( 'An error happened' );
-	}
-);
-
 // Load 2018 Tesla 3 resource
 
 loader.load(
