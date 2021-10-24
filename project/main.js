@@ -34,6 +34,9 @@ const loader = new GLTFLoader();
 
 let mixer;
 
+let mixer;
+let loaded = false;
+
 loader.load(
 	// resource URL
 	'./models/goku-rigged-animated/scene.gltf',
@@ -52,6 +55,9 @@ loader.load(
 	},
 	// called while loading is progressing
 	function ( xhr ) {
+    if(xhr.loaded / xhr.total * 100 == 100) {
+      loaded = true
+    }
 		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
 	},
 	// called when loading has errors
