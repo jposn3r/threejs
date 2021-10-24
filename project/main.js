@@ -58,30 +58,6 @@ loader.load(
 	}
 );
 
-// Load 2018 Tesla 3 resource
-
-loader.load(
-	// resource URL
-	'./models/tesla-3-2018/scene.gltf',
-	// called when the resource is loaded
-	function ( gltf ) {
-    gltf.scene.scale.set(.025,.025,.025);
-    gltf.scene.position.x = 0;
-    gltf.scene.position.y = 1;
-    gltf.scene.position.z = 0;
-    gltf.scene.rotation.y += 180;
-		scene.add( gltf.scene );
-	},
-	// called while loading is progressing
-	function ( xhr ) {
-		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-	},
-	// called when loading has errors
-	function ( error ) {
-		console.log( 'An error happened' );
-	}
-);
-
 // build and add torus rings
 
 const geometry = new THREE.TorusGeometry(10, 0.5, 10, 100);
@@ -177,14 +153,23 @@ moon.position.set(0, 20, -50);
 scene.add(moon);
 
 // add items to gui
-gui.add(moon.position, 'y');
-gui.add(fuboCube.position, 'y');
+let moonFolder = gui.addFolder('moon');
+let fuboCubeFolder = gui.addFolder('fuboCube');
+let cameraFolder = gui.addFolder('camera');
 
-// animate starts the scene by triggering requestAnimationFrame callback loop
+moonFolder.add(moon.position, 'y');
+moonFolder.add(moon.position, 'x');
+moonFolder.add(moon.position, 'z');
 
-function animate() {
-  requestAnimationFrame(animate)
+fuboCubeFolder.add(fuboCube.position, 'y');
+fuboCubeFolder.add(fuboCube.position, 'x');
+fuboCubeFolder.add(fuboCube.position, 'z');
 
+cameraFolder.add(camera.position, 'y');
+cameraFolder.add(camera.position, 'x');
+cameraFolder.add(camera.position, 'z');
+
+function updateTorus() {
   torus.rotation.x += 0.01;
   torus.rotation.y += 0.01;
   torus.rotation.z += 0.01;
@@ -196,14 +181,29 @@ function animate() {
   torus3.rotation.x -= 0.02;
   torus3.rotation.y += 0.02;
   torus3.rotation.z -= 0.02;
+}
 
+function updateFuboCube() {
   fuboCube.rotation.x -= 0.005;
   fuboCube.rotation.y -= 0.005;
   fuboCube.rotation.z -= 0.005;
+}
 
-  // moon.rotation.x -= 0.01;
-  // moon.rotation.y -= 0.01;
-  // moon.rotation.z -= 0.01;
+function updateMoon() {
+  moon.material.color = new THREE.Color(0xffffff * Math.random());
+  moon.material.needsUpdate = true;
+}
+
+// animate starts the scene by triggering requestAnimationFrame callback loop
+
+function animate() {
+  requestAnimationFrame(animate)
+
+  updateTorus()
+
+  updateFuboCube()
+
+  updateMoon()
 
   controls.update();
 
