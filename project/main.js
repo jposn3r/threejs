@@ -24,13 +24,15 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 // align camera
 
-camera.position.set( 0, 25, 90 );
+camera.position.set( 0, 14, 110 );
 
 // loader
 
 const loader = new GLTFLoader();
 
-// Load Goku Rigged resource
+// Load GLTF Goku Rigged resource
+
+let mixer;
 
 loader.load(
 	// resource URL
@@ -42,12 +44,11 @@ loader.load(
     gltf.scene.position.y = 0;
     gltf.scene.position.z = -20;
 
-    const mixer = new THREE.AnimationMixer( gltf.scene );
+    mixer = new THREE.AnimationMixer( gltf.scene );
     console.log(gltf.animations)
     var action = mixer.clipAction( gltf.animations[0] );
     action.play();
 		scene.add( gltf.scene );
-
 	},
 	// called while loading is progressing
 	function ( xhr ) {
@@ -59,18 +60,20 @@ loader.load(
 	}
 );
 
-// load this bitch
+// load FBX Vanguard bitch
+
+let mixer2;
 
 const loader2 = new FBXLoader();
     loader2.load("./models/vanguard.fbx", model => {
         model.scale.set(0.1, 0.1, 0.1)
-        model.position.set(-10, 0, -10)
+        model.position.set(-20, 0, -15)
         // model is a THREE.Group (THREE.Object3D)                              
-        const mixer = new THREE.AnimationMixer(model);
+        mixer2 = new THREE.AnimationMixer(model);
         const anim = new FBXLoader();
         anim.setPath('./models/');
-        anim.load('capoeira.fbx', (anim) => {
-          let dance = mixer.clipAction(anim.animations[0])
+        anim.load('battlecry.fbx', (anim) => {
+          let dance = mixer2.clipAction(anim.animations[0])
           dance.play()
         })
         // animations is a list of THREE.AnimationClip      
@@ -85,7 +88,7 @@ const geometry = new THREE.TorusGeometry(10, 0.5, 10, 100);
 const blueMaterial = new THREE.MeshStandardMaterial({ color: 0x00dadf});
 const torus = new THREE.Mesh(geometry, blueMaterial);
 
-torus.position.set(0, 20, -50);
+torus.position.set(0, 30, -50);
 scene.add(torus);
 
 // build and add torus rings
@@ -93,8 +96,8 @@ scene.add(torus);
 const torus2 = new THREE.Mesh(geometry, blueMaterial);
 const torus3 = new THREE.Mesh(geometry, blueMaterial);
 
-torus2.position.set(0, 20, -50);
-torus3.position.set(0, 20, -50);
+torus2.position.set(0, 30, -50);
+torus3.position.set(0, 30, -50);
 scene.add(torus2);
 scene.add(torus3);
 
@@ -169,26 +172,31 @@ const moon = new THREE.Mesh(
   sphereMaterial
 );
 
-moon.position.set(0, 20, -50);
+moon.position.set(0, 30, -50);
 
 scene.add(moon);
 
 // add items to gui
+
 let moonFolder = gui.addFolder('moon');
 let fuboCubeFolder = gui.addFolder('fuboCube');
 let cameraFolder = gui.addFolder('camera');
 
-moonFolder.add(moon.position, 'y');
 moonFolder.add(moon.position, 'x');
+moonFolder.add(moon.position, 'y');
 moonFolder.add(moon.position, 'z');
 
-fuboCubeFolder.add(fuboCube.position, 'y');
 fuboCubeFolder.add(fuboCube.position, 'x');
+fuboCubeFolder.add(fuboCube.position, 'y');
 fuboCubeFolder.add(fuboCube.position, 'z');
 
-cameraFolder.add(camera.position, 'y');
 cameraFolder.add(camera.position, 'x');
+cameraFolder.add(camera.position, 'y');
 cameraFolder.add(camera.position, 'z');
+
+cameraFolder.add(camera.rotation, 'x');
+cameraFolder.add(camera.rotation, 'y');
+cameraFolder.add(camera.rotation, 'z');
 
 function updateTorus() {
   torus.rotation.x += 0.01;
@@ -228,7 +236,13 @@ function animate() {
 
   updateMoon()
 
-  // mixer.update(clock.getDelta());
+  // update animation
+  if(mixer) {
+    mixer.update(clock.getDelta());
+  }
+  if (mixer2) {
+    mixer2.update(clock.getDelta());
+  }
 
   controls.update();
 
