@@ -216,13 +216,13 @@ Array(1000).fill().forEach(addStar);
 
 // space background texture
 
-const spaceTexture = new THREE.TextureLoader().load('/images/space-2.jpg');
+const spaceTexture = new THREE.TextureLoader().load('/assets/space-2.jpg');
 scene.background = spaceTexture;
 
 // fubo cube
 
-const fuboTexture = new THREE.TextureLoader().load('/images/fubo-bg.jpg');
-// const jakeTexture = new THREE.TextureLoader().load('/images/jake-bw.jpeg');
+const fuboTexture = new THREE.TextureLoader().load('/assets/fubo-bg.jpg');
+// const jakeTexture = new THREE.TextureLoader().load('/assets/jake-bw.jpeg');
 
 const fuboCube = new THREE.Mesh(
   new THREE.BoxGeometry(6,6,6),
@@ -237,7 +237,7 @@ scene.add(fuboCube);
 
 // prome cube
 
-const promeTexture = new THREE.TextureLoader().load('/images/prometheus.jpg');
+const promeTexture = new THREE.TextureLoader().load('/assets/prometheus.jpg');
 const promeCube = new THREE.Mesh(
   new THREE.BoxGeometry(6,6,6),
   new THREE.MeshBasicMaterial({map: promeTexture})
@@ -251,8 +251,8 @@ scene.add(promeCube);
 
 // moon
 
-const moonTexture = new THREE.TextureLoader().load('/images/moon.jpeg');
-const normalTexture = new THREE.TextureLoader().load('/images/moon-normal-map.jpg');
+const moonTexture = new THREE.TextureLoader().load('/assets/moon.jpeg');
+const normalTexture = new THREE.TextureLoader().load('/assets/moon-normal-map.jpg');
 const sphereMaterial = new THREE.MeshStandardMaterial({
   normalMap: normalTexture
 })
