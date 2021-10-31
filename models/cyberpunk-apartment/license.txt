@@ -1,0 +1,11 @@
+Model Information:
+* title:	Cyberpunk Micro-Apartments
+* source:	https://sketchfab.com/3d-models/cyberpunk-micro-apartments-fd8011e2af0e43288f5445600197ea77
+* author:	Mikita Hubanau (https://sketchfab.com/Mikita_Hubanau)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Cyberpunk Micro-Apartments" (https://sketchfab.com/3d-models/cyberpunk-micro-apartments-fd8011e2af0e43288f5445600197ea77) by Mikita Hubanau (https://sketchfab.com/Mikita_Hubanau) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
