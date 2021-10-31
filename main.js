@@ -49,14 +49,14 @@ loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .1, {x: 12, y: 0, z: 8}, true)
 let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
 loadGLTF(masterChiefResourceUrl, 'master-chief', 5, {x: -5, y: 0, z: 20}, true)
 
-let ironManResourceUrl = './models/iron_man_bleeding_edge/scene.gltf'
-loadGLTF(ironManResourceUrl, 'iron-man', 17, {x: -23, y: 0, z: -20}, false, 0, 0)
+// let ironManResourceUrl = './models/iron_man_bleeding_edge/scene.gltf'
+// loadGLTF(ironManResourceUrl, 'iron-man', 17, {x: -23, y: 0, z: -20}, false, 0, 0)
 
 // let squidGameResourceUrl = './models/squid_game_-_guards/scene.gltf'
 // loadGLTF(squidGameResourceUrl, 10, {x: 0, y: .01, z: -12}, false)
 
-let godzillaResourceUrl = './models/godzilla-walk-anim/scene.gltf'
-loadGLTF(godzillaResourceUrl, 'godzilla', .1, {x: 0, y: .1, z: -200}, true)
+// let godzillaResourceUrl = './models/godzilla-walk-anim/scene.gltf'
+// loadGLTF(godzillaResourceUrl, 'godzilla', .1, {x: 0, y: .1, z: -200}, true)
 
 let cyberpunkApartmentResourceUrl = './models/cyberpunk-apartment/scene.gltf'
 loadGLTF(cyberpunkApartmentResourceUrl, "cyber-punk-apt", 7, {x: 55, y: 0.25, z: -35}, false)
@@ -64,8 +64,8 @@ loadGLTF(cyberpunkApartmentResourceUrl, "cyber-punk-apt", 7, {x: 55, y: 0.25, z:
 // let keanuResourceUrl = './models/cyber-keanu/scene.gltf'
 // loadGLTF(keanuResourceUrl, .25, {x: 10, y: 0, z: 8}, false)
 
-let ninjaResourceUrl = './models/ninja.fbx'
-loadFBX(ninjaResourceUrl, 0.1, {x: -12, y: 0, z: 8}, true, 'angry.fbx')
+// let ninjaResourceUrl = './models/ninja.fbx'
+// loadFBX(ninjaResourceUrl, 0.1, {x: -12, y: 0, z: 8}, true, 'angry.fbx')
 
 // GLTF Loader function
 function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0) {
