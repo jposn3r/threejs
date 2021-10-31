@@ -41,13 +41,13 @@ const scene = new THREE.Scene();
 let mixers = [];
 
 let gokuResourceUrl = './models/goku-rigged-animated/scene.gltf'
-loadGLTF(gokuResourceUrl, 'goku', 5, {x: 5, y: 0, z: 20}, true)
+loadGLTF(gokuResourceUrl, 'goku', 8, {x: -10, y: 0, z: 20}, true)
 
-let snakeEyesResourceUrl = './models/snake_eyes__fortnite_item_shop_skin/scene.gltf'
-loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .1, {x: 12, y: 0, z: 8}, true)
+let snakeEyesResourceUrl = './models/snake_eyes/scene.gltf'
+loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: 10, y: 0, z: 20}, true)
 
 let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
-loadGLTF(masterChiefResourceUrl, 'master-chief', 5, {x: -5, y: 0, z: 20}, true)
+loadGLTF(masterChiefResourceUrl, 'master-chief', 7, {x: 0, y: 0, z: 25}, true)
 
 // let ironManResourceUrl = './models/iron_man_bleeding_edge/scene.gltf'
 // loadGLTF(ironManResourceUrl, 'iron-man', 17, {x: -23, y: 0, z: -20}, false, 0, 0)
@@ -58,8 +58,8 @@ loadGLTF(masterChiefResourceUrl, 'master-chief', 5, {x: -5, y: 0, z: 20}, true)
 // let godzillaResourceUrl = './models/godzilla-walk-anim/scene.gltf'
 // loadGLTF(godzillaResourceUrl, 'godzilla', .1, {x: 0, y: .1, z: -200}, true)
 
-let cyberpunkApartmentResourceUrl = './models/cyberpunk-apartment/scene.gltf'
-loadGLTF(cyberpunkApartmentResourceUrl, "cyber-punk-apt", 7, {x: 55, y: 0.25, z: -35}, false)
+// let cyberpunkApartmentResourceUrl = './models/cyberpunk-apartment/scene.gltf'
+// loadGLTF(cyberpunkApartmentResourceUrl, "cyber-punk-apt", 7, {x: 55, y: 0.25, z: -35}, false)
 
 // let keanuResourceUrl = './models/cyber-keanu/scene.gltf'
 // loadGLTF(keanuResourceUrl, .25, {x: 10, y: 0, z: 8}, false)
