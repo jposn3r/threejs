@@ -26,11 +26,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.name = "camera-1";
-let cameraTargets = {
-  "origin": new Vector3(0,0,0),
-  "fuboCube": new Vector3(20, 6, 40)
-};
-let cameraState = "origin";
+let cameraFocus = "origin"
 
 // controls to move the scene
 
@@ -223,14 +219,16 @@ fuboCube.name = "fuboCube"
 
 fuboCube.position.set(20, 6, 40);
 fuboCube.callback = function () {
-  if(camera.position.x == 20) {
+  if(cameraFocus != "fuboCube") {
+    cameraFocus = "fuboCube";
+    // move camera to focus the cube
+    camera.position.set(20, 6, 55);
+    // move focal point of controls 
+    controls.target = new THREE.Vector3(20, 6, 40);
+  } else {
     // open fubo website in new tab
-    window.open('http://www.fubo.tv', '_blank');
+    // window.open('http://www.fubo.tv', '_blank');
   }
-  // move camera to focus the cube
-  camera.position.set(20, 6, 55);
-  // move focal point of controls 
-  controls.target = new THREE.Vector3(20, 6, 40);
 }
 scene.add(fuboCube);
 
@@ -336,6 +334,7 @@ function updateMixers(clockDelta) {
 
 function resetCamera() {
   controls.target = new THREE.Vector3(0, 0, 0)
+  cameraFocus = "origin";
   updateCameraPosition([0, 12, 73], 50, 1)
 }
 
@@ -393,7 +392,6 @@ function keyDownHandler(event) {
     case 68: // d
       break;
     case 38: // up
-      console.log("forward!");
       camera.position.z -= 3
       break;
     case 37: // left
@@ -412,11 +410,10 @@ function keyDownHandler(event) {
 
 // update camera position
 
-function updateCameraPosition(position = [0, 12, 73], fov = 50, zoom = 1, cameraTarget = "origin") {
+function updateCameraPosition(position = [0, 12, 73], fov = 50, zoom = 1) {
   camera.position.set(position[0], position[1], position[2]);
   camera.fov = fov;
   camera.zoom = zoom;
-  controls.target = cameraTargets[cameraTarget]
   camera.updateProjectionMatrix();
 }
 
@@ -431,8 +428,6 @@ function animate() {
   updateFuboCube();
 
   updatePromeCube();
-
-  // updateMoon();
 
   updateMixers(clockDelta);
 
