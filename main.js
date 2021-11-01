@@ -233,6 +233,7 @@ const fuboCube = new THREE.Mesh(
 fuboCube.position.set(20, 6, 40);
 fuboCube.callback = function () {
   console.log("fubo cube!");
+  window.open('http://www.fubo.tv', '_blank');
 }
 scene.add(fuboCube);
 
@@ -246,6 +247,7 @@ const promeCube = new THREE.Mesh(
 
 promeCube.position.set(-20, 6, 40);
 promeCube.callback = function () {
+  window.open('https://www.merriam-webster.com/dictionary/Prometheus', '_blank');
   console.log("Prometheus!")
 }
 scene.add(promeCube);
