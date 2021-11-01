@@ -1,11 +1,11 @@
 import './style.css'
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { MeshPhongMaterial } from 'three';
+import { MeshPhongMaterial, Vector3 } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
 
 // document event listeners
@@ -24,13 +24,24 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 // camera 
 
-const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.01, 5000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.name = "camera-1";
+let cameraTargets = {
+  "origin": new Vector3(0,0,0),
+  "fuboCube": new Vector3(20, 6, 40)
+};
+let cameraState = "origin";
+
+// controls to move the scene
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
+// let controls = new MapControls(camera, renderer.domElement);
 updateCameraPosition([0, 12, 73], 50, 1)
 
 // gui
 
-const gui = new dat.GUI();
+// const gui = new dat.GUI();
 
 // main scene
 
@@ -48,24 +59,6 @@ loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -13, y: 0, z: 20}, true)
 
 let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
 loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
-
-// let ironManResourceUrl = './models/iron_man_bleeding_edge/scene.gltf'
-// loadGLTF(ironManResourceUrl, 'iron-man', 17, {x: -23, y: 0, z: -20}, false, 0, 0)
-
-// let squidGameResourceUrl = './models/squid_game_-_guards/scene.gltf'
-// loadGLTF(squidGameResourceUrl, 10, {x: 0, y: .01, z: -12}, false)
-
-// let godzillaResourceUrl = './models/godzilla-walk-anim/scene.gltf'
-// loadGLTF(godzillaResourceUrl, 'godzilla', .1, {x: 0, y: .1, z: -200}, true)
-
-// let cyberpunkApartmentResourceUrl = './models/cyberpunk-apartment/scene.gltf'
-// loadGLTF(cyberpunkApartmentResourceUrl, "cyber-punk-apt", 7, {x: 55, y: 0.25, z: -35}, false)
-
-// let keanuResourceUrl = './models/cyber-keanu/scene.gltf'
-// loadGLTF(keanuResourceUrl, .25, {x: 10, y: 0, z: 8}, false)
-
-// let ninjaResourceUrl = './models/ninja.fbx'
-// loadFBX(ninjaResourceUrl, 0.1, {x: -12, y: 0, z: 8}, true, 'angry.fbx')
 
 // GLTF Loader function
 function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0) {
@@ -197,10 +190,6 @@ pointLight.position.set(5,5,5);
 const gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf);
 scene.add(gridHelper);
 
-// controls to move the scene
-
-const controls = new OrbitControls(camera, renderer.domElement);
-
 // background star effect
 
 function addStar() {
@@ -230,10 +219,18 @@ const fuboCube = new THREE.Mesh(
   new THREE.MeshBasicMaterial({map:fuboTexture})
 );
 
+fuboCube.name = "fuboCube"
+
 fuboCube.position.set(20, 6, 40);
 fuboCube.callback = function () {
-  console.log("fubo cube!");
-  window.open('http://www.fubo.tv', '_blank');
+  if(camera.position.x == 20) {
+    // open fubo website in new tab
+    window.open('http://www.fubo.tv', '_blank');
+  }
+  // move camera to focus the cube
+  camera.position.set(20, 6, 55);
+  // move focal point of controls 
+  controls.target = new THREE.Vector3(20, 6, 40);
 }
 scene.add(fuboCube);
 
@@ -337,6 +334,11 @@ function updateMixers(clockDelta) {
   }
 }
 
+function resetCamera() {
+  controls.target = new THREE.Vector3(0, 0, 0)
+  updateCameraPosition([0, 12, 73], 50, 1)
+}
+
 // clock used to track time deltas
 let clock = new THREE.Clock();
 
@@ -403,15 +405,18 @@ function keyDownHandler(event) {
     case 39: // right
       camera.position.x += 3
       break;
+    case 27: // escape
+      resetCamera()
   }
 }
 
 // update camera position
 
-function updateCameraPosition(position = [0, 12, 73], fov = 50, zoom = 1) {
+function updateCameraPosition(position = [0, 12, 73], fov = 50, zoom = 1, cameraTarget = "origin") {
   camera.position.set(position[0], position[1], position[2]);
   camera.fov = fov;
   camera.zoom = zoom;
+  controls.target = cameraTargets[cameraTarget]
   camera.updateProjectionMatrix();
 }
 
