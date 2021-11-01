@@ -41,13 +41,13 @@ const scene = new THREE.Scene();
 let mixers = [];
 
 let gokuResourceUrl = './models/goku-rigged-animated/scene.gltf'
-loadGLTF(gokuResourceUrl, 'goku', 8, {x: -10, y: 0, z: 20}, true)
+loadGLTF(gokuResourceUrl, 'goku', 8, {x: 13, y: 0, z: 20}, true)
 
 let snakeEyesResourceUrl = './models/snake_eyes/scene.gltf'
-loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: 10, y: 0, z: 20}, true)
+loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -13, y: 0, z: 20}, true)
 
 let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
-loadGLTF(masterChiefResourceUrl, 'master-chief', 7, {x: 0, y: 0, z: 25}, true)
+loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
 
 // let ironManResourceUrl = './models/iron_man_bleeding_edge/scene.gltf'
 // loadGLTF(ironManResourceUrl, 'iron-man', 17, {x: -23, y: 0, z: -20}, false, 0, 0)
@@ -136,6 +136,7 @@ function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
 }
 
 // load 3d text
+
 function loadText(fontUrl, text, size, height, position, shadow, xRotation = 0, yRotation = 0) {
   const loader = new FontLoader();
 
@@ -334,8 +335,14 @@ function updateMixers(clockDelta) {
   }
 }
 
+// clock used to track time deltas
 let clock = new THREE.Clock();
-buildGui();
+
+// buildGui();
+
+const light = new THREE.PointLight(0x00beee, 3, 100);
+light.position.set(0, 25, 45);
+scene.add(light);
 
 // handle mousedown events
 
