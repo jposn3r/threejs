@@ -238,9 +238,16 @@ fuboCube.callback = function () {
   if(cameraFocus != "fuboCube") {
     cameraFocus = "fuboCube";
     // move camera to focus the cube
-    camera.position.set(20, 6, 55);
-    // move focal point of controls 
-    controls.target = new THREE.Vector3(20, 6, 40);
+    if(window.innerWidth > 1000) {
+      camera.position.set(20, 6, 55);
+      // move focal point of controls 
+      controls.target = new THREE.Vector3(20, 6, 40);
+    } else {
+      camera.position.set(10, 6, 55);
+      // move focal point of controls 
+      controls.target = new THREE.Vector3(10, 6, 40);
+    }
+    
   } else {
     // open fubo website in new tab
     // window.open('http://www.fubo.tv', '_blank');
