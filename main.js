@@ -8,10 +8,33 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
 
+// Ideas
+// 1. Slow mo button - 
+// turns all animations to 1/60th of time scale and maybe zooms in on master chief walking
+
+// 2. Fubo cube additional metadata overlay
+// when you click on fubo cube it should give you an indicator like a glow or ring underneath to show it's being focused
+// also to do additional things like see website or see when the stock price
+
+// 3. Joystick navigation
+// https://codepen.io/ogames/pen/rNmYpdo
+
+// 4. Arcade Cabinet 
+// Build a portal to games as an old school arcade cabinet
+// Build a cabinet that has all the old games loaded in aka linked to a website where they can play them on the screen
+// could get the joystick navigation as input
+
+// 5. Interactivity with animation
+// https://tympanus.net/codrops/2019/10/14/how-to-create-an-interactive-3d-character-with-three-js/
+
 // document event listeners
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('mousedown', onDocumentMouseDown, false);
+
+var buttons = document.getElementsByTagName('button');
+buttons[0].addEventListener('click', onButtonClick, false);
+console.log(buttons);
 
 // renderer
 
@@ -47,15 +70,6 @@ const scene = new THREE.Scene();
 
 let mixers = [];
 
-let gokuResourceUrl = './models/goku-rigged-animated/scene.gltf'
-loadGLTF(gokuResourceUrl, 'goku', 8, {x: 13, y: 0, z: 20}, true)
-
-let snakeEyesResourceUrl = './models/snake_eyes/scene.gltf'
-loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -13, y: 0, z: 20}, true)
-
-let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
-loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
-
 // GLTF Loader function
 function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0) {
     let mixer;
@@ -67,6 +81,8 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
       function ( gltf ) {
         gltf.scene.scale.set(scale,scale,scale);
 
+        gltf.scene.name = name;
+
         gltf.scene.position.x = position.x;
         gltf.scene.position.y = position.y;
         gltf.scene.position.z = position.z;
@@ -75,10 +91,11 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
         gltf.scene.rotation.y = yRotation;
     
         mixer = new THREE.AnimationMixer( gltf.scene );
-        console.log(gltf.animations);
+        // console.log(gltf.animations);
+        // console.log(gltf)
 
         if(animate) {
-          var action = mixer.clipAction( gltf.animations[0] );
+          var action = mixer.clipAction(gltf.animations[0]);
           action.play();
         } 
         gltf.scene.callback = function() {
@@ -216,8 +233,8 @@ const fuboCube = new THREE.Mesh(
 );
 
 fuboCube.name = "fuboCube"
-
 fuboCube.position.set(20, 6, 40);
+
 fuboCube.callback = function () {
   if(cameraFocus != "fuboCube") {
     cameraFocus = "fuboCube";
@@ -242,8 +259,14 @@ const promeCube = new THREE.Mesh(
 
 promeCube.position.set(-20, 6, 40);
 promeCube.callback = function () {
-  window.open('https://www.merriam-webster.com/dictionary/Prometheus', '_blank');
-  console.log("Prometheus!")
+  // open prometheus definition
+  // window.open('https://www.merriam-webster.com/dictionary/Prometheus', '_blank');
+
+  // find all the meshes
+  // how do you do that?
+  let masterChief= scene.getObjectByName("master-chief");
+  console.log(masterChief);
+  // decrease their animation speed to 1/60th normal
 }
 scene.add(promeCube);
 
@@ -267,6 +290,15 @@ const moon = new THREE.Mesh(
 moon.position.set(0, -15, 15);
 
 scene.add(moon);
+
+let gokuResourceUrl = './models/goku-rigged-animated/scene.gltf'
+loadGLTF(gokuResourceUrl, 'goku', 8, {x: 13, y: 0, z: 20}, true)
+
+let snakeEyesResourceUrl = './models/snake_eyes/scene.gltf'
+loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -13, y: 0, z: 20}, true)
+
+let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
+loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
 
 // add items to gui
 
@@ -316,11 +348,6 @@ function updatePromeCube() {
   promeCube.rotation.x += 0.005;
   promeCube.rotation.y += 0.005;
   promeCube.rotation.z += 0.005;
-}
-
-function updateMoon() {
-  moon.material.color = new THREE.Color(0xffffff * Math.random());
-  moon.material.needsUpdate = true;
 }
 
 function updateMixers(clockDelta) {
@@ -376,6 +403,12 @@ function onDocumentMouseDown( event ) {
 
 }
 
+// on button click
+
+function onButtonClick(event) {
+  resetCamera()
+}
+
 // handle key events
 
 function keyDownHandler(event) {
@@ -421,7 +454,8 @@ let clockDelta;
 
 function animate() {
   requestAnimationFrame(animate)
-  clockDelta = clock.getDelta()
+  
+  clockDelta = clock.getDelta();
 
   updateTorus();
 

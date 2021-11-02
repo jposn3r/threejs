@@ -16,6 +16,14 @@ main {
   position: absolute;
 }
 
+button {
+  position: absolute;
+  display: block;
+  z-index: 99;
+  left: 5%;
+  top: 5%;
+}
+
 @keyframes flickerAnimation {
   0%   { opacity:1; }
   50%  { opacity:0; }
