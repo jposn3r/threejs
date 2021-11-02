@@ -233,7 +233,6 @@ const fuboCube = new THREE.Mesh(
 );
 
 fuboCube.name = "fuboCube"
-fuboCube.position.set(20, 6, 40);
 
 fuboCube.callback = function () {
   if(cameraFocus != "fuboCube") {
@@ -257,18 +256,16 @@ const promeCube = new THREE.Mesh(
   new THREE.MeshBasicMaterial({map: promeTexture})
 );
 
-promeCube.position.set(-20, 6, 40);
 promeCube.callback = function () {
   // open prometheus definition
   // window.open('https://www.merriam-webster.com/dictionary/Prometheus', '_blank');
 
   // find all the meshes
   // how do you do that?
-  let masterChief= scene.getObjectByName("master-chief");
-  console.log(masterChief);
+  // let masterChief= scene.getObjectByName("master-chief");
+  // console.log(masterChief);
   // decrease their animation speed to 1/60th normal
 }
-scene.add(promeCube);
 
 // moon
 
@@ -292,13 +289,25 @@ moon.position.set(0, -15, 15);
 scene.add(moon);
 
 let gokuResourceUrl = './models/goku-rigged-animated/scene.gltf'
-loadGLTF(gokuResourceUrl, 'goku', 8, {x: 13, y: 0, z: 20}, true)
-
 let snakeEyesResourceUrl = './models/snake_eyes/scene.gltf'
-loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -13, y: 0, z: 20}, true)
-
 let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
-loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
+
+// don't load master chief on mobile
+if(window.innerWidth > 1000) {
+  loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
+  loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -13, y: 0, z: 20}, true)
+  loadGLTF(gokuResourceUrl, 'goku', 8, {x: 13, y: 0, z: 20}, true)
+  fuboCube.position.set(20, 6, 40);
+  promeCube.position.set(-20, 6, 40);
+} else {
+  loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -7, y: 0, z: 20}, true)
+  loadGLTF(gokuResourceUrl, 'goku', 8, {x: 7, y: 0, z: 20}, true)
+  fuboCube.position.set(10, 6, 40);
+  promeCube.position.set(-10, 6, 40);
+}
+
+scene.add(promeCube);
+
 
 // add items to gui
 
