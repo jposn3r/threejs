@@ -209,8 +209,8 @@ Array(1000).fill().forEach(addStar);
 // don't load master chief on mobile
 if(window.innerWidth > 1000) {
   // loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
-  loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -13, y: 0, z: 20}, true)
-  loadGLTF(gokuResourceUrl, 'goku', 8, {x: 13, y: 0, z: 20}, true)
+  loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
+  loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
   fuboCube.position.set(20, 6, 40);
   promeCube.position.set(-20, 6, 40);
 } else {
@@ -243,7 +243,7 @@ scene.add(fuboCube);
 // tween test area
 
 var position = { x : 0, y: 0};
-var target = { x : 20, y: 6};
+var target = { x : 17, y: 6};
 var tween = new TWEEN.Tween(position).to(target, 4000);
 
 tween.onUpdate(function(){
@@ -256,7 +256,7 @@ tween.start();
 // promecube opposite animation
 
 var position2 = { x : 0, y: 0};
-var target2 = { x : 20, y: 6};
+var target2 = { x : 17, y: 6};
 var tween2 = new TWEEN.Tween(position2).to(target2, 4000);
 
 tween2.easing(TWEEN.Easing.Quadratic.Out)
