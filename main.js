@@ -229,7 +229,7 @@ const fuboTexture = new THREE.TextureLoader().load('/assets/fubo-bg.jpg');
 
 const fuboCube = new THREE.Mesh(
   new THREE.BoxGeometry(6,6,6),
-  new THREE.MeshBasicMaterial({map:fuboTexture})
+  new THREE.MeshStandardMaterial({map:fuboTexture})
 );
 
 fuboCube.name = "fuboCube"
