@@ -27,6 +27,12 @@ import * as dat from 'dat.gui';
 // 5. Interactivity with animation
 // https://tympanus.net/codrops/2019/10/14/how-to-create-an-interactive-3d-character-with-three-js/
 
+// 6. 3D OG Pong
+// nuff said
+
+// 7. 3D transitions like ESPN/Sports Broadcasts
+// this would be sick
+
 // document event listeners
 
 document.addEventListener('keydown', keyDownHandler, false);
@@ -411,28 +417,32 @@ function addStar() {
 
 // handle mousedown events
 
-function onDocumentMouseDown( event ) {
+function onDocumentMouseDown(event) {
+  event.preventDefault();
 
-    event.preventDefault();
+  mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
+  mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
 
-    mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
+  raycaster.setFromCamera( mouse, camera );
 
-    raycaster.setFromCamera( mouse, camera );
+  var intersects = raycaster.intersectObjects( scene.children ); 
 
-    var intersects = raycaster.intersectObjects( scene.children ); 
-
-    if ( intersects.length > 0 ) {
-      console.log(intersects)
-      let callback = intersects[0].object.callback;
-      console.log(callback)
-      if(callback instanceof Function) {
-        callback()
-      } else {
-        console.log("error: callback not a function")
-      }
+  if ( intersects.length > 0 ) {
+    console.log(intersects)
+    let callback = intersects[0].object.callback;
+    console.log(callback)
+    if(callback instanceof Function) {
+      callback()
+    } else {
+      console.log("error: callback not a function")
     }
+  }
+}
 
+// on the way to hover effects....potentially
+
+function onMouseOver(event) {
+  console.log("on mouse over")
 }
 
 // on button click
