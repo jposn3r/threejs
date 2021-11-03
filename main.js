@@ -7,6 +7,7 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
+import TWEEN from '@tweenjs/tween.js';
 
 // Ideas
 // 1. Slow mo button - 
@@ -207,10 +208,9 @@ Array(1000).fill().forEach(addStar);
 
 // don't load master chief on mobile
 if(window.innerWidth > 1000) {
-  loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
+  // loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
   loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -13, y: 0, z: 20}, true)
   loadGLTF(gokuResourceUrl, 'goku', 8, {x: 13, y: 0, z: 20}, true)
-  
   fuboCube.position.set(20, 6, 40);
   promeCube.position.set(-20, 6, 40);
 } else {
@@ -239,6 +239,38 @@ scene.add(moon);
 // cubes
 scene.add(promeCube);
 scene.add(fuboCube);
+
+// tween test area
+
+var position = { x : 0, y: 0};
+var target = { x : 20, y: 6};
+var tween = new TWEEN.Tween(position).to(target, 4000);
+
+tween.onUpdate(function(){
+  fuboCube.position.x = position.x;
+  fuboCube.position.y = position.y;
+});
+
+tween.start();
+
+// promecube opposite animation
+
+var position2 = { x : 0, y: 0};
+var target2 = { x : 20, y: 6};
+var tween2 = new TWEEN.Tween(position2).to(target2, 4000);
+
+tween2.easing(TWEEN.Easing.Quadratic.Out)
+
+tween2.onUpdate(function(){
+  promeCube.position.x = -position.x;
+  promeCube.position.y = position.y;
+});
+
+tween2.start();
+
+// camera tween : todo for animation to focus on fubo cube from wherever you are when you click it
+
+// end test area
 
 // GLTF Loader function
 function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0) {
@@ -510,6 +542,8 @@ function animate() {
   requestAnimationFrame(animate)
   
   clockDelta = clock.getDelta();
+
+  TWEEN.update();
 
   updateTorus();
 
