@@ -34,7 +34,6 @@ document.addEventListener('mousedown', onDocumentMouseDown, false);
 
 var buttons = document.getElementsByTagName('button');
 buttons[0].addEventListener('click', onButtonClick, false);
-console.log(buttons);
 
 // renderer
 
@@ -49,14 +48,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.name = "camera-1";
-let cameraFocus = "origin"
+let cameraFocus = "origin";
 
 // controls to move the scene
 
 const controls = new OrbitControls(camera, renderer.domElement);
-
 // let controls = new MapControls(camera, renderer.domElement);
-updateCameraPosition([0, 12, 73], 50, 1)
 
 // gui
 
@@ -66,156 +63,36 @@ updateCameraPosition([0, 12, 73], 50, 1)
 
 const scene = new THREE.Scene();
 
+// clock used to track time deltas
+
+let clock = new THREE.Clock();
+let clockDelta;
+
+// help track mouse movement events
+
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+
 // animation mixers array - https://www.mixamo.com - for more animations and models
 
 let mixers = [];
-
-// GLTF Loader function
-function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0) {
-    let mixer;
-    let loader = new GLTFLoader();
-    loader.load(
-      // resource URL
-      resourceUrl,
-      // called when the resource is loaded
-      function ( gltf ) {
-        gltf.scene.scale.set(scale,scale,scale);
-
-        gltf.scene.name = name;
-
-        gltf.scene.position.x = position.x;
-        gltf.scene.position.y = position.y;
-        gltf.scene.position.z = position.z;
-
-        gltf.scene.rotation.x = xRotation;
-        gltf.scene.rotation.y = yRotation;
-    
-        mixer = new THREE.AnimationMixer( gltf.scene );
-        // console.log(gltf.animations);
-        // console.log(gltf)
-
-        if(animate) {
-          var action = mixer.clipAction(gltf.animations[0]);
-          action.play();
-        } 
-        gltf.scene.callback = function() {
-          console.log("gltf callback baby!")
-        }
-
-        scene.add(gltf.scene);
-        mixers.push(mixer);
-      },
-      // called while loading is progressing
-      function ( xhr ) {
-        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-      },
-      // called when loading has errors
-      function ( error ) {
-        console.log( 'An error happened loading Goku' );
-      }
-    );
-}
-
-// FBX Loader function
-function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
-    // todo
-    let loader = new FBXLoader();
-    loader.load(resourceUrl, model => {
-      model.scale.set(scale, scale, scale)
-      model.position.set(position.x, position.y, position.z)
-
-      let mixer = new THREE.AnimationMixer(model)
-
-      if(animate) {
-          let anim = new FBXLoader();
-          anim.setPath('./models/');
-          anim.load(animationUrl, (anim) => {
-          let action = mixer.clipAction(anim.animations[0])
-          console.log("we bout to animate!")
-          action.play()
-        })
-      }
-      
-      scene.add(model);
-      mixers.push(mixer);
-    })
-}
-
-// load 3d text
-
-function loadText(fontUrl, text, size, height, position, shadow, xRotation = 0, yRotation = 0) {
-  const loader = new FontLoader();
-
-  loader.load(fontUrl, function (font) {
-    const geometry = new TextGeometry(text, {
-      font: font,
-      size: size,
-      height: height,
-    })
-    const textMesh = new THREE.Mesh(geometry, [
-      new MeshPhongMaterial({ color: 0xffffff}),
-      new MeshPhongMaterial({ color: 0x009390}),
-    ])
-
-    textMesh.castShadow = shadow
-    textMesh.position.set(position[0], position[1], position[2])
-    textMesh.rotation.x = xRotation
-    textMesh.rotation.y = yRotation
-    scene.add(textMesh)
-  })
-}
-
-let metaverseHeader = 'Metaverse'
-let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
-loadText(optimerBoldUrl, metaverseHeader, 6, 2, [-18, -11, 27], true, -.5)
 
 // build and add torus rings
 
 const geometry = new THREE.TorusGeometry(10, 0.5, 10, 100);
 const blueMaterial = new THREE.MeshStandardMaterial({ color: 0x00dadf});
+
 const torus = new THREE.Mesh(geometry, blueMaterial);
-
-torus.position.set(0, -15, 15);
-scene.add(torus);
-
-// build and add torus rings
-
 const torus2 = new THREE.Mesh(geometry, blueMaterial);
 const torus3 = new THREE.Mesh(geometry, blueMaterial);
 
-torus2.position.set(0, -15, 15);
-torus3.position.set(0, -15, 15);
-scene.add(torus2);
-scene.add(torus3);
-
-// build and add ambient light
-
+// lights
 const ambientLight = new THREE.AmbientLight(0xffffff);
-scene.add(ambientLight);
-
-// build point light to be used in light helper
-
-const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(5,5,5);
+const pointLight = new THREE.PointLight(0x00beee, 3, 100);
 
 // helpers
 
 const gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf);
-scene.add(gridHelper);
-
-// background star effect
-
-function addStar() {
-  const geometry = new THREE.SphereGeometry(.5, 24, 24);
-  const material = new THREE.MeshStandardMaterial({color:0xffffff});
-  const star = new THREE.Mesh(geometry, material);
-
-  const [x, y, z] = Array(3).fill().map(()=> THREE.MathUtils.randFloatSpread(1000));
-  star.position.set(x,y,z);
-  scene.add(star);
-}
-
-Array(1000).fill().forEach(addStar);
 
 // space background texture
 
@@ -233,19 +110,27 @@ const fuboCube = new THREE.Mesh(
 );
 
 fuboCube.name = "fuboCube"
+let stadiumVisible = false;
 
 fuboCube.callback = function () {
   if(cameraFocus != "fuboCube") {
     cameraFocus = "fuboCube";
+
+    // add floating stadium
+    if(!stadiumVisible) {
+      stadiumVisible = true;
+      loadGLTF(barcelonaStadiumResourceUrl, 'barcelona-stadium', 0.0005, {x: 30, y: 5, z: 40})
+    }
+
     // move camera to focus the cube
     if(window.innerWidth > 1000) {
-      camera.position.set(20, 6, 55);
+      camera.position.set(24, 7, 55);
       // move focal point of controls 
-      controls.target = new THREE.Vector3(20, 6, 40);
+      controls.target = new THREE.Vector3(24, 7, 40);
     } else {
-      camera.position.set(10, 6, 55);
+      camera.position.set(14, 7, 55);
       // move focal point of controls 
-      controls.target = new THREE.Vector3(10, 6, 40);
+      controls.target = new THREE.Vector3(14, 7, 40);
     }
     
   } else {
@@ -253,7 +138,6 @@ fuboCube.callback = function () {
     // window.open('http://www.fubo.tv', '_blank');
   }
 }
-scene.add(fuboCube);
 
 // prome cube
 
@@ -283,7 +167,6 @@ const sphereMaterial = new THREE.MeshStandardMaterial({
 })
 
 sphereMaterial.color = new THREE.Color(0x292929)
-
 const sphereGeometry = new THREE.SphereGeometry(1, 16, 16)
 
 const moon = new THREE.Mesh(
@@ -291,19 +174,37 @@ const moon = new THREE.Mesh(
   sphereMaterial
 );
 
-moon.position.set(0, -15, 15);
+// set resource variables
 
-scene.add(moon);
-
+let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
 let gokuResourceUrl = './models/goku-rigged-animated/scene.gltf'
 let snakeEyesResourceUrl = './models/snake_eyes/scene.gltf'
 let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
+let barcelonaStadiumResourceUrl = './models/camp-nou-stadium/scene.gltf'
+
+// set positions
+
+torus.position.set(0, -15, 15);
+torus2.position.set(0, -15, 15);
+torus3.position.set(0, -15, 15);
+
+moon.position.set(0, -15, 15);
+
+pointLight.position.set(0, 25, 45);
+
+updateCameraPosition([0, 12, 73], 50, 1)
+
+// add objects to the scene
+
+// Add stars
+Array(1000).fill().forEach(addStar);
 
 // don't load master chief on mobile
 if(window.innerWidth > 1000) {
   loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
   loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -13, y: 0, z: 20}, true)
   loadGLTF(gokuResourceUrl, 'goku', 8, {x: 13, y: 0, z: 20}, true)
+  
   fuboCube.position.set(20, 6, 40);
   promeCube.position.set(-20, 6, 40);
 } else {
@@ -313,8 +214,119 @@ if(window.innerWidth > 1000) {
   promeCube.position.set(-10, 6, 40);
 }
 
-scene.add(promeCube);
+let metaverseHeader = 'Metaverse'
+loadText(optimerBoldUrl, metaverseHeader, 6, 2, [-18, -11, 27], true, -.5)
 
+// lights
+scene.add(pointLight);
+scene.add(ambientLight);
+
+// metaverse rings
+scene.add(torus);
+scene.add(torus2);
+scene.add(torus3);
+
+// metaverse floor grid
+scene.add(gridHelper);
+// sphere
+scene.add(moon);
+// cubes
+scene.add(promeCube);
+scene.add(fuboCube);
+
+// GLTF Loader function
+function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0) {
+  let mixer;
+  let loader = new GLTFLoader();
+  loader.load(
+    // resource URL
+    resourceUrl,
+    // called when the resource is loaded
+    function ( gltf ) {
+      gltf.scene.scale.set(scale,scale,scale);
+
+      gltf.scene.name = name;
+
+      gltf.scene.position.x = position.x;
+      gltf.scene.position.y = position.y;
+      gltf.scene.position.z = position.z;
+
+      gltf.scene.rotation.x = xRotation;
+      gltf.scene.rotation.y = yRotation;
+  
+      mixer = new THREE.AnimationMixer( gltf.scene );
+      // console.log(gltf.animations);
+      // console.log(gltf)
+
+      if(animate) {
+        var action = mixer.clipAction(gltf.animations[0]);
+        action.play();
+      } 
+      gltf.scene.callback = function() {
+        console.log("gltf callback baby!")
+      }
+
+      scene.add(gltf.scene);
+      mixers.push(mixer);
+    },
+    // called while loading is progressing
+    function ( xhr ) {
+      console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+    },
+    // called when loading has errors
+    function ( error ) {
+      console.log( 'An error happened loading Goku' );
+    }
+  );
+}
+
+// FBX Loader function
+function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
+  // todo
+  let loader = new FBXLoader();
+  loader.load(resourceUrl, model => {
+    model.scale.set(scale, scale, scale)
+    model.position.set(position.x, position.y, position.z)
+
+    let mixer = new THREE.AnimationMixer(model)
+
+    if(animate) {
+        let anim = new FBXLoader();
+        anim.setPath('./models/');
+        anim.load(animationUrl, (anim) => {
+        let action = mixer.clipAction(anim.animations[0])
+        console.log("we bout to animate!")
+        action.play()
+      })
+    }
+    
+    scene.add(model);
+    mixers.push(mixer);
+  })
+}
+
+// load 3d text
+function loadText(fontUrl, text, size, height, position, shadow, xRotation = 0, yRotation = 0) {
+  const loader = new FontLoader();
+
+  loader.load(fontUrl, function (font) {
+    const geometry = new TextGeometry(text, {
+      font: font,
+      size: size,
+      height: height,
+    })
+    const textMesh = new THREE.Mesh(geometry, [
+      new MeshPhongMaterial({ color: 0xffffff}),
+      new MeshPhongMaterial({ color: 0x009390}),
+    ])
+
+    textMesh.castShadow = shadow
+    textMesh.position.set(position[0], position[1], position[2])
+    textMesh.rotation.x = xRotation
+    textMesh.rotation.y = yRotation
+    scene.add(textMesh)
+  })
+}
 
 // add items to gui
 
@@ -379,21 +391,25 @@ function resetCamera() {
   controls.target = new THREE.Vector3(0, 0, 0)
   cameraFocus = "origin";
   updateCameraPosition([0, 12, 73], 50, 1)
+  stadiumVisible = false;
+  removeObject('barcelona-stadium');
 }
 
-// clock used to track time deltas
-let clock = new THREE.Clock();
+// background star effect
+
+function addStar() {
+  const geometry = new THREE.SphereGeometry(.5, 24, 24);
+  const material = new THREE.MeshStandardMaterial({color:0xffffff});
+  const star = new THREE.Mesh(geometry, material);
+
+  const [x, y, z] = Array(3).fill().map(()=> THREE.MathUtils.randFloatSpread(1000));
+  star.position.set(x,y,z);
+  scene.add(star);
+}
 
 // buildGui();
 
-const light = new THREE.PointLight(0x00beee, 3, 100);
-light.position.set(0, 25, 45);
-scene.add(light);
-
 // handle mousedown events
-
-var raycaster = new THREE.Raycaster();
-var mouse = new THREE.Vector2();
 
 function onDocumentMouseDown( event ) {
 
@@ -466,7 +482,19 @@ function updateCameraPosition(position = [0, 12, 73], fov = 50, zoom = 1) {
   camera.updateProjectionMatrix();
 }
 
-let clockDelta;
+// get object from the scene
+
+function getObjectByName(name) {
+  return scene.getObjectByName(name);
+}
+
+// remove object from scene
+
+function removeObject(objectName) {
+  var selectedObject = getObjectByName(objectName)
+  scene.remove(selectedObject);
+  animate();
+}
 
 function animate() {
   requestAnimationFrame(animate)
