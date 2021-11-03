@@ -126,16 +126,16 @@ fuboCube.callback = function () {
     // add floating stadium
     if(!stadiumVisible) {
       stadiumVisible = true;
-      loadGLTF(barcelonaStadiumResourceUrl, 'barcelona-stadium', 0.0005, {x: 30, y: 5, z: 40})
+      loadGLTF(barcelonaStadiumResourceUrl, 'barcelona-stadium', 0.0005, {x: 25, y: 5, z: 40})
     }
 
     // move camera to focus the cube
     if(window.innerWidth > 1000) {
-      camera.position.set(24, 7, 55);
+      camera.position.set(21, 8, 55);
       // move focal point of controls 
-      controls.target = new THREE.Vector3(24, 7, 40);
+      controls.target = new THREE.Vector3(21, 7, 40);
     } else {
-      camera.position.set(14, 7, 55);
+      camera.position.set(14, 8, 55);
       // move focal point of controls 
       controls.target = new THREE.Vector3(14, 7, 40);
     }
