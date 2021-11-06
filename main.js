@@ -111,10 +111,7 @@ scene.background = spaceTexture;
 const fuboTexture = new THREE.TextureLoader().load('/assets/fubo-bg.jpg');
 // const jakeTexture = new THREE.TextureLoader().load('/assets/jake-bw.jpeg');
 
-const fuboCube = new THREE.Mesh(
-  new THREE.BoxGeometry(6,6,6),
-  new THREE.MeshStandardMaterial({map:fuboTexture})
-);
+const fuboCube = buildBoxGeometry(6, 6, 6, fuboTexture)
 
 fuboCube.name = "fuboCube"
 let stadiumVisible = false;
@@ -125,15 +122,14 @@ fuboCube.callback = function () {
 
     // add floating stadium
     if(!stadiumVisible) {
-      stadiumVisible = true;
-      loadGLTF(barcelonaStadiumResourceUrl, 'barcelona-stadium', 0.0005, {x: 25, y: 5, z: 40})
+      setupFuboScene()
     }
 
     // move camera to focus the cube
     if(window.innerWidth > 1000) {
-      camera.position.set(21, 8, 55);
-      // move focal point of controls 
-      controls.target = new THREE.Vector3(21, 7, 40);
+      camera.position.set(25, 8, 63);
+      // move focal point of controls
+      controls.target = new THREE.Vector3(25, 8, 40);
     } else {
       camera.position.set(14, 8, 55);
       // move focal point of controls 
@@ -146,13 +142,40 @@ fuboCube.callback = function () {
   }
 }
 
+function setupFuboScene() {
+  stadiumVisible = true
+  loadGLTF(barcelonaStadiumResourceUrl, 'barcelona-stadium', 0.0009, {x: 30, y: 2.5, z: 40}, false, 0, 180, -0.25)
+
+  let fuboHeader = 'fuboTV'
+  loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [24, 9, 40], true, 0)
+
+  let fuboSubHeader = 'The Future of Interactive Streaming'
+  loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [24, 7.75, 40], true, 0)
+
+  let fuboWebsiteText = 'Website ->'
+  loadText(optimerBoldUrl, 'fubo-website-link', fuboWebsiteText, .4, .2, [24, 6.5, 40 ], true, 0)
+
+  // const fuboSceneTextBackground = buildBoxGeometry(9, 10, 1)
+  // fuboSceneTextBackground.position.set(24, 9, 38)
+  // scene.add(fuboSceneTextBackground)
+}
+
+function openFuboWebsite() {
+  window.open('http://www.fubo.tv', '_blank');
+}
+
+function tearDownFuboScene() {
+  stadiumVisible = false;
+  removeObject('barcelona-stadium');
+  removeObject('fubo-header');
+  removeObject('fubo-sub-header');
+  removeObject('fubo-website-link');
+}
+
 // prome cube
 
 const promeTexture = new THREE.TextureLoader().load('/assets/prometheus.jpg');
-const promeCube = new THREE.Mesh(
-  new THREE.BoxGeometry(6,6,6),
-  new THREE.MeshBasicMaterial({map: promeTexture})
-);
+const promeCube = buildBoxGeometry(6, 6, 6, promeTexture);
 
 promeCube.callback = function () {
   // open prometheus definition
@@ -163,6 +186,13 @@ promeCube.callback = function () {
   // let masterChief= scene.getObjectByName("master-chief");
   // console.log(masterChief);
   // decrease their animation speed to 1/60th normal
+}
+
+function buildBoxGeometry(scaleX = 1, scaleY = 1, scaleZ = 1, texture = new THREE.MeshBasicMaterial()) {
+  return new THREE.Mesh(
+    new THREE.BoxGeometry(scaleX,scaleY,scaleX),
+    new THREE.MeshBasicMaterial({map: texture})
+  );
 }
 
 // moon
@@ -221,7 +251,7 @@ if(window.innerWidth > 1000) {
 }
 
 let metaverseHeader = 'Metaverse'
-loadText(optimerBoldUrl, metaverseHeader, 6, 2, [-18, -11, 27], true, -.5)
+loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 6, 2, [-18, -11, 27], true, -.5)
 
 // lights
 scene.add(pointLight);
@@ -273,7 +303,7 @@ tween2.start();
 // end test area
 
 // GLTF Loader function
-function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0) {
+function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}) {
   let mixer;
   let loader = new GLTFLoader();
   loader.load(
@@ -291,18 +321,20 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
 
       gltf.scene.rotation.x = xRotation;
       gltf.scene.rotation.y = yRotation;
+      gltf.scene.rotation.z = zRotation;
   
       mixer = new THREE.AnimationMixer( gltf.scene );
-      // console.log(gltf.animations);
-      // console.log(gltf)
 
       if(animate) {
         var action = mixer.clipAction(gltf.animations[0]);
         action.play();
-      } 
-      gltf.scene.callback = function() {
-        console.log("gltf callback baby!")
       }
+
+      console.log("\ndebug callback")
+      console.log(gltf.scene)
+      console.log(callback)
+      gltf.scene.callback = callback
+      console.log(gltf.scene.callback)
 
       scene.add(gltf.scene);
       mixers.push(mixer);
@@ -344,8 +376,8 @@ function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
 }
 
 // load 3d text
-function loadText(fontUrl, text, size, height, position, shadow, xRotation = 0, yRotation = 0) {
-  const loader = new FontLoader();
+function loadText(fontUrl, name, text, size, height, position, shadow, xRotation = 0, yRotation = 0) {
+  const loader = new FontLoader()
 
   loader.load(fontUrl, function (font) {
     const geometry = new TextGeometry(text, {
@@ -357,6 +389,10 @@ function loadText(fontUrl, text, size, height, position, shadow, xRotation = 0, 
       new MeshPhongMaterial({ color: 0xffffff}),
       new MeshPhongMaterial({ color: 0x009390}),
     ])
+
+    textMesh.name = name
+
+    textMesh.addEventListener('click', openFuboWebsite, false)
 
     textMesh.castShadow = shadow
     textMesh.position.set(position[0], position[1], position[2])
@@ -429,8 +465,7 @@ function resetCamera() {
   controls.target = new THREE.Vector3(0, 0, 0)
   cameraFocus = "origin";
   updateCameraPosition([0, 12, 73], 50, 1)
-  stadiumVisible = false;
-  removeObject('barcelona-stadium');
+  tearDownFuboScene()
 }
 
 // background star effect
@@ -460,8 +495,11 @@ function onDocumentMouseDown(event) {
   var intersects = raycaster.intersectObjects( scene.children ); 
 
   if ( intersects.length > 0 ) {
-    console.log(intersects)
-    let callback = intersects[0].object.callback;
+    // console.log(intersects)
+    let object = intersects[0].object
+    let callback = object.callback
+    console.log("\ndebug object")
+    console.log(object)
     console.log(callback)
     if(callback instanceof Function) {
       callback()
