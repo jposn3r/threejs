@@ -125,13 +125,27 @@ fuboCube.callback = function () {
       setupFuboScene()
     }
 
-    // move camera to focus the cube
+     // tween test area
+     var position = { x : camera.position.x, y: camera.position.y, z: camera.position.z}
+     var target = { x : 27, y: 8, z: 63}
+     var tween3 = new TWEEN.Tween(position).to(target, 1000)
+ 
+     tween3.onUpdate(function() {
+       camera.position.x = position.x
+       camera.position.y = position.y
+       camera.position.z = position.z
+     })
+ 
+     tween3.start()
+
+     // move camera to focus the cube
+     // todo: fix focus on mobile
     if(window.innerWidth > 1000) {
-      camera.position.set(25, 8, 63)
+      // camera.position.set(25, 8, 63)
       // move focal point of controls
       controls.target = new THREE.Vector3(25, 8, 40)
     } else {
-      camera.position.set(14, 8, 55)
+      // camera.position.set(14, 8, 55)
       // move focal point of controls 
       controls.target = new THREE.Vector3(14, 7, 40)
     }
