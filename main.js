@@ -1,13 +1,13 @@
 import './style.css'
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { MeshPhongMaterial, Vector3 } from 'three';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import * as dat from 'dat.gui';
-import TWEEN from '@tweenjs/tween.js';
+import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { MeshPhongMaterial, Vector3 } from 'three'
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
+import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import * as dat from 'dat.gui'
+import TWEEN from '@tweenjs/tween.js'
 
 // Ideas
 // 1. Slow mo button - 
@@ -36,89 +36,89 @@ import TWEEN from '@tweenjs/tween.js';
 
 // document event listeners
 
-document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('mousedown', onDocumentMouseDown, false);
+document.addEventListener('keydown', keyDownHandler, false)
+document.addEventListener('mousedown', onDocumentMouseDown, false)
 
-var buttons = document.getElementsByTagName('button');
-buttons[0].addEventListener('click', onButtonClick, false);
+var buttons = document.getElementsByTagName('button')
+buttons[0].addEventListener('click', onButtonClick, false)
 
 // renderer
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#world'),
-});
+})
 
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio)
+renderer.setSize(window.innerWidth, window.innerHeight)
 
 // camera 
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.name = "camera-1";
-let cameraFocus = "origin";
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+camera.name = "camera-1"
+let cameraFocus = "origin"
 
 // controls to move the scene
 
-const controls = new OrbitControls(camera, renderer.domElement);
-// let controls = new MapControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement)
+// let controls = new MapControls(camera, renderer.domElement)
 
 // gui
 
-// const gui = new dat.GUI();
+// const gui = new dat.GUI()
 
 // main scene
 
-const scene = new THREE.Scene();
+const scene = new THREE.Scene()
 
 // clock used to track time deltas
 
-let clock = new THREE.Clock();
-let clockDelta;
+let clock = new THREE.Clock()
+let clockDelta
 
 // help track mouse movement events
 
-var raycaster = new THREE.Raycaster();
-var mouse = new THREE.Vector2();
+var raycaster = new THREE.Raycaster()
+var mouse = new THREE.Vector2()
 
 // animation mixers array - https://www.mixamo.com - for more animations and models
 
-let mixers = [];
+let mixers = []
 
 // build and add torus rings
 
-const geometry = new THREE.TorusGeometry(10, 0.5, 10, 100);
-const blueMaterial = new THREE.MeshStandardMaterial({ color: 0x00dadf});
+const geometry = new THREE.TorusGeometry(10, 0.5, 10, 100)
+const blueMaterial = new THREE.MeshStandardMaterial({ color: 0x00dadf})
 
-const torus = new THREE.Mesh(geometry, blueMaterial);
-const torus2 = new THREE.Mesh(geometry, blueMaterial);
-const torus3 = new THREE.Mesh(geometry, blueMaterial);
+const torus = new THREE.Mesh(geometry, blueMaterial)
+const torus2 = new THREE.Mesh(geometry, blueMaterial)
+const torus3 = new THREE.Mesh(geometry, blueMaterial)
 
 // lights
-const ambientLight = new THREE.AmbientLight(0xffffff);
-const pointLight = new THREE.PointLight(0x00beee, 3, 100);
+const ambientLight = new THREE.AmbientLight(0xffffff)
+const pointLight = new THREE.PointLight(0x00beee, 3, 100)
 
 // helpers
 
-const gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf);
+const gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf)
 
 // space background texture
 
-const spaceTexture = new THREE.TextureLoader().load('/assets/space-2.jpg');
-scene.background = spaceTexture;
+const spaceTexture = new THREE.TextureLoader().load('/assets/space-2.jpg')
+scene.background = spaceTexture
 
 // fubo cube
 
-const fuboTexture = new THREE.TextureLoader().load('/assets/fubo-bg.jpg');
-// const jakeTexture = new THREE.TextureLoader().load('/assets/jake-bw.jpeg');
+const fuboTexture = new THREE.TextureLoader().load('/assets/fubo-bg.jpg')
+// const jakeTexture = new THREE.TextureLoader().load('/assets/jake-bw.jpeg')
 
 const fuboCube = buildBoxGeometry(6, 6, 6, fuboTexture)
 
 fuboCube.name = "fuboCube"
-let stadiumVisible = false;
+let stadiumVisible = false
 
 fuboCube.callback = function () {
   if(cameraFocus != "fuboCube") {
-    cameraFocus = "fuboCube";
+    cameraFocus = "fuboCube"
 
     // add floating stadium
     if(!stadiumVisible) {
@@ -127,13 +127,13 @@ fuboCube.callback = function () {
 
     // move camera to focus the cube
     if(window.innerWidth > 1000) {
-      camera.position.set(25, 8, 63);
+      camera.position.set(25, 8, 63)
       // move focal point of controls
-      controls.target = new THREE.Vector3(25, 8, 40);
+      controls.target = new THREE.Vector3(25, 8, 40)
     } else {
-      camera.position.set(14, 8, 55);
+      camera.position.set(14, 8, 55)
       // move focal point of controls 
-      controls.target = new THREE.Vector3(14, 7, 40);
+      controls.target = new THREE.Vector3(14, 7, 40)
     }
     
   } else {
@@ -145,16 +145,16 @@ fuboCube.callback = function () {
 function setupFuboScene() {
   // console.log("\nsetupFuboScene()")
   stadiumVisible = true
-  loadGLTF(barcelonaStadiumResourceUrl, 'barcelona-stadium', 0.0009, {x: 30, y: 2.5, z: 40}, false, 0, 180, -0.25)
+  // loadGLTF(barcelonaStadiumResourceUrl, 'barcelona-stadium', 0.0009, {x: 30, y: 13.5, z: 40}, false, 0.75, 180, 0)
 
   let fuboHeader = 'fuboTV'
-  loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [24, 9, 40], true, 0)
+  loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [24, 12, 40], true, 0)
 
   let fuboSubHeader = 'The Future of Interactive Streaming'
-  loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [24, 7.75, 40], true, 0)
+  loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [24, 10.75, 40], true, 0)
 
-  let fuboWebsiteText = 'Website ->'
-  loadText(optimerBoldUrl, 'fubo-website-link', fuboWebsiteText, .4, .2, [24, 6.5, 40 ], true, 0)
+  // let fuboWebsiteText = 'Website ->'
+  // loadText(optimerBoldUrl, 'fubo-website-link', fuboWebsiteText, .4, .2, [24, 9.5, 40 ], true, 0)
 
   // const fuboSceneTextBackground = buildBoxGeometry(9, 9, 9)
   // fuboSceneTextBackground.position.set(24, 9, 38)
@@ -164,7 +164,7 @@ function setupFuboScene() {
     new THREE.BoxGeometry(50,25,1),
     new THREE.MeshBasicMaterial()
   );
-  fuboSceneTextBackground.material.color.setHex( 0x000012 );
+  fuboSceneTextBackground.material.color.setHex( 0x000012 )
   fuboSceneTextBackground.position.set(25, 12.5, 35)
   fuboSceneTextBackground.name = 'fubo-scene-background'
 
@@ -172,36 +172,76 @@ function setupFuboScene() {
     new THREE.BoxGeometry(50,1,50),
     new THREE.MeshBasicMaterial()
   );
-  fuboSceneTextFloor.material.color.setHex( 0x000012 );
+  fuboSceneTextFloor.material.color.setHex( 0x000012 )
   fuboSceneTextFloor.position.set(25, 0, 59.5)
   fuboSceneTextFloor.name = 'fubo-scene-floor'
 
   scene.add(fuboSceneTextBackground)
   scene.add(fuboSceneTextFloor)
+
+  // child cubes
+
+  let fuboChildCube1 = new THREE.Mesh(
+    new THREE.BoxGeometry(3,3,3),
+    new THREE.MeshBasicMaterial()
+  );
+
+  fuboChildCube1.callback = () => {
+    openFuboWebsite()
+  }
+
+  fuboChildCube1.material.color.setHex( 0xffffff )
+  fuboChildCube1.position.set(25, 6, 40)
+  fuboChildCube1.name = 'fubo-child-cube-1'
+
+  let fuboChildCube2 = new THREE.Mesh(
+    new THREE.BoxGeometry(3,3,3),
+    new THREE.MeshBasicMaterial()
+  );
+
+  fuboChildCube2.material.color.setHex( 0xffffff )
+  fuboChildCube2.position.set(30, 6, 40)
+  fuboChildCube2.name = 'fubo-child-cube-2'
+
+  let fuboChildCube3 = new THREE.Mesh(
+    new THREE.BoxGeometry(3,3,3),
+    new THREE.MeshBasicMaterial()
+  );
+
+  fuboChildCube3.material.color.setHex( 0xffffff )
+  fuboChildCube3.position.set(35, 6, 40)
+  fuboChildCube3.name = 'fubo-child-cube-3'
+
+  scene.add(fuboChildCube1)
+  scene.add(fuboChildCube2)
+  scene.add(fuboChildCube3)
 }
 
 function openFuboWebsite() {
-  window.open('http://www.fubo.tv', '_blank');
+  window.open('http://www.fubo.tv', '_blank')
 }
 
 function tearDownFuboScene() {
-  stadiumVisible = false;
-  removeObject('barcelona-stadium');
-  removeObject('fubo-header');
-  removeObject('fubo-sub-header');
-  removeObject('fubo-website-link');
-  removeObject('fubo-scene-floor');
-  removeObject('fubo-scene-background');
+  stadiumVisible = false
+  removeObject('barcelona-stadium')
+  removeObject('fubo-header')
+  removeObject('fubo-sub-header')
+  removeObject('fubo-website-link')
+  removeObject('fubo-scene-floor')
+  removeObject('fubo-scene-background')
+  removeObject('fubo-child-cube-1')
+  removeObject('fubo-child-cube-2')
+  removeObject('fubo-child-cube-3')
 }
 
 // prome cube
 
-const promeTexture = new THREE.TextureLoader().load('/assets/prometheus.jpg');
-const promeCube = buildBoxGeometry(6, 6, 6, promeTexture);
+const promeTexture = new THREE.TextureLoader().load('/assets/prometheus.jpg')
+const promeCube = buildBoxGeometry(6, 6, 6, promeTexture)
 
 promeCube.callback = function () {
   // open prometheus definition
-  // window.open('https://www.merriam-webster.com/dictionary/Prometheus', '_blank');
+  // window.open('https://www.merriam-webster.com/dictionary/Prometheus', '_blank')
 
   // find all the meshes
   // how do you do that?
@@ -214,13 +254,13 @@ function buildBoxGeometry(scaleX = 1, scaleY = 1, scaleZ = 1, texture = new THRE
   return new THREE.Mesh(
     new THREE.BoxGeometry(scaleX,scaleY,scaleX),
     new THREE.MeshBasicMaterial({map: texture})
-  );
+  )
 }
 
 // moon
 
-const moonTexture = new THREE.TextureLoader().load('/assets/moon.jpeg');
-const normalTexture = new THREE.TextureLoader().load('/assets/moon-normal-map.jpg');
+const moonTexture = new THREE.TextureLoader().load('/assets/moon.jpeg')
+const normalTexture = new THREE.TextureLoader().load('/assets/moon-normal-map.jpg')
 const sphereMaterial = new THREE.MeshStandardMaterial({
   normalMap: normalTexture
 })
@@ -231,7 +271,7 @@ const sphereGeometry = new THREE.SphereGeometry(1, 16, 16)
 const moon = new THREE.Mesh(
   sphereGeometry,
   sphereMaterial
-);
+)
 
 // set resource variables
 
@@ -256,69 +296,69 @@ updateCameraPosition([0, 12, 73], 50, 1)
 // add objects to the scene
 
 // Add stars
-Array(1000).fill().forEach(addStar);
+Array(1000).fill().forEach(addStar)
 
 // don't load master chief on mobile
 if(window.innerWidth > 1000) {
   // loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
   loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
   loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
-  fuboCube.position.set(20, 6, 40);
-  promeCube.position.set(-20, 6, 40);
+  fuboCube.position.set(20, 6, 40)
+  promeCube.position.set(-20, 6, 40)
 } else {
   loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -7, y: 0, z: 20}, true)
   loadGLTF(gokuResourceUrl, 'goku', 8, {x: 7, y: 0, z: 20}, true)
-  fuboCube.position.set(10, 6, 40);
-  promeCube.position.set(-10, 6, 40);
+  fuboCube.position.set(10, 6, 40)
+  promeCube.position.set(-10, 6, 40)
 }
 
 let metaverseHeader = 'Metaverse'
 loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 6, 2, [-18, -11, 27], true, -.5)
 
 // lights
-scene.add(pointLight);
-scene.add(ambientLight);
+scene.add(pointLight)
+scene.add(ambientLight)
 
 // metaverse rings
-scene.add(torus);
-scene.add(torus2);
-scene.add(torus3);
+scene.add(torus)
+scene.add(torus2)
+scene.add(torus3)
 
 // metaverse floor grid
-scene.add(gridHelper);
+scene.add(gridHelper)
 // sphere
-scene.add(moon);
+scene.add(moon)
 // cubes
-scene.add(promeCube);
-scene.add(fuboCube);
+scene.add(promeCube)
+scene.add(fuboCube)
 
 // tween test area
 
-var position = { x : 0, y: 0};
-var target = { x : 17, y: 6};
-var tween = new TWEEN.Tween(position).to(target, 4000);
+var position = { x : 0, y: 0}
+var target = { x : 17, y: 6}
+var tween = new TWEEN.Tween(position).to(target, 4000)
 
-tween.onUpdate(function(){
-  fuboCube.position.x = position.x;
-  fuboCube.position.y = position.y;
-});
+tween.onUpdate(function() {
+  fuboCube.position.x = position.x
+  fuboCube.position.y = position.y
+})
 
-tween.start();
+tween.start()
 
 // promecube opposite animation
 
-var position2 = { x : 0, y: 0};
-var target2 = { x : 17, y: 6};
-var tween2 = new TWEEN.Tween(position2).to(target2, 4000);
+var position2 = { x : 0, y: 0}
+var target2 = { x : 17, y: 6}
+var tween2 = new TWEEN.Tween(position2).to(target2, 4000)
 
 tween2.easing(TWEEN.Easing.Quadratic.Out)
 
 tween2.onUpdate(function(){
-  promeCube.position.x = -position.x;
-  promeCube.position.y = position.y;
-});
+  promeCube.position.x = -position.x
+  promeCube.position.y = position.y
+})
 
-tween2.start();
+tween2.start()
 
 // camera tween : todo for animation to focus on fubo cube from wherever you are when you click it
 
@@ -326,30 +366,30 @@ tween2.start();
 
 // GLTF Loader function
 function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}) {
-  let mixer;
-  let loader = new GLTFLoader();
+  let mixer
+  let loader = new GLTFLoader()
   loader.load(
     // resource URL
     resourceUrl,
     // called when the resource is loaded
     function ( gltf ) {
-      gltf.scene.scale.set(scale,scale,scale);
+      gltf.scene.scale.set(scale,scale,scale)
 
-      gltf.scene.name = name;
+      gltf.scene.name = name
 
-      gltf.scene.position.x = position.x;
-      gltf.scene.position.y = position.y;
-      gltf.scene.position.z = position.z;
+      gltf.scene.position.x = position.x
+      gltf.scene.position.y = position.y
+      gltf.scene.position.z = position.z
 
-      gltf.scene.rotation.x = xRotation;
-      gltf.scene.rotation.y = yRotation;
-      gltf.scene.rotation.z = zRotation;
+      gltf.scene.rotation.x = xRotation
+      gltf.scene.rotation.y = yRotation
+      gltf.scene.rotation.z = zRotation
   
-      mixer = new THREE.AnimationMixer( gltf.scene );
+      mixer = new THREE.AnimationMixer( gltf.scene )
 
       if(animate) {
-        var action = mixer.clipAction(gltf.animations[0]);
-        action.play();
+        var action = mixer.clipAction(gltf.animations[0])
+        action.play()
       }
 
       // console.log("\ndebug callback")
@@ -358,24 +398,23 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
       gltf.scene.callback = callback
       // console.log(gltf.scene.callback)
 
-      scene.add(gltf.scene);
-      mixers.push(mixer);
+      scene.add(gltf.scene)
+      mixers.push(mixer)
     },
     // called while loading is progressing
     function ( xhr ) {
-      console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+      console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
     },
     // called when loading has errors
     function ( error ) {
-      console.log( 'An error happened loading Goku' );
+      console.log( 'An error happened loading GLTF model' )
     }
   );
 }
 
 // FBX Loader function
 function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
-  // todo
-  let loader = new FBXLoader();
+  let loader = new FBXLoader()
   loader.load(resourceUrl, model => {
     model.scale.set(scale, scale, scale)
     model.position.set(position.x, position.y, position.z)
@@ -383,16 +422,16 @@ function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
     let mixer = new THREE.AnimationMixer(model)
 
     if(animate) {
-        let anim = new FBXLoader();
-        anim.setPath('./models/');
+        let anim = new FBXLoader()
+        anim.setPath('./models/')
         anim.load(animationUrl, (anim) => {
         let action = mixer.clipAction(anim.animations[0])
         action.play()
       })
     }
     
-    scene.add(model);
-    mixers.push(mixer);
+    scene.add(model)
+    mixers.push(mixer)
   })
 }
 
@@ -426,25 +465,25 @@ function loadText(fontUrl, name, text, size, height, position, shadow, xRotation
 // add items to gui
 
 function buildGui() {
-  let moonFolder = gui.addFolder('moon');
-  let fuboCubeFolder = gui.addFolder('fuboCube');
-  let cameraFolder = gui.addFolder('camera');
+  let moonFolder = gui.addFolder('moon')
+  let fuboCubeFolder = gui.addFolder('fuboCube')
+  let cameraFolder = gui.addFolder('camera')
 
-  moonFolder.add(moon.position, 'x');
-  moonFolder.add(moon.position, 'y');
-  moonFolder.add(moon.position, 'z');
+  moonFolder.add(moon.position, 'x')
+  moonFolder.add(moon.position, 'y')
+  moonFolder.add(moon.position, 'z')
 
-  fuboCubeFolder.add(fuboCube.position, 'x');
-  fuboCubeFolder.add(fuboCube.position, 'y');
-  fuboCubeFolder.add(fuboCube.position, 'z');
+  fuboCubeFolder.add(fuboCube.position, 'x')
+  fuboCubeFolder.add(fuboCube.position, 'y')
+  fuboCubeFolder.add(fuboCube.position, 'z')
 
-  cameraFolder.add(camera.position, 'x');
-  cameraFolder.add(camera.position, 'y');
-  cameraFolder.add(camera.position, 'z');
+  cameraFolder.add(camera.position, 'x')
+  cameraFolder.add(camera.position, 'y')
+  cameraFolder.add(camera.position, 'z')
 
-  cameraFolder.add(camera.rotation, 'x');
-  cameraFolder.add(camera.rotation, 'y');
-  cameraFolder.add(camera.rotation, 'z');
+  cameraFolder.add(camera.rotation, 'x')
+  cameraFolder.add(camera.rotation, 'y')
+  cameraFolder.add(camera.rotation, 'z')
 }
 
 function updateTorus() {
@@ -485,7 +524,7 @@ function updateMixers(clockDelta) {
 function resetCamera() {
   // todo: find a way to stop the rotation speed from increasing when camera is reset
   controls.target = new THREE.Vector3(0, 0, 0)
-  cameraFocus = "origin";
+  cameraFocus = "origin"
   updateCameraPosition([0, 12, 73], 50, 1)
   tearDownFuboScene()
 }
@@ -509,12 +548,12 @@ function addStar() {
 function onDocumentMouseDown(event) {
   event.preventDefault();
 
-  mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
-  mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
+  mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1
+  mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1
 
-  raycaster.setFromCamera( mouse, camera );
+  raycaster.setFromCamera( mouse, camera )
 
-  var intersects = raycaster.intersectObjects( scene.children ); 
+  var intersects = raycaster.intersectObjects( scene.children )
 
   if ( intersects.length > 0 ) {
     // console.log(intersects)
@@ -578,42 +617,42 @@ function keyDownHandler(event) {
 // update camera position
 
 function updateCameraPosition(position = [0, 12, 73], fov = 50, zoom = 1) {
-  camera.position.set(position[0], position[1], position[2]);
-  camera.fov = fov;
-  camera.zoom = zoom;
-  camera.updateProjectionMatrix();
+  camera.position.set(position[0], position[1], position[2])
+  camera.fov = fov
+  camera.zoom = zoom
+  camera.updateProjectionMatrix()
 }
 
 // get object from the scene
 
 function getObjectByName(name) {
-  return scene.getObjectByName(name);
+  return scene.getObjectByName(name)
 }
 
 // remove object from scene
 
 function removeObject(objectName) {
-  scene.remove(getObjectByName(objectName));
+  scene.remove(getObjectByName(objectName))
 }
 
 function animate() {
   requestAnimationFrame(animate)
   
-  clockDelta = clock.getDelta();
+  clockDelta = clock.getDelta()
 
-  TWEEN.update();
+  TWEEN.update()
 
-  updateTorus();
+  updateTorus()
 
-  updateFuboCube();
+  updateFuboCube()
 
-  updatePromeCube();
+  updatePromeCube()
 
-  updateMixers(clockDelta);
+  updateMixers(clockDelta)
 
-  controls.update();
+  controls.update()
 
-  renderer.render(scene, camera);
+  renderer.render(scene, camera)
 }
 
-animate();
+animate()
