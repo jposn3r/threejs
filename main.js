@@ -169,6 +169,8 @@ function setupFuboScene() {
   stadiumVisible = true
   // loadGLTF(barcelonaStadiumResourceUrl, 'barcelona-stadium', 0.0009, {x: 30, y: 13.5, z: 40}, false, 0.75, 180, 0)
 
+  removeObject('click-me-text')
+
   let fuboHeader = 'fuboTV'
   loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [24, 11, 40], true, 0)
 
@@ -277,6 +279,7 @@ function tearDownFuboScene() {
   removeObject('fubo-news-link')
   removeObject('fubo-tv-link')
   removeObject('fubo-sportsbook-link')
+  loadText(optimerBoldUrl, 'click-me-text', clickMeText, 1, .5, [13, 12, 40], true, 0, -.5, 0)
 }
 
 // prome cube
@@ -360,6 +363,9 @@ if(window.innerWidth > 1000) {
 let metaverseHeader = 'Metaverse'
 loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 6, 2, [-18, -11, 27], true, -.5)
 
+let clickMeText = 'Click Me!'
+loadText(optimerBoldUrl, 'click-me-text', clickMeText, 1, .5, [13, 12, 40], true, 0, -.5, 0)
+
 // lights
 scene.add(pointLight)
 scene.add(ambientLight)
@@ -381,7 +387,7 @@ scene.add(fuboCube)
 
 var position = { x : 0, y: 0}
 var target = { x : 17, y: 6}
-var tween = new TWEEN.Tween(position).to(target, 4000)
+var tween = new TWEEN.Tween(position).to(target, 2500)
 
 tween.onUpdate(function() {
   fuboCube.position.x = position.x
@@ -394,7 +400,7 @@ tween.start()
 
 var position2 = { x : 0, y: 0}
 var target2 = { x : 17, y: 6}
-var tween2 = new TWEEN.Tween(position2).to(target2, 4000)
+var tween2 = new TWEEN.Tween(position2).to(target2, 2500)
 
 tween2.easing(TWEEN.Easing.Quadratic.Out)
 
@@ -481,7 +487,7 @@ function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
 }
 
 // load 3d text
-function loadText(fontUrl, name, text, size, height, position, shadow, xRotation = 0, yRotation = 0) {
+function loadText(fontUrl, name, text, size, height, position, shadow, xRotation = 0, yRotation = 0, zRotation = 0) {
   const loader = new FontLoader()
 
   loader.load(fontUrl, function (font) {
