@@ -148,22 +148,27 @@ function setupFuboScene() {
   // loadGLTF(barcelonaStadiumResourceUrl, 'barcelona-stadium', 0.0009, {x: 30, y: 13.5, z: 40}, false, 0.75, 180, 0)
 
   let fuboHeader = 'fuboTV'
-  loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [24, 12, 40], true, 0)
+  loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [24, 11, 40], true, 0)
 
   let fuboSubHeader = 'The Future of Interactive Streaming'
-  loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [24, 10.75, 40], true, 0)
+  loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [24, 9.75, 40], true, 0)
 
-  // let fuboWebsiteText = 'Website ->'
-  // loadText(optimerBoldUrl, 'fubo-website-link', fuboWebsiteText, .4, .2, [24, 9.5, 40 ], true, 0)
+  let fuboTVText = 'TV'
+  loadText(optimerBoldUrl, 'fubo-tv-link', fuboTVText, .6, .2, [24.5, 3.75, 40 ], true, 0)
 
-  // const fuboSceneTextBackground = buildBoxGeometry(9, 9, 9)
-  // fuboSceneTextBackground.position.set(24, 9, 38)
-  // scene.add(fuboSceneTextBackground)
+  let fuboGamingText = 'BET'
+  loadText(optimerBoldUrl, 'fubo-sportsbook-link', fuboGamingText, .6, .2, [29.5, 3.75, 40 ], true, 0)
+
+  let fuboNewsText = 'NEWS'
+  loadText(optimerBoldUrl, 'fubo-news-link', fuboNewsText, .6, .2, [34, 3.75, 40 ], true, 0)
   
+  // black floor and background for fubo scene
+
   const fuboSceneTextBackground = new THREE.Mesh(
     new THREE.BoxGeometry(50,25,1),
     new THREE.MeshBasicMaterial()
-  );
+  )
+
   fuboSceneTextBackground.material.color.setHex( 0x000012 )
   fuboSceneTextBackground.position.set(25, 12.5, 35)
   fuboSceneTextBackground.name = 'fubo-scene-background'
@@ -171,7 +176,8 @@ function setupFuboScene() {
   const fuboSceneTextFloor = new THREE.Mesh(
     new THREE.BoxGeometry(50,1,50),
     new THREE.MeshBasicMaterial()
-  );
+  )
+
   fuboSceneTextFloor.material.color.setHex( 0x000012 )
   fuboSceneTextFloor.position.set(25, 0, 59.5)
   fuboSceneTextFloor.name = 'fubo-scene-floor'
@@ -180,36 +186,46 @@ function setupFuboScene() {
   scene.add(fuboSceneTextFloor)
 
   // child cubes
-
+  const blackTexture1 = new THREE.TextureLoader().load('/assets/gold-texture.jpeg')
   let fuboChildCube1 = new THREE.Mesh(
     new THREE.BoxGeometry(3,3,3),
-    new THREE.MeshBasicMaterial()
-  );
+    new THREE.MeshBasicMaterial({map: blackTexture1})
+  )
 
   fuboChildCube1.callback = () => {
-    openFuboWebsite()
+    openWebsite('https://www.fubo.tv')
   }
 
-  fuboChildCube1.material.color.setHex( 0xffffff )
-  fuboChildCube1.position.set(25, 6, 40)
+  // fuboChildCube1.material.color.setHex( 0x00FFF7 )
+  fuboChildCube1.position.set(25, 6.5, 40)
   fuboChildCube1.name = 'fubo-child-cube-1'
 
+  const blackTexture2 = new THREE.TextureLoader().load('/assets/silver-texture.jpeg')
   let fuboChildCube2 = new THREE.Mesh(
     new THREE.BoxGeometry(3,3,3),
-    new THREE.MeshBasicMaterial()
+    new THREE.MeshBasicMaterial({map: blackTexture2})
   );
 
-  fuboChildCube2.material.color.setHex( 0xffffff )
-  fuboChildCube2.position.set(30, 6, 40)
+  fuboChildCube2.callback = () => {
+    openWebsite('https://www.fubosportsbook.com')
+  }
+
+  // fuboChildCube2.material.color.setHex( 0x00FFF7 )
+  fuboChildCube2.position.set(30, 6.5, 40)
   fuboChildCube2.name = 'fubo-child-cube-2'
 
+  const blackTexture3 = new THREE.TextureLoader().load('/assets/bronze-texture.jpeg')
   let fuboChildCube3 = new THREE.Mesh(
     new THREE.BoxGeometry(3,3,3),
-    new THREE.MeshBasicMaterial()
+    new THREE.MeshBasicMaterial({map: blackTexture3})
   );
 
-  fuboChildCube3.material.color.setHex( 0xffffff )
-  fuboChildCube3.position.set(35, 6, 40)
+  fuboChildCube3.callback = () => {
+    openWebsite('https://www.google.com/search?q=fubotv+news')
+  }
+
+  // fuboChildCube3.material.color.setHex( 0x00FFF7 )
+  fuboChildCube3.position.set(35, 6.5, 40)
   fuboChildCube3.name = 'fubo-child-cube-3'
 
   scene.add(fuboChildCube1)
@@ -217,8 +233,12 @@ function setupFuboScene() {
   scene.add(fuboChildCube3)
 }
 
-function openFuboWebsite() {
-  window.open('http://www.fubo.tv', '_blank')
+function openWebsite(url = "", newTab = true) {
+  if(newTab) {
+    window.open(url, '_blank')
+  } else {
+    window.open(url)
+  }
 }
 
 function tearDownFuboScene() {
@@ -232,6 +252,9 @@ function tearDownFuboScene() {
   removeObject('fubo-child-cube-1')
   removeObject('fubo-child-cube-2')
   removeObject('fubo-child-cube-3')
+  removeObject('fubo-news-link')
+  removeObject('fubo-tv-link')
+  removeObject('fubo-sportsbook-link')
 }
 
 // prome cube
@@ -451,8 +474,6 @@ function loadText(fontUrl, name, text, size, height, position, shadow, xRotation
     ])
 
     textMesh.name = name
-
-    textMesh.addEventListener('click', openFuboWebsite, false)
 
     textMesh.castShadow = shadow
     textMesh.position.set(position[0], position[1], position[2])
