@@ -36,6 +36,14 @@ import TWEEN from '@tweenjs/tween.js'
 
 // document event listeners
 
+// window.addEventListener('resize', function() {
+//   var WIDTH = window.innerWidth,
+//     HEIGHT = window.innerHeight;
+//   renderer.setSize(WIDTH, HEIGHT);
+//   camera.aspect = WIDTH / HEIGHT;
+//   camera.updateProjectionMatrix();
+// });
+
 document.addEventListener('keydown', keyDownHandler, false)
 document.addEventListener('mousedown', onDocumentMouseDown, false)
 
