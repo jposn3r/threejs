@@ -143,6 +143,7 @@ fuboCube.callback = function () {
 }
 
 function setupFuboScene() {
+  // console.log("\nsetupFuboScene()")
   stadiumVisible = true
   loadGLTF(barcelonaStadiumResourceUrl, 'barcelona-stadium', 0.0009, {x: 30, y: 2.5, z: 40}, false, 0, 180, -0.25)
 
@@ -155,9 +156,28 @@ function setupFuboScene() {
   let fuboWebsiteText = 'Website ->'
   loadText(optimerBoldUrl, 'fubo-website-link', fuboWebsiteText, .4, .2, [24, 6.5, 40 ], true, 0)
 
-  // const fuboSceneTextBackground = buildBoxGeometry(9, 10, 1)
+  // const fuboSceneTextBackground = buildBoxGeometry(9, 9, 9)
   // fuboSceneTextBackground.position.set(24, 9, 38)
   // scene.add(fuboSceneTextBackground)
+  
+  const fuboSceneTextBackground = new THREE.Mesh(
+    new THREE.BoxGeometry(50,25,1),
+    new THREE.MeshBasicMaterial()
+  );
+  fuboSceneTextBackground.material.color.setHex( 0x000012 );
+  fuboSceneTextBackground.position.set(25, 12.5, 35)
+  fuboSceneTextBackground.name = 'fubo-scene-background'
+
+  const fuboSceneTextFloor = new THREE.Mesh(
+    new THREE.BoxGeometry(50,1,50),
+    new THREE.MeshBasicMaterial()
+  );
+  fuboSceneTextFloor.material.color.setHex( 0x000012 );
+  fuboSceneTextFloor.position.set(25, 0, 59.5)
+  fuboSceneTextFloor.name = 'fubo-scene-floor'
+
+  scene.add(fuboSceneTextBackground)
+  scene.add(fuboSceneTextFloor)
 }
 
 function openFuboWebsite() {
@@ -170,6 +190,8 @@ function tearDownFuboScene() {
   removeObject('fubo-header');
   removeObject('fubo-sub-header');
   removeObject('fubo-website-link');
+  removeObject('fubo-scene-floor');
+  removeObject('fubo-scene-background');
 }
 
 // prome cube
@@ -330,11 +352,11 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
         action.play();
       }
 
-      console.log("\ndebug callback")
-      console.log(gltf.scene)
-      console.log(callback)
+      // console.log("\ndebug callback")
+      // console.log(gltf.scene)
+      // console.log(callback)
       gltf.scene.callback = callback
-      console.log(gltf.scene.callback)
+      // console.log(gltf.scene.callback)
 
       scene.add(gltf.scene);
       mixers.push(mixer);
@@ -365,7 +387,6 @@ function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
         anim.setPath('./models/');
         anim.load(animationUrl, (anim) => {
         let action = mixer.clipAction(anim.animations[0])
-        console.log("we bout to animate!")
         action.play()
       })
     }
@@ -462,6 +483,7 @@ function updateMixers(clockDelta) {
 }
 
 function resetCamera() {
+  // todo: find a way to stop the rotation speed from increasing when camera is reset
   controls.target = new THREE.Vector3(0, 0, 0)
   cameraFocus = "origin";
   updateCameraPosition([0, 12, 73], 50, 1)
@@ -498,9 +520,9 @@ function onDocumentMouseDown(event) {
     // console.log(intersects)
     let object = intersects[0].object
     let callback = object.callback
-    console.log("\ndebug object")
-    console.log(object)
-    console.log(callback)
+    // console.log("\ndebug object")
+    // console.log(object)
+    // console.log(callback)
     if(callback instanceof Function) {
       callback()
     } else {
@@ -512,7 +534,7 @@ function onDocumentMouseDown(event) {
 // on the way to hover effects....potentially
 
 function onMouseOver(event) {
-  console.log("on mouse over")
+  // console.log("on mouse over")
 }
 
 // on button click
@@ -524,7 +546,7 @@ function onButtonClick(event) {
 // handle key events
 
 function keyDownHandler(event) {
-  console.log(event.keyCode)
+  // console.log(event.keyCode)
   switch (event.keyCode) {
     case 87: // w
       camera.position.z -= 5
