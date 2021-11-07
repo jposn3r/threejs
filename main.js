@@ -593,9 +593,7 @@ function getObjectByName(name) {
 // remove object from scene
 
 function removeObject(objectName) {
-  var selectedObject = getObjectByName(objectName)
-  scene.remove(selectedObject);
-  animate();
+  scene.remove(getObjectByName(objectName));
 }
 
 function animate() {
