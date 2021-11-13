@@ -1,7 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { MeshPhongMaterial, Vector3 } from 'three'
+import { AnimationObjectGroup, MeshPhongMaterial, Vector3 } from 'three'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
@@ -131,32 +131,21 @@ fuboCube.callback = function () {
     // add floating stadium
     if(!stadiumVisible) {
       setupFuboScene()
+      var position = { x : 17, y: 6}
+
+      var target = { x : 32, y: 6}
+      var tween = new TWEEN.Tween(position).to(target, 1500)
+
+      tween.onUpdate(function() {
+        fuboCube.position.x = position.x
+        fuboCube.position.y = position.y
+      })
+
+      tween.start()
     }
 
-     // tween test area
-     var position = { x : camera.position.x, y: camera.position.y, z: camera.position.z}
-     var target = { x : 27, y: 8, z: 63}
-     var tween3 = new TWEEN.Tween(position).to(target, 1000)
- 
-     tween3.onUpdate(function() {
-       camera.position.x = position.x
-       camera.position.y = position.y
-       camera.position.z = position.z
-     })
- 
-     tween3.start()
-
-     // move camera to focus the cube
-     // todo: fix focus on mobile
-    if(window.innerWidth > 1000) {
-      // camera.position.set(25, 8, 63)
-      // move focal point of controls
-      controls.target = new THREE.Vector3(25, 8, 40)
-    } else {
-      // camera.position.set(14, 8, 55)
-      // move focal point of controls 
-      controls.target = new THREE.Vector3(14, 7, 40)
-    }
+    // animate to fubo scene
+    animateToScene("fubo")
     
   } else {
     // open fubo website in new tab
@@ -172,42 +161,42 @@ function setupFuboScene() {
   removeObject('click-me-text')
 
   let fuboHeader = 'fuboTV'
-  loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [24, 11, 40], true, 0)
+  loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [39, 11, 40], true, 0)
 
   let fuboSubHeader = 'The Future of Interactive Streaming'
-  loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [24, 9.75, 40], true, 0)
+  loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [39, 9.75, 40], true, 0)
 
   let fuboTVText = 'TV'
-  loadText(optimerBoldUrl, 'fubo-tv-link', fuboTVText, .6, .2, [24.5, 3.75, 40 ], true, 0)
+  loadText(optimerBoldUrl, 'fubo-tv-link', fuboTVText, .6, .2, [39.5, 3.75, 40 ], true, 0)
 
   let fuboGamingText = 'BET'
-  loadText(optimerBoldUrl, 'fubo-sportsbook-link', fuboGamingText, .6, .2, [29.5, 3.75, 40 ], true, 0)
+  loadText(optimerBoldUrl, 'fubo-sportsbook-link', fuboGamingText, .6, .2, [44.5, 3.75, 40 ], true, 0)
 
   let fuboNewsText = 'NEWS'
-  loadText(optimerBoldUrl, 'fubo-news-link', fuboNewsText, .6, .2, [34, 3.75, 40 ], true, 0)
+  loadText(optimerBoldUrl, 'fubo-news-link', fuboNewsText, .6, .2, [49, 3.75, 40 ], true, 0)
   
   // black floor and background for fubo scene
 
-  const fuboSceneTextBackground = new THREE.Mesh(
-    new THREE.BoxGeometry(50,25,1),
-    new THREE.MeshBasicMaterial()
-  )
+  // const fuboSceneTextBackground = new THREE.Mesh(
+  //   new THREE.BoxGeometry(50,25,1),
+  //   new THREE.MeshBasicMaterial()
+  // )
 
-  fuboSceneTextBackground.material.color.setHex( 0x000012 )
-  fuboSceneTextBackground.position.set(25, 12.5, 35)
-  fuboSceneTextBackground.name = 'fubo-scene-background'
+  // fuboSceneTextBackground.material.color.setHex( 0x000012 )
+  // fuboSceneTextBackground.position.set(25, 12.5, 35)
+  // fuboSceneTextBackground.name = 'fubo-scene-background'
 
-  const fuboSceneTextFloor = new THREE.Mesh(
-    new THREE.BoxGeometry(50,1,50),
-    new THREE.MeshBasicMaterial()
-  )
+  // const fuboSceneTextFloor = new THREE.Mesh(
+  //   new THREE.BoxGeometry(50,1,50),
+  //   new THREE.MeshBasicMaterial()
+  // )
 
-  fuboSceneTextFloor.material.color.setHex( 0x000012 )
-  fuboSceneTextFloor.position.set(25, 0, 59.5)
-  fuboSceneTextFloor.name = 'fubo-scene-floor'
+  // fuboSceneTextFloor.material.color.setHex( 0x000012 )
+  // fuboSceneTextFloor.position.set(25, 0, 59.5)
+  // fuboSceneTextFloor.name = 'fubo-scene-floor'
 
-  scene.add(fuboSceneTextBackground)
-  scene.add(fuboSceneTextFloor)
+  // scene.add(fuboSceneTextBackground)
+  // scene.add(fuboSceneTextFloor)
 
   // child cubes
   const blackTexture1 = new THREE.TextureLoader().load('/assets/gold-texture.jpeg')
@@ -221,7 +210,7 @@ function setupFuboScene() {
   }
 
   // fuboChildCube1.material.color.setHex( 0x00FFF7 )
-  fuboChildCube1.position.set(25, 6.5, 40)
+  fuboChildCube1.position.set(40, 6.5, 40)
   fuboChildCube1.name = 'fubo-child-cube-1'
 
   const blackTexture2 = new THREE.TextureLoader().load('/assets/silver-texture.jpeg')
@@ -235,7 +224,7 @@ function setupFuboScene() {
   }
 
   // fuboChildCube2.material.color.setHex( 0x00FFF7 )
-  fuboChildCube2.position.set(30, 6.5, 40)
+  fuboChildCube2.position.set(45, 6.5, 40)
   fuboChildCube2.name = 'fubo-child-cube-2'
 
   const blackTexture3 = new THREE.TextureLoader().load('/assets/bronze-texture.jpeg')
@@ -249,7 +238,7 @@ function setupFuboScene() {
   }
 
   // fuboChildCube3.material.color.setHex( 0x00FFF7 )
-  fuboChildCube3.position.set(35, 6.5, 40)
+  fuboChildCube3.position.set(50, 6.5, 40)
   fuboChildCube3.name = 'fubo-child-cube-3'
 
   scene.add(fuboChildCube1)
@@ -280,6 +269,24 @@ function tearDownFuboScene() {
   removeObject('fubo-tv-link')
   removeObject('fubo-sportsbook-link')
   loadText(optimerBoldUrl, 'click-me-text', clickMeText, 1, .5, [13, 12, 40], true, 0, -.5, 0)
+  animateObjectToPosition(fuboCube, [17, 6], 1500)
+}
+
+function animateObjectToPosition(object, target, time) {
+  console.log("animateObjectToPosition: firing")
+  var position = { x : object.position.x, y: object.position.y}
+  console.log(position)
+  var target = { x : target[0], y: target[1]}
+  console.log(target)
+  var tween = new TWEEN.Tween(position).to(target, time)
+
+  tween.onUpdate(function() {
+    console.log("updating: " + position.x + "-" + position.y)
+    object.position.x = position.x
+    object.position.y = position.y
+  })
+
+  tween.start()
 }
 
 // prome cube
@@ -572,9 +579,10 @@ function updateMixers(clockDelta) {
 
 function resetCamera() {
   // todo: find a way to stop the rotation speed from increasing when camera is reset
-  controls.target = new THREE.Vector3(0, 0, 0)
+  // controls.target = new THREE.Vector3(0, 0, 0)
   cameraFocus = "origin"
-  updateCameraPosition([0, 12, 73], 50, 1)
+  // updateCameraPosition([0, 12, 73], 50, 1)
+  animateToScene("landing")
   tearDownFuboScene()
 }
 
@@ -656,11 +664,61 @@ function keyDownHandler(event) {
       camera.position.z += 3
       break;
     case 39: // right
-      camera.position.x += 3
+      // animateToScene("fubo")
       break;
     case 27: // escape
       resetCamera()
   }
+}
+
+let sceneStates = {
+  totalScenes: 3,
+  landing: {
+    id: 0,
+    name: "landing",
+    cameraPosition: [0, 12, 73],
+    controlsTargetVector: [0, 0, 0]
+  },
+  portfolio: {
+    id: 1,
+    name: "portfolio",
+    cameraPosition: [-40, 8, 63],
+    controlsTargetVector: [-40, 8, 50]
+  },
+  fubo: {
+    id: 2,
+    name: "fubo",
+    cameraPosition: [40, 8, 63],
+    controlsTargetVector: [40, 8, 50]
+  }
+}
+
+let sceneState = sceneStates.landing
+
+function animateToScene(sceneName) {
+  console.log("animateToScene: " + sceneName)
+  console.log(sceneStates[sceneName])
+  let scenePosition = sceneStates[sceneName].cameraPosition
+  console.log("position: " + scenePosition)
+  let controlsTargetVector = sceneStates[sceneName].controlsTargetVector
+  console.log("controlsTargetVector: " + controlsTargetVector)
+
+  controls.target = new THREE.Vector3(controlsTargetVector[0], controlsTargetVector[1], controlsTargetVector[2])
+
+  // tween test area
+  var position = { x : camera.position.x, y: camera.position.y, z: camera.position.z}
+  var target = { x : scenePosition[0], y: scenePosition[1], z: scenePosition[2]}
+  var tween3 = new TWEEN.Tween(position).to(target, 1500)
+
+  tween3.onUpdate(function() {
+    camera.position.x = position.x
+    camera.position.y = position.y
+    camera.position.z = position.z
+  })
+
+  tween3.start()
+
+  sceneState = sceneStates[sceneName]
 }
 
 // update camera position
