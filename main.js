@@ -94,7 +94,7 @@ let mixers = []
 
 // build and add torus rings
 
-const geometry = new THREE.TorusGeometry(10, 0.5, 10, 100)
+const geometry = new THREE.TorusGeometry(9, 0.5, 10, 100)
 const blueMaterial = new THREE.MeshStandardMaterial({ color: 0x00dadf})
 
 const torus = new THREE.Mesh(geometry, blueMaterial)
@@ -273,15 +273,11 @@ function tearDownFuboScene() {
 }
 
 function animateObjectToPosition(object, target, time) {
-  console.log("animateObjectToPosition: firing")
   var position = { x : object.position.x, y: object.position.y}
-  console.log(position)
   var target = { x : target[0], y: target[1]}
-  console.log(target)
   var tween = new TWEEN.Tween(position).to(target, time)
 
   tween.onUpdate(function() {
-    console.log("updating: " + position.x + "-" + position.y)
     object.position.x = position.x
     object.position.y = position.y
   })
@@ -341,11 +337,11 @@ let hoverCarLoaded = false
 
 // set positions
 
-torus.position.set(0, -15, 15);
-torus2.position.set(0, -15, 15);
-torus3.position.set(0, -15, 15);
+torus.position.set(0, 22, 7);
+torus2.position.set(0, 22, 7);
+torus3.position.set(0, 22, 7);
 
-moon.position.set(0, -15, 15);
+moon.position.set(0, 0, 0);
 
 pointLight.position.set(0, 25, 45);
 
@@ -355,6 +351,11 @@ updateCameraPosition([0, 12, 73], 50, 1)
 
 // Add stars
 Array(1000).fill().forEach(addStar)
+
+loadGLTF(hoverCarResourceUrl, 'hover-car-small', 3, {x: 1, y: 3.5, z: 40}, true, 0, 45, 0, function(){
+  // animateToScene("portfolio")
+  console.log("\ncalling it or nah")
+})
 
 // don't load master chief on mobile
 if(window.innerWidth > 1000) {
@@ -371,7 +372,7 @@ if(window.innerWidth > 1000) {
 }
 
 let metaverseHeader = 'Metaverse'
-loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 6, 2, [-18, -11, 27], true, -.5)
+loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .5, [-6.5, 22, 3], true, 0, 0, 0)
 
 let clickMeText = 'Click Me!'
 loadText(optimerBoldUrl, 'click-me-text', clickMeText, 1, .5, [13, 12, 40], true, 0, -.5, 0)
@@ -388,7 +389,7 @@ scene.add(torus3)
 // metaverse floor grid
 scene.add(gridHelper)
 // sphere
-scene.add(moon)
+// scene.add(moon)
 // cubes
 scene.add(promeCube)
 scene.add(fuboCube)
