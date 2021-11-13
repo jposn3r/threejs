@@ -335,6 +335,9 @@ let gokuResourceUrl = './models/goku-rigged-animated/scene.gltf'
 let snakeEyesResourceUrl = './models/snake_eyes/scene.gltf'
 let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
 let barcelonaStadiumResourceUrl = './models/camp-nou-stadium/scene.gltf'
+let hoverCarResourceUrl = './models/hover-car/scene.gltf'
+
+let hoverCarLoaded = false
 
 // set positions
 
@@ -462,6 +465,9 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
     // called while loading is progressing
     function ( xhr ) {
       console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+      if(xhr.loaded / xhr.total == 1) {
+        console.log("\nloading finished, proceed with operation")
+      }
     },
     // called when loading has errors
     function ( error ) {
@@ -658,7 +664,15 @@ function keyDownHandler(event) {
       camera.position.z -= 3
       break;
     case 37: // left
-      camera.position.x -= 3
+      // animate to hover car
+      console.log("\nleft click \ncurrent scene: " + sceneState.name)
+      if(sceneState.name !== "portfolio") {
+        animateToScene("portfolio")
+        if(!hoverCarLoaded) {
+          loadGLTF(hoverCarResourceUrl, 'hover-car', 10, {x: -40, y: 9, z: 0}, true, 0, 45)
+          hoverCarLoaded = true
+        }
+      }
       break;
     case 40: // down
       camera.position.z += 3
