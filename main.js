@@ -162,8 +162,6 @@ fuboCube.callback = function () {
 function setupFuboScene() {
   // console.log("\nsetupFuboScene()")
   stadiumVisible = true
-  // loadGLTF(barcelonaStadiumResourceUrl, 'barcelona-stadium', 0.0009, {x: 30, y: 13.5, z: 40}, false, 0.75, 180, 0)
-
   removeObject('click-me-text')
 
   let fuboHeader = 'fuboTV'
@@ -204,52 +202,54 @@ function setupFuboScene() {
   // scene.add(fuboSceneTextBackground)
   // scene.add(fuboSceneTextFloor)
 
+  const fuboCubeGroup = new THREE.Group()
+  fuboCubeGroup.name = 'fubo-cube-group'
+
   // child cubes
   const blackTexture1 = new THREE.TextureLoader().load('/assets/gold-texture.jpeg')
-  let fuboChildCube1 = new THREE.Mesh(
+  let fuboTVCube = new THREE.Mesh(
     new THREE.BoxGeometry(3,3,3),
     new THREE.MeshBasicMaterial({map: blackTexture1})
   )
 
-  fuboChildCube1.callback = () => {
+  fuboTVCube.callback = () => {
     openWebsite('https://www.fubo.tv')
   }
 
-  // fuboChildCube1.material.color.setHex( 0x00FFF7 )
-  fuboChildCube1.position.set(40, 6.5, 40)
-  fuboChildCube1.name = 'fubo-child-cube-1'
+  fuboTVCube.position.set(40, 6.5, 40)
+  fuboTVCube.name = 'fubo-tv-cube'
 
   const blackTexture2 = new THREE.TextureLoader().load('/assets/silver-texture.jpeg')
-  let fuboChildCube2 = new THREE.Mesh(
+  let fuboBetCube = new THREE.Mesh(
     new THREE.BoxGeometry(3,3,3),
     new THREE.MeshBasicMaterial({map: blackTexture2})
   );
 
-  fuboChildCube2.callback = () => {
+  fuboBetCube.callback = () => {
     openWebsite('https://www.fubosportsbook.com')
   }
 
-  // fuboChildCube2.material.color.setHex( 0x00FFF7 )
-  fuboChildCube2.position.set(45, 6.5, 40)
-  fuboChildCube2.name = 'fubo-child-cube-2'
+  fuboBetCube.position.set(45, 6.5, 40)
+  fuboBetCube.name = 'fubo-bet-cube'
 
   const blackTexture3 = new THREE.TextureLoader().load('/assets/bronze-texture.jpeg')
-  let fuboChildCube3 = new THREE.Mesh(
+  let fuboNewsCube = new THREE.Mesh(
     new THREE.BoxGeometry(3,3,3),
     new THREE.MeshBasicMaterial({map: blackTexture3})
   );
 
-  fuboChildCube3.callback = () => {
+  fuboNewsCube.callback = () => {
     openWebsite('https://www.google.com/search?q=fubotv+news')
   }
 
   // fuboChildCube3.material.color.setHex( 0x00FFF7 )
-  fuboChildCube3.position.set(50, 6.5, 40)
-  fuboChildCube3.name = 'fubo-child-cube-3'
+  fuboNewsCube.position.set(50, 6.5, 40)
+  fuboNewsCube.name = 'fubo-news-cube'
 
-  scene.add(fuboChildCube1)
-  scene.add(fuboChildCube2)
-  scene.add(fuboChildCube3)
+  fuboCubeGroup.add(fuboTVCube)
+  fuboCubeGroup.add(fuboBetCube)
+  fuboCubeGroup.add(fuboNewsCube)
+  scene.add(fuboCubeGroup)
 }
 
 function openWebsite(url = "", newTab = true) {
@@ -268,9 +268,7 @@ function tearDownFuboScene() {
   removeObject('fubo-website-link')
   removeObject('fubo-scene-floor')
   removeObject('fubo-scene-background')
-  removeObject('fubo-child-cube-1')
-  removeObject('fubo-child-cube-2')
-  removeObject('fubo-child-cube-3')
+  removeObject('fubo-cube-group')
   removeObject('fubo-news-link')
   removeObject('fubo-tv-link')
   removeObject('fubo-sportsbook-link')
