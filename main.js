@@ -120,7 +120,7 @@ scene.add(focusTorus)
 const ambientLight = new THREE.AmbientLight(0xffffff)
 const pointLight = new THREE.PointLight(0x00beee, 3, 100)
 
-// helpers
+// grid floor
 
 const gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf)
 
@@ -133,7 +133,7 @@ scene.background = spaceTexture
 
 const fuboTexture = new THREE.TextureLoader().load('/assets/fubo-bg.jpg')
 
-const fuboCube = buildBoxGeometry(6, 6, 6, fuboTexture)
+const fuboCube = buildBoxGeometry(4, 4, 4, fuboTexture)
 
 fuboCube.name = "fuboCube"
 let stadiumVisible = false
@@ -250,7 +250,6 @@ function openWebsite(url = "", newTab = true) {
 
 function tearDownFuboScene() {
   stadiumVisible = false
-  removeObject('barcelona-stadium')
   removeObject('fubo-header')
   removeObject('fubo-sub-header')
   removeObject('fubo-website-link')
@@ -260,7 +259,7 @@ function tearDownFuboScene() {
   removeObject('fubo-news-link')
   removeObject('fubo-tv-link')
   removeObject('fubo-sportsbook-link')
-  animateObjectToPosition(fuboCube, [17, 6], 1500)
+  // animateObjectToPosition(fuboCube, [17, 6], 1500)
 }
 
 function animateObjectToPosition(object, target, time) {
@@ -279,7 +278,7 @@ function animateObjectToPosition(object, target, time) {
 // prome cube
 
 const promeTexture = new THREE.TextureLoader().load('/assets/prometheus.jpg')
-const promeCube = buildBoxGeometry(6, 6, 6, promeTexture)
+const promeCube = buildBoxGeometry(4, 4, 4, promeTexture)
 
 promeCube.callback = function () {
   // open prometheus definition
@@ -324,18 +323,17 @@ let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./s
 let barcelonaStadiumResourceUrl = './models/camp-nou-stadium/scene.gltf'
 let hoverCarResourceUrl = './models/hover-car/scene.gltf'
 let hoverBikeResourceUrl = './models/hover-bike/scene.gltf'
-
-let hoverCarLoaded = false
+let astronautResourceUrl = './models/astronaut/scene.gltf'
 
 // set positions
 
-torus.position.set(0, 22, 7);
-torus2.position.set(0, 22, 7);
-torus3.position.set(0, 22, 7);
+torusGroup.position.set(0, 22, -10)
 
-moon.position.set(0, 0, 0);
+focusTorus.position.set(0, 0, 41)
 
-pointLight.position.set(0, 25, 45);
+// moon.position.set(0, 0, 0);
+
+pointLight.position.set(0, 25, 45)
 
 updateCameraPosition([0, 20, 75], 50, 1)
 
@@ -344,27 +342,47 @@ updateCameraPosition([0, 20, 75], 50, 1)
 // Add stars
 Array(1000).fill().forEach(addStar)
 
-// add small car to menu - when clicked it shows the big version
-loadGLTF(hoverCarResourceUrl, 'hover-car-small', 3, {x: 1, y: 3.5, z: 40}, true, 0, 45, 0)
+// main menu
 
-// don't load master chief on mobile
-if(window.innerWidth > 1000) {
-  // loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
+// add small car to menu - when clicked it shows the big version
+loadGLTF(hoverCarResourceUrl, 'hover-car-small', 2, {x: -12.5, y: 2.5, z: 40}, true, 0, 45)
+
+// add small astronaut to menu - when focused and click enter it shows the big one
+loadGLTF(astronautResourceUrl, 'astronaut-small', 2.5, {x: 12.5, y: 0, z: 40}, true, 0, 0, 0)
+
+// add small goku to menu - when focused and click enter it shows the big one
+loadGLTF(gokuResourceUrl, 'goku-small', 3, {x: 3, y: 1, z: 40}, true, 0)
+
+// add small snake eyes to menu - when focused and click enter it shows the big one
+loadGLTF(snakeEyesResourceUrl, 'snake-eyes-small', .055, {x: -3, y: 1, z: 40}, true)
+
+// load intitial layout into focus area
+function loadLanding() {
   loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
   loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
-  fuboCube.position.set(20, 6, 40)
-  promeCube.position.set(-20, 6, 40)
+}
+loadLanding()
+
+// change variables based on screen width
+if(window.innerWidth > 1000) {
+  // loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
+  // loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
+  // loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
+  // fuboCube.position.set(25, 6, 40)
+  // promeCube.position.set(-25, 6, 40)
 } else {
-  loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -7, y: 0, z: 20}, true)
-  loadGLTF(gokuResourceUrl, 'goku', 8, {x: 7, y: 0, z: 20}, true)
-  fuboCube.position.set(10, 6, 40)
-  promeCube.position.set(-10, 6, 40)
+  // loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -7, y: 0, z: 20}, true)
+  // loadGLTF(gokuResourceUrl, 'goku', 8, {x: 7, y: 0, z: 20}, true)
+  // fuboCube.position.set(10, 6, 40)
+  // promeCube.position.set(-10, 6, 40)
 }
 
-focusTorus.position.set(0, 2, 41)
-
 let metaverseHeader = 'Metaverse'
-loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .5, [-6.5, 22, 3], true, 0, 0, 0)
+loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .5, [-6.5, 22, -10], true, 0, 0, 0)
+
+
+let keyHint = 'Use arrows to navigate'
+loadText(optimerBoldUrl, 'key-hint-header', keyHint, .75, .05, [-5, 0, 49], true, 0, 0, 0)
 
 // lights
 scene.add(pointLight)
@@ -377,27 +395,29 @@ scene.add(torusGroup)
 scene.add(gridHelper)
 // sphere
 // scene.add(moon)
+
 // cubes
 scene.add(promeCube)
 scene.add(fuboCube)
 
 // tween test area
 
-var position = { x : 0, y: 0}
-var target = { x : 17, y: 6}
+var position = { x : 0, y: 0, z: 40}
+var target = { x : 25, y: 5, z: 40}
 var tween = new TWEEN.Tween(position).to(target, 2500)
 
 tween.onUpdate(function() {
   fuboCube.position.x = position.x
   fuboCube.position.y = position.y
+  fuboCube.position.z = position.z
 })
 
 tween.start()
 
 // promecube opposite animation
 
-var position2 = { x : 0, y: 0}
-var target2 = { x : 17, y: 6}
+var position2 = { x : 0, y: 0, z: 40}
+var target2 = { x : 25, y: 5, z: 40}
 var tween2 = new TWEEN.Tween(position2).to(target2, 2500)
 
 tween2.easing(TWEEN.Easing.Quadratic.Out)
@@ -405,6 +425,7 @@ tween2.easing(TWEEN.Easing.Quadratic.Out)
 tween2.onUpdate(function(){
   promeCube.position.x = -position.x
   promeCube.position.y = position.y
+  promeCube.position.z = position.z
 })
 
 tween2.start()
@@ -414,7 +435,7 @@ tween2.start()
 // end test area
 
 // GLTF Loader function
-function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}) {
+function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}, animationIndex = 0) {
   let mixer
   let loader = new GLTFLoader()
   loader.load(
@@ -437,7 +458,9 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
       mixer = new THREE.AnimationMixer( gltf.scene )
 
       if(animate) {
-        var action = mixer.clipAction(gltf.animations[0])
+        // console.log("\n" + name + " animations: \n")
+        // console.log(gltf.animations)
+        var action = mixer.clipAction(gltf.animations[animationIndex])
         action.play()
       }
 
@@ -452,14 +475,14 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
     },
     // called while loading is progressing
     function ( xhr ) {
-      console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+      // console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
       if(xhr.loaded / xhr.total == 1) {
-        console.log("\nloading finished, proceed with operation")
+        // console.log("\nloading finished, proceed with operation")
       }
     },
     // called when loading has errors
     function ( error ) {
-      console.log( 'An error happened loading GLTF model' )
+      console.log( 'An error happened loading GLTF model ' + name )
     }
   );
 }
@@ -630,17 +653,17 @@ function onMouseOver(event) {
 // on button click
 
 function onButtonClick(event) {
-  console.log("\nonButtonClick()")
+  // console.log("\nonButtonClick()")
   resetCamera()
 }
 
 // handle key events
 
-let focusState = 'hover-car'
+let focusState = 'landing'
 let focusTargetPosition
 
 function keyDownHandler(event) {
-  console.log(event.keyCode)
+  // console.log(event.keyCode)
   switch (event.keyCode) {
     case 87: // w
       // camera.position.z -= 5
@@ -657,13 +680,29 @@ function keyDownHandler(event) {
       break
     case 37: // left
       // move focus torus
-      if(focusState == 'hover-car') {
-        focusTargetPosition = [-18, 0]
-        focusState = 'prome'
-      } else if(focusState == 'fubo') {
-        focusTargetPosition = [0, 0]
+      // console.log(focusState)
+      if(focusState == 'landing') {
+        // removeObject('goku')
+        // removeObject('snake-eyes')
+        getObjectByName('goku').visible = false
+        getObjectByName('snake-eyes').visible = false
+        focusTargetPosition = [-12, 0]
         focusState = 'hover-car'
+      } else if(focusState == 'astronaut') {
+        getObjectByName('astronaut').visible = false
+        focusTargetPosition = [0, 0]
+        focusState = 'landing'
+      } else if(focusState == 'fubo') {
+        // remove fubo scene
+        focusTargetPosition = [12, 0]
+        focusState = 'astronaut'
+      } else if(focusState == 'hover-car') {
+        getObjectByName('hover-car').visible = false
+        getObjectByName('hover-bike').visible = false
+        focusTargetPosition = [-24, 0]
+        focusState = 'prome'
       }
+      updateFocusArea(focusState)
       animateObjectToPosition(focusTorus, focusTargetPosition, 250)
       break
     case 40: // down
@@ -671,33 +710,46 @@ function keyDownHandler(event) {
       break
     case 39: // right
       // animateToScene("fubo")
-      if(focusState == 'hover-car') {
-        focusTargetPosition = [18, 0]
+      // console.log(focusState)
+      if(focusState == 'landing') {
+        getObjectByName('goku').visible = false
+        getObjectByName('snake-eyes').visible = false
+        focusTargetPosition = [12, 0]
+        focusState = 'astronaut'
+      } else if(focusState == 'astronaut') {
+        getObjectByName('astronaut').visible = false
+        focusTargetPosition = [24, 0]
         focusState = 'fubo'
-      } else if(focusState == 'prome') {
+      } else if(focusState == 'hover-car') {
+        getObjectByName('hover-car').visible = false
+        getObjectByName('hover-bike').visible = false
         focusTargetPosition = [0, 0]
+        focusState = 'landing'
+      } else if(focusState == 'prome') {
+        focusTargetPosition = [-12, 0]
         focusState = 'hover-car'
       }
+      updateFocusArea(focusState)
       animateObjectToPosition(focusTorus, focusTargetPosition, 250)
       break
     case 13: // enter
       // check where focus is
-      console.log(focusState)
+      // console.log(focusState)
       switch(focusState) {
         case 'fubo':
           //animate to fubo scene
-          initFuboScene()
+          // initFuboScene()
           break
         case 'hover-car':
           // animate to garage
           // animate to hover car
-          console.log("\nenter \ncurrent scene: " + sceneState.name)
+          // console.log("\nenter \ncurrent scene: " + sceneState.name)
           if(sceneState.name !== "portfolio") {
             animateToScene("portfolio")
             if(!hoverCarLoaded) {
-              loadGLTF(hoverCarResourceUrl, 'hover-car', 10, {x: -70, y: 9, z: 0}, true, 0, 45)
-              loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: -85, y: 6, z: 25}, true, 0, 235)
-              hoverCarLoaded = true
+              // loadGLTF(hoverCarResourceUrl, 'hover-car', 10, {x: -70, y: 9, z: 0}, true, 0, 45)
+              // loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: -85, y: 6, z: 25}, true, 0, 235)
+              // hoverCarLoaded = true
             }
           }
           break
@@ -709,6 +761,45 @@ function keyDownHandler(event) {
       // move to new scene
     case 27: // escape
       resetCamera()
+      break
+  }
+}
+
+let hoverCarLoaded = false
+let astronautLoaded = false
+
+function updateFocusArea(focusState = "") {
+  switch(focusState) {
+    case "landing":
+      // load/show goku and snake eyes
+      getObjectByName('goku').visible = true
+      getObjectByName('snake-eyes').visible = true
+      break
+    case "hover-car":
+      // load/show hover car and bike
+      if(!hoverCarLoaded) {
+        loadGLTF(hoverCarResourceUrl, 'hover-car', 8, {x: -12, y: 9, z: 10}, true, 0, 45)
+        loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: 20, y: 6, z: 14}, true, 0, 45)
+        hoverCarLoaded = true
+      } else {
+        getObjectByName('hover-car').visible = true
+        getObjectByName('hover-bike').visible = true
+      }
+      break
+    case "astronaut":
+      // load/show astronaut
+      if(!astronautLoaded) {
+        loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 2, z: 20}, true, 0, 0, 0, function(){}, 3)
+        astronautLoaded = true
+      } else {
+        getObjectByName('astronaut').visible = true
+      }
+      break
+    case "prome":
+      // load portfolio
+      break
+    case "fubo":
+      // load fubo
       break
   }
 }
@@ -738,7 +829,7 @@ let sceneStates = {
 let sceneState = sceneStates.landing
 
 function animateToScene(sceneName) {
-  console.log("animateToScene: " + sceneName)
+  // console.log("animateToScene: " + sceneName)
   // console.log(sceneStates[sceneName])
   let scenePosition = sceneStates[sceneName].cameraPosition
   // console.log("position: " + scenePosition)
