@@ -332,6 +332,7 @@ let snakeEyesResourceUrl = './models/snake_eyes/scene.gltf'
 let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
 let barcelonaStadiumResourceUrl = './models/camp-nou-stadium/scene.gltf'
 let hoverCarResourceUrl = './models/hover-car/scene.gltf'
+let hoverBikeResourceUrl = './models/hover-bike/scene.gltf'
 
 let hoverCarLoaded = false
 
@@ -345,7 +346,7 @@ moon.position.set(0, 0, 0);
 
 pointLight.position.set(0, 25, 45);
 
-updateCameraPosition([0, 12, 73], 50, 1)
+updateCameraPosition([0, 15, 69], 50, 1)
 
 // add objects to the scene
 
@@ -671,6 +672,7 @@ function keyDownHandler(event) {
         animateToScene("portfolio")
         if(!hoverCarLoaded) {
           loadGLTF(hoverCarResourceUrl, 'hover-car', 10, {x: -40, y: 9, z: 0}, true, 0, 45)
+          loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: -55, y: 6, z: 25}, true, 0, 235)
           hoverCarLoaded = true
         }
       }
@@ -697,8 +699,8 @@ let sceneStates = {
   portfolio: {
     id: 1,
     name: "portfolio",
-    cameraPosition: [-40, 8, 63],
-    controlsTargetVector: [-40, 8, 50]
+    cameraPosition: [-44, 25, 60],
+    controlsTargetVector: [-40, 5, 0]
   },
   fubo: {
     id: 2,
