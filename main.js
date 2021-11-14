@@ -107,6 +107,15 @@ torusGroup.add(torus)
 torusGroup.add(torus2)
 torusGroup.add(torus3)
 
+const focusTorusGeometry = new THREE.TorusGeometry(5, 0.25, 5)
+const focusTorusMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff})
+const focusTorus = new THREE.Mesh(focusTorusGeometry, focusTorusMaterial)
+focusTorus.rotation.x = -1.575
+focusTorus.rotation.y = 0
+focusTorus.rotation.z = 0
+
+scene.add(focusTorus)
+
 // lights
 const ambientLight = new THREE.AmbientLight(0xffffff)
 const pointLight = new THREE.PointLight(0x00beee, 3, 100)
@@ -123,7 +132,6 @@ scene.background = spaceTexture
 // fubo cube
 
 const fuboTexture = new THREE.TextureLoader().load('/assets/fubo-bg.jpg')
-// const jakeTexture = new THREE.TextureLoader().load('/assets/jake-bw.jpeg')
 
 const fuboCube = buildBoxGeometry(6, 6, 6, fuboTexture)
 
@@ -131,6 +139,10 @@ fuboCube.name = "fuboCube"
 let stadiumVisible = false
 
 fuboCube.callback = function () {
+  // initFuboScene()
+}
+
+function initFuboScene() {
   if(cameraFocus != "fuboCube") {
     cameraFocus = "fuboCube"
 
@@ -162,7 +174,6 @@ fuboCube.callback = function () {
 function setupFuboScene() {
   // console.log("\nsetupFuboScene()")
   stadiumVisible = true
-  removeObject('click-me-text')
 
   let fuboHeader = 'fuboTV'
   loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [39, 11, 40], true, 0)
@@ -178,29 +189,6 @@ function setupFuboScene() {
 
   let fuboNewsText = 'NEWS'
   loadText(optimerBoldUrl, 'fubo-news-link', fuboNewsText, .6, .2, [49, 3.75, 40 ], true, 0)
-  
-  // black floor and background for fubo scene
-
-  // const fuboSceneTextBackground = new THREE.Mesh(
-  //   new THREE.BoxGeometry(50,25,1),
-  //   new THREE.MeshBasicMaterial()
-  // )
-
-  // fuboSceneTextBackground.material.color.setHex( 0x000012 )
-  // fuboSceneTextBackground.position.set(25, 12.5, 35)
-  // fuboSceneTextBackground.name = 'fubo-scene-background'
-
-  // const fuboSceneTextFloor = new THREE.Mesh(
-  //   new THREE.BoxGeometry(50,1,50),
-  //   new THREE.MeshBasicMaterial()
-  // )
-
-  // fuboSceneTextFloor.material.color.setHex( 0x000012 )
-  // fuboSceneTextFloor.position.set(25, 0, 59.5)
-  // fuboSceneTextFloor.name = 'fubo-scene-floor'
-
-  // scene.add(fuboSceneTextBackground)
-  // scene.add(fuboSceneTextFloor)
 
   const fuboCubeGroup = new THREE.Group()
   fuboCubeGroup.name = 'fubo-cube-group'
@@ -272,7 +260,6 @@ function tearDownFuboScene() {
   removeObject('fubo-news-link')
   removeObject('fubo-tv-link')
   removeObject('fubo-sportsbook-link')
-  loadText(optimerBoldUrl, 'click-me-text', clickMeText, 1, .5, [13, 12, 40], true, 0, -.5, 0)
   animateObjectToPosition(fuboCube, [17, 6], 1500)
 }
 
@@ -350,17 +337,15 @@ moon.position.set(0, 0, 0);
 
 pointLight.position.set(0, 25, 45);
 
-updateCameraPosition([0, 15, 69], 50, 1)
+updateCameraPosition([0, 20, 75], 50, 1)
 
 // add objects to the scene
 
 // Add stars
 Array(1000).fill().forEach(addStar)
 
-loadGLTF(hoverCarResourceUrl, 'hover-car-small', 3, {x: 1, y: 3.5, z: 40}, true, 0, 45, 0, function(){
-  // animateToScene("portfolio")
-  console.log("\ncalling it or nah")
-})
+// add small car to menu - when clicked it shows the big version
+loadGLTF(hoverCarResourceUrl, 'hover-car-small', 3, {x: 1, y: 3.5, z: 40}, true, 0, 45, 0)
 
 // don't load master chief on mobile
 if(window.innerWidth > 1000) {
@@ -376,11 +361,10 @@ if(window.innerWidth > 1000) {
   promeCube.position.set(-10, 6, 40)
 }
 
+focusTorus.position.set(0, 2, 41)
+
 let metaverseHeader = 'Metaverse'
 loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .5, [-6.5, 22, 3], true, 0, 0, 0)
-
-let clickMeText = 'Click Me!'
-loadText(optimerBoldUrl, 'click-me-text', clickMeText, 1, .5, [13, 12, 40], true, 0, -.5, 0)
 
 // lights
 scene.add(pointLight)
@@ -534,6 +518,9 @@ function buildGui() {
   let moonFolder = gui.addFolder('moon')
   let fuboCubeFolder = gui.addFolder('fuboCube')
   let cameraFolder = gui.addFolder('camera')
+  let focusTorusFolder = gui.addFolder('focusTorus')
+
+  focusTorusFolder.add(focusTorus.rotation, 'x')
 
   moonFolder.add(moon.position, 'x')
   moonFolder.add(moon.position, 'y')
@@ -588,10 +575,7 @@ function updateMixers(clockDelta) {
 }
 
 function resetCamera() {
-  // todo: find a way to stop the rotation speed from increasing when camera is reset
-  // controls.target = new THREE.Vector3(0, 0, 0)
   cameraFocus = "origin"
-  // updateCameraPosition([0, 12, 73], 50, 1)
   animateToScene("landing")
   tearDownFuboScene()
 }
@@ -608,7 +592,7 @@ function addStar() {
   scene.add(star);
 }
 
-// buildGui();
+// buildGui()
 
 // handle mousedown events
 
@@ -646,47 +630,86 @@ function onMouseOver(event) {
 // on button click
 
 function onButtonClick(event) {
+  console.log("\nonButtonClick()")
   resetCamera()
 }
 
 // handle key events
 
+let focusState = 'hover-car'
+let focusTargetPosition
+
 function keyDownHandler(event) {
-  // console.log(event.keyCode)
+  console.log(event.keyCode)
   switch (event.keyCode) {
     case 87: // w
-      camera.position.z -= 5
-      break;
+      // camera.position.z -= 5
+      break
     case 65: // a
-      break;
+      break
     case 83: // s
-      camera.position.z += 5
-      break;
+      // camera.position.z += 5
+      break
     case 68: // d
-      break;
+      break
     case 38: // up
-      camera.position.z -= 3
-      break;
+      // camera.position.z -= 3
+      break
     case 37: // left
-      // animate to hover car
-      console.log("\nleft click \ncurrent scene: " + sceneState.name)
-      if(sceneState.name !== "portfolio") {
-        animateToScene("portfolio")
-        if(!hoverCarLoaded) {
-          loadGLTF(hoverCarResourceUrl, 'hover-car', 10, {x: -40, y: 9, z: 0}, true, 0, 45)
-          loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: -55, y: 6, z: 25}, true, 0, 235)
-          hoverCarLoaded = true
-        }
+      // move focus torus
+      if(focusState == 'hover-car') {
+        focusTargetPosition = [-18, 0]
+        focusState = 'prome'
+      } else if(focusState == 'fubo') {
+        focusTargetPosition = [0, 0]
+        focusState = 'hover-car'
       }
-      break;
+      animateObjectToPosition(focusTorus, focusTargetPosition, 250)
+      break
     case 40: // down
-      camera.position.z += 3
-      break;
+      // camera.position.z += 3
+      break
     case 39: // right
       // animateToScene("fubo")
-      break;
+      if(focusState == 'hover-car') {
+        focusTargetPosition = [18, 0]
+        focusState = 'fubo'
+      } else if(focusState == 'prome') {
+        focusTargetPosition = [0, 0]
+        focusState = 'hover-car'
+      }
+      animateObjectToPosition(focusTorus, focusTargetPosition, 250)
+      break
+    case 13: // enter
+      // check where focus is
+      console.log(focusState)
+      switch(focusState) {
+        case 'fubo':
+          //animate to fubo scene
+          initFuboScene()
+          break
+        case 'hover-car':
+          // animate to garage
+          // animate to hover car
+          console.log("\nenter \ncurrent scene: " + sceneState.name)
+          if(sceneState.name !== "portfolio") {
+            animateToScene("portfolio")
+            if(!hoverCarLoaded) {
+              loadGLTF(hoverCarResourceUrl, 'hover-car', 10, {x: -70, y: 9, z: 0}, true, 0, 45)
+              loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: -85, y: 6, z: 25}, true, 0, 235)
+              hoverCarLoaded = true
+            }
+          }
+          break
+        case 'prome':
+          // animate to portfolio
+          break
+      }
+      break
+      // move to new scene
     case 27: // escape
       resetCamera()
+      break
   }
 }
 
@@ -695,14 +718,14 @@ let sceneStates = {
   landing: {
     id: 0,
     name: "landing",
-    cameraPosition: [0, 12, 73],
+    cameraPosition: [0, 20, 75],
     controlsTargetVector: [0, 0, 0]
   },
   portfolio: {
     id: 1,
     name: "portfolio",
-    cameraPosition: [-44, 25, 60],
-    controlsTargetVector: [-40, 5, 0]
+    cameraPosition: [-74, 25, 60],
+    controlsTargetVector: [-80, 5, 0]
   },
   fubo: {
     id: 2,
@@ -716,11 +739,11 @@ let sceneState = sceneStates.landing
 
 function animateToScene(sceneName) {
   console.log("animateToScene: " + sceneName)
-  console.log(sceneStates[sceneName])
+  // console.log(sceneStates[sceneName])
   let scenePosition = sceneStates[sceneName].cameraPosition
-  console.log("position: " + scenePosition)
+  // console.log("position: " + scenePosition)
   let controlsTargetVector = sceneStates[sceneName].controlsTargetVector
-  console.log("controlsTargetVector: " + controlsTargetVector)
+  // console.log("controlsTargetVector: " + controlsTargetVector)
 
   controls.target = new THREE.Vector3(controlsTargetVector[0], controlsTargetVector[1], controlsTargetVector[2])
 
@@ -742,7 +765,7 @@ function animateToScene(sceneName) {
 
 // update camera position
 
-function updateCameraPosition(position = [0, 12, 73], fov = 50, zoom = 1) {
+function updateCameraPosition(position = [0, 20, 75], fov = 50, zoom = 1) {
   camera.position.set(position[0], position[1], position[2])
   camera.fov = fov
   camera.zoom = zoom
