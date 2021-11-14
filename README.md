@@ -17,3 +17,9 @@ Initial Load
 Interaction and movement
 - Secondary scene/layout
 - Smooth animation between the Welcome scene/layout and the secondary scene/layout
+
+### Phase 3
+
+Advanced Interaction
+- Main Menu to switch which models are visible
+- Hide and show with visibility without loading and removing objects constantly
