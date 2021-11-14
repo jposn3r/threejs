@@ -328,7 +328,7 @@ let toriiGateResourceUrl = './models/torii-gate/scene.gltf'
 
 // set positions
 
-torusGroup.position.set(0, 22, -10)
+torusGroup.position.set(-40, 22, -10)
 
 focusTorus.position.set(0, 0, 41)
 
@@ -382,7 +382,7 @@ if(window.innerWidth > 1000) {
 }
 
 let metaverseHeader = 'Metaverse'
-loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .5, [-6.5, 22, -10], true, 0, 0, 0)
+loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [-46.5, 22, -10], true, 0, 0, 0)
 
 let keyHint = 'Use arrows to navigate'
 loadText(optimerBoldUrl, 'key-hint-header', keyHint, .75, .05, [-5, 0, 49], true, 0, 0, 0)
@@ -748,7 +748,7 @@ function keyDownHandler(event) {
           // animate to hover car
           // console.log("\nenter \ncurrent scene: " + sceneState.name)
           if(sceneState.name !== "portfolio") {
-            animateToScene("portfolio")
+            // animateToScene("portfolio")
             if(!hoverCarLoaded) {
               // loadGLTF(hoverCarResourceUrl, 'hover-car', 10, {x: -70, y: 9, z: 0}, true, 0, 45)
               // loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: -85, y: 6, z: 25}, true, 0, 235)
