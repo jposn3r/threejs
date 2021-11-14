@@ -94,12 +94,18 @@ let mixers = []
 
 // build and add torus rings
 
+const torusGroup = new THREE.Group()
+
 const geometry = new THREE.TorusGeometry(9, 0.5, 10, 100)
 const blueMaterial = new THREE.MeshStandardMaterial({ color: 0x00dadf})
 
 const torus = new THREE.Mesh(geometry, blueMaterial)
 const torus2 = new THREE.Mesh(geometry, blueMaterial)
 const torus3 = new THREE.Mesh(geometry, blueMaterial)
+
+torusGroup.add(torus)
+torusGroup.add(torus2)
+torusGroup.add(torus3)
 
 // lights
 const ambientLight = new THREE.AmbientLight(0xffffff)
@@ -383,9 +389,7 @@ scene.add(pointLight)
 scene.add(ambientLight)
 
 // metaverse rings
-scene.add(torus)
-scene.add(torus2)
-scene.add(torus3)
+scene.add(torusGroup)
 
 // metaverse floor grid
 scene.add(gridHelper)
