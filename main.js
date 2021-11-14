@@ -318,12 +318,13 @@ const moon = new THREE.Mesh(
 
 let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
 let gokuResourceUrl = './models/goku-rigged-animated/scene.gltf'
-let snakeEyesResourceUrl = './models/snake_eyes/scene.gltf'
+let snakeEyesResourceUrl = './models/snake-eyes/scene.gltf'
 let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
 let barcelonaStadiumResourceUrl = './models/camp-nou-stadium/scene.gltf'
 let hoverCarResourceUrl = './models/hover-car/scene.gltf'
 let hoverBikeResourceUrl = './models/hover-bike/scene.gltf'
 let astronautResourceUrl = './models/astronaut/scene.gltf'
+let toriiGateResourceUrl = './models/torii-gate/scene.gltf'
 
 // set positions
 
@@ -356,6 +357,9 @@ loadGLTF(gokuResourceUrl, 'goku-small', 3, {x: 3, y: 1, z: 40}, true, 0)
 // add small snake eyes to menu - when focused and click enter it shows the big one
 loadGLTF(snakeEyesResourceUrl, 'snake-eyes-small', .055, {x: -3, y: 1, z: 40}, true)
 
+// add torii gate to background
+loadGLTF(toriiGateResourceUrl, 'torii-gate', 9, {x: 0, y: 0, z: -30}, false)
+
 // load intitial layout into focus area
 function loadLanding() {
   loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
@@ -379,7 +383,6 @@ if(window.innerWidth > 1000) {
 
 let metaverseHeader = 'Metaverse'
 loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .5, [-6.5, 22, -10], true, 0, 0, 0)
-
 
 let keyHint = 'Use arrows to navigate'
 loadText(optimerBoldUrl, 'key-hint-header', keyHint, .75, .05, [-5, 0, 49], true, 0, 0, 0)
