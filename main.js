@@ -680,6 +680,10 @@ function keyDownHandler(event) {
       break
     case 38: // up
       // camera.position.z -= 3
+      if(ridingBike) {
+        // move the bike forward
+        // need to structure this code better
+      }
       break
     case 37: // left
       // move focus torus
@@ -738,6 +742,7 @@ function keyDownHandler(event) {
     case 13: // enter
       // check where focus is
       // console.log(focusState)
+      goToCyberBike()
       switch(focusState) {
         case 'fubo':
           //animate to fubo scene
@@ -768,6 +773,15 @@ function keyDownHandler(event) {
   }
 }
 
+let ridingBike = false
+
+function goToCyberBike() {
+  // move camera position to where you look like you're seated in the bike
+  camera.position.set(17.5, 16, 19)
+  controls.target = new THREE.Vector3(35, 7, -10)
+  ridingBike = true
+}
+
 let hoverCarLoaded = false
 let astronautLoaded = false
 
@@ -782,7 +796,7 @@ function updateFocusArea(focusState = "") {
       // load/show hover car and bike
       if(!hoverCarLoaded) {
         loadGLTF(hoverCarResourceUrl, 'hover-car', 8, {x: -12, y: 9, z: 10}, true, 0, 45)
-        loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: 20, y: 6, z: 14}, true, 0, 45)
+        loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: 20, y: 6, z: 14}, false, 0, 45)
         hoverCarLoaded = true
       } else {
         getObjectByName('hover-car').visible = true
