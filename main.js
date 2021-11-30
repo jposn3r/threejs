@@ -307,12 +307,14 @@ const sphereMaterial = new THREE.MeshStandardMaterial({
 })
 
 sphereMaterial.color = new THREE.Color(0x292929)
-const sphereGeometry = new THREE.SphereGeometry(1, 16, 16)
+const sphereGeometry = new THREE.SphereGeometry(10, 30, 30)
 
 const moon = new THREE.Mesh(
   sphereGeometry,
   sphereMaterial
 )
+
+moon.name = "wilder-planet"
 
 // set resource variables
 
@@ -332,7 +334,7 @@ torusGroup.position.set(-40, 22, -10)
 
 focusTorus.position.set(0, 0, 41)
 
-// moon.position.set(0, 0, 0);
+moon.position.set(0, 15, -250);
 
 pointLight.position.set(0, 25, 45)
 
@@ -362,6 +364,7 @@ loadGLTF(toriiGateResourceUrl, 'torii-gate', 9, {x: 0, y: 0, z: -30}, false)
 
 // load intitial layout into focus area
 function loadLanding() {
+  // change this to astronaut
   loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
   loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
 }
@@ -396,8 +399,6 @@ scene.add(torusGroup)
 
 // metaverse floor grid
 scene.add(gridHelper)
-// sphere
-// scene.add(moon)
 
 // cubes
 scene.add(promeCube)
@@ -604,6 +605,9 @@ function resetCamera() {
   cameraFocus = "origin"
   animateToScene("landing")
   tearDownFuboScene()
+
+  // work on reset camera from wilder world
+  scene.remove(getObjectByName("wilder-planet"))
 }
 
 // background star effect
@@ -744,17 +748,9 @@ function keyDownHandler(event) {
           // initFuboScene()
           break
         case 'hover-car':
-          // animate to garage
-          // animate to hover car
-          // console.log("\nenter \ncurrent scene: " + sceneState.name)
-          if(sceneState.name !== "portfolio") {
-            // animateToScene("portfolio")
-            if(!hoverCarLoaded) {
-              // loadGLTF(hoverCarResourceUrl, 'hover-car', 10, {x: -70, y: 9, z: 0}, true, 0, 45)
-              // loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: -85, y: 6, z: 25}, true, 0, 235)
-              // hoverCarLoaded = true
-            }
-          }
+          // animate to Wilder World
+          console.log("\nenter \ncurrent scene: " + sceneState.name)
+          animateToScene("wilderWorld")
           break
         case 'prome':
           // animate to portfolio
@@ -766,6 +762,46 @@ function keyDownHandler(event) {
       resetCamera()
       break
   }
+}
+
+
+// light
+const wilderPointLightBlue = new THREE.PointLight(0x00beee, 3, 100)
+const wilderPointLightYellow = new THREE.PointLight(0xffff00, 3, 100)
+const wilderPointLightRed = new THREE.PointLight(0x6a0dad, 3, 100)
+
+// OnWilderWorldLoaded - called when we have finished animating the camera and controls to the wilder world area
+
+function onWilderWorldLoaded() {
+  console.log("\nwilder world loading complete\n")
+  wilderPointLightYellow.position.set(-10, 8, -245)
+  scene.add(wilderPointLightYellow)
+  wilderPointLightBlue.position.set(0, 12, -275)
+  scene.add(wilderPointLightBlue)
+  wilderPointLightRed.position.set(10, 8, -225)
+  scene.add(wilderPointLightRed)
+  
+  // sphere
+  scene.add(moon)
+  // load new models for scene
+
+  let wilderWorldHeader = 'Wilder World'
+  loadText(optimerBoldUrl, 'wilder-world-header', wilderWorldHeader, 2, .25, [-10, 25, -240], true, 0)
+
+  // planet
+
+  // wilder logo
+
+  // wheels
+
+  // kicks
+
+  // cribs
+
+  // land
+
+  // new menu to navigate and go back to main menu
+
 }
 
 let hoverCarLoaded = false
@@ -808,7 +844,7 @@ function updateFocusArea(focusState = "") {
 }
 
 let sceneStates = {
-  totalScenes: 3,
+  totalScenes: 4,
   landing: {
     id: 0,
     name: "landing",
@@ -826,6 +862,13 @@ let sceneStates = {
     name: "fubo",
     cameraPosition: [40, 8, 63],
     controlsTargetVector: [40, 8, 50]
+  },
+  wilderWorld: {
+    id: 3,
+    name: "wilder-world",
+    cameraPosition: [0, 10, -175],
+    controlsTargetVector: [0, 8, -200],
+    callback: onWilderWorldLoaded
   }
 }
 
@@ -853,6 +896,7 @@ function animateToScene(sceneName) {
   })
 
   tween3.start()
+  tween3.onComplete(sceneStates[sceneName].callback)
 
   sceneState = sceneStates[sceneName]
 }
@@ -890,6 +934,10 @@ function animate() {
   updateFuboCube()
 
   updatePromeCube()
+
+  // moon.rotation.x -= 0.005;
+  // moon.rotation.y -= 0.005;
+  // moon.rotation.z -= 0.005;
 
   updateMixers(clockDelta)
 
