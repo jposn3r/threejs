@@ -307,7 +307,7 @@ const sphereMaterial = new THREE.MeshStandardMaterial({
 })
 
 sphereMaterial.color = new THREE.Color(0x292929)
-const sphereGeometry = new THREE.SphereGeometry(10, 30, 30)
+const sphereGeometry = new THREE.SphereGeometry(20, 30, 30)
 
 const moon = new THREE.Mesh(
   sphereGeometry,
@@ -334,7 +334,7 @@ torusGroup.position.set(-40, 22, -10)
 
 focusTorus.position.set(0, 0, 41)
 
-moon.position.set(0, 15, -250);
+moon.position.set(0, 25, -250);
 
 pointLight.position.set(0, 25, 45)
 
@@ -389,6 +389,9 @@ loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [-46.5, 22
 
 let keyHint = 'Use arrows to navigate'
 loadText(optimerBoldUrl, 'key-hint-header', keyHint, .75, .05, [-5, 0, 49], true, 0, 0, 0)
+
+let keyHintEnter = 'press enter to explore'
+loadText(optimerBoldUrl, 'key-hint-enter', keyHintEnter, .75, .05, [-5, 0, 49], true, 0, 0, 0, false)
 
 // lights
 scene.add(pointLight)
@@ -515,7 +518,7 @@ function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
 }
 
 // load 3d text
-function loadText(fontUrl, name, text, size, height, position, shadow, xRotation = 0, yRotation = 0, zRotation = 0) {
+function loadText(fontUrl, name, text, size, height, position, shadow, xRotation = 0, yRotation = 0, zRotation = 0, visible = true) {
   const loader = new FontLoader()
 
   loader.load(fontUrl, function (font) {
@@ -533,12 +536,16 @@ function loadText(fontUrl, name, text, size, height, position, shadow, xRotation
 
     textMesh.castShadow = shadow
     textMesh.position.set(position[0], position[1], position[2])
+
     textMesh.rotation.x = xRotation
     textMesh.rotation.y = yRotation
+    textMesh.rotation.z = zRotation
+
+    textMesh.visible = visible
     scene.add(textMesh)
   })
 }
-
+ 
 // add items to gui
 
 function buildGui() {
@@ -608,6 +615,7 @@ function resetCamera() {
 
   // work on reset camera from wilder world
   scene.remove(getObjectByName("wilder-planet"))
+  scene.remove(getObjectByName("wilder-world-header"))
 }
 
 // background star effect
@@ -688,29 +696,31 @@ function keyDownHandler(event) {
     case 37: // left
       // move focus torus
       // console.log(focusState)
-      if(focusState == 'landing') {
-        // removeObject('goku')
-        // removeObject('snake-eyes')
-        getObjectByName('goku').visible = false
-        getObjectByName('snake-eyes').visible = false
-        focusTargetPosition = [-12, 0]
-        focusState = 'hover-car'
-      } else if(focusState == 'astronaut') {
-        getObjectByName('astronaut').visible = false
-        focusTargetPosition = [0, 0]
-        focusState = 'landing'
-      } else if(focusState == 'fubo') {
-        // remove fubo scene
-        focusTargetPosition = [12, 0]
-        focusState = 'astronaut'
-      } else if(focusState == 'hover-car') {
-        getObjectByName('hover-car').visible = false
-        getObjectByName('hover-bike').visible = false
-        focusTargetPosition = [-24, 0]
-        focusState = 'prome'
+      if(sceneState.name == 'landing') {
+        if(focusState == 'landing') {
+          // removeObject('goku')
+          // removeObject('snake-eyes')
+          getObjectByName('goku').visible = false
+          getObjectByName('snake-eyes').visible = false
+          focusTargetPosition = [-12, 0]
+          focusState = 'hover-car'
+        } else if(focusState == 'astronaut') {
+          getObjectByName('astronaut').visible = false
+          focusTargetPosition = [0, 0]
+          focusState = 'landing'
+        } else if(focusState == 'fubo') {
+          // remove fubo scene
+          focusTargetPosition = [12, 0]
+          focusState = 'astronaut'
+        } else if(focusState == 'hover-car') {
+          getObjectByName('hover-car').visible = false
+          getObjectByName('hover-bike').visible = false
+          focusTargetPosition = [-24, 0]
+          focusState = 'prome'
+        }
+        updateFocusArea(focusState)
+        animateObjectToPosition(focusTorus, focusTargetPosition, 250)
       }
-      updateFocusArea(focusState)
-      animateObjectToPosition(focusTorus, focusTargetPosition, 250)
       break
     case 40: // down
       // camera.position.z += 3
@@ -718,43 +728,47 @@ function keyDownHandler(event) {
     case 39: // right
       // animateToScene("fubo")
       // console.log(focusState)
-      if(focusState == 'landing') {
-        getObjectByName('goku').visible = false
-        getObjectByName('snake-eyes').visible = false
-        focusTargetPosition = [12, 0]
-        focusState = 'astronaut'
-      } else if(focusState == 'astronaut') {
-        getObjectByName('astronaut').visible = false
-        focusTargetPosition = [24, 0]
-        focusState = 'fubo'
-      } else if(focusState == 'hover-car') {
-        getObjectByName('hover-car').visible = false
-        getObjectByName('hover-bike').visible = false
-        focusTargetPosition = [0, 0]
-        focusState = 'landing'
-      } else if(focusState == 'prome') {
-        focusTargetPosition = [-12, 0]
-        focusState = 'hover-car'
+      if(sceneState.name == 'landing') {
+        if(focusState == 'landing') {
+          getObjectByName('goku').visible = false
+          getObjectByName('snake-eyes').visible = false
+          focusTargetPosition = [12, 0]
+          focusState = 'astronaut'
+        } else if(focusState == 'astronaut') {
+          getObjectByName('astronaut').visible = false
+          focusTargetPosition = [24, 0]
+          focusState = 'fubo'
+        } else if(focusState == 'hover-car') {
+          getObjectByName('hover-car').visible = false
+          getObjectByName('hover-bike').visible = false
+          focusTargetPosition = [0, 0]
+          focusState = 'landing'
+        } else if(focusState == 'prome') {
+          focusTargetPosition = [-12, 0]
+          focusState = 'hover-car'
+        }
+        updateFocusArea(focusState)
+        animateObjectToPosition(focusTorus, focusTargetPosition, 250)
       }
-      updateFocusArea(focusState)
-      animateObjectToPosition(focusTorus, focusTargetPosition, 250)
       break
     case 13: // enter
       // check where focus is
       // console.log(focusState)
-      switch(focusState) {
-        case 'fubo':
-          //animate to fubo scene
-          // initFuboScene()
-          break
-        case 'hover-car':
-          // animate to Wilder World
-          console.log("\nenter \ncurrent scene: " + sceneState.name)
-          animateToScene("wilderWorld")
-          break
-        case 'prome':
-          // animate to portfolio
-          break
+      if(sceneState.name == 'landing') {
+        switch(focusState) {
+          case 'fubo':
+            //animate to fubo scene
+            // initFuboScene()
+            break
+          case 'hover-car':
+            // animate to Wilder World
+            console.log("\nenter \ncurrent scene: " + sceneState.name)
+            animateToScene("wilderWorld")
+            break
+          case 'prome':
+            // animate to portfolio
+            break
+        }
       }
       break
       // move to new scene
@@ -768,7 +782,7 @@ function keyDownHandler(event) {
 // light
 const wilderPointLightBlue = new THREE.PointLight(0x00beee, 3, 100)
 const wilderPointLightYellow = new THREE.PointLight(0xffff00, 3, 100)
-const wilderPointLightRed = new THREE.PointLight(0x6a0dad, 3, 100)
+const wilderPointLightPurple = new THREE.PointLight(0x6a0dad, 3, 100)
 
 // OnWilderWorldLoaded - called when we have finished animating the camera and controls to the wilder world area
 
@@ -778,17 +792,18 @@ function onWilderWorldLoaded() {
   scene.add(wilderPointLightYellow)
   wilderPointLightBlue.position.set(0, 12, -275)
   scene.add(wilderPointLightBlue)
-  wilderPointLightRed.position.set(10, 8, -225)
-  scene.add(wilderPointLightRed)
+  wilderPointLightPurple.position.set(10, 8, -225)
+  scene.add(wilderPointLightPurple)
   
-  // sphere
-  scene.add(moon)
   // load new models for scene
 
   let wilderWorldHeader = 'Wilder World'
-  loadText(optimerBoldUrl, 'wilder-world-header', wilderWorldHeader, 2, .25, [-10, 25, -240], true, 0)
+  loadText(optimerBoldUrl, 'wilder-world-header', wilderWorldHeader, 4, .25, [-17.5, 25, -230], true, 0)
 
   // planet
+
+  // sphere
+  scene.add(moon)
 
   // wilder logo
 
@@ -813,6 +828,8 @@ function updateFocusArea(focusState = "") {
       // load/show goku and snake eyes
       getObjectByName('goku').visible = true
       getObjectByName('snake-eyes').visible = true
+      getObjectByName('key-hint-enter').visible = false
+      getObjectByName('key-hint-header').visible = true
       break
     case "hover-car":
       // load/show hover car and bike
@@ -824,6 +841,9 @@ function updateFocusArea(focusState = "") {
         getObjectByName('hover-car').visible = true
         getObjectByName('hover-bike').visible = true
       }
+      // change text to say "click enter to explore"
+      getObjectByName('key-hint-header').visible = false
+      getObjectByName('key-hint-enter').visible = true
       break
     case "astronaut":
       // load/show astronaut
@@ -833,12 +853,18 @@ function updateFocusArea(focusState = "") {
       } else {
         getObjectByName('astronaut').visible = true
       }
+      getObjectByName('key-hint-enter').visible = false
+      getObjectByName('key-hint-header').visible = true
       break
     case "prome":
       // load portfolio
+      getObjectByName('key-hint-enter').visible = false
+      getObjectByName('key-hint-header').visible = true
       break
     case "fubo":
       // load fubo
+      getObjectByName('key-hint-enter').visible = false
+      getObjectByName('key-hint-header').visible = true
       break
   }
 }
@@ -866,8 +892,8 @@ let sceneStates = {
   wilderWorld: {
     id: 3,
     name: "wilder-world",
-    cameraPosition: [0, 10, -175],
-    controlsTargetVector: [0, 8, -200],
+    cameraPosition: [0, 6, -175],
+    controlsTargetVector: [0, 11, -200],
     callback: onWilderWorldLoaded
   }
 }
@@ -935,9 +961,9 @@ function animate() {
 
   updatePromeCube()
 
-  // moon.rotation.x -= 0.005;
-  // moon.rotation.y -= 0.005;
-  // moon.rotation.z -= 0.005;
+  moon.rotation.x -= 0.001
+  moon.rotation.y -= 0.001
+  moon.rotation.z -= 0.001
 
   updateMixers(clockDelta)
 
