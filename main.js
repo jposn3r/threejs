@@ -627,6 +627,8 @@ function resetCamera() {
   scene.remove(getObjectByName("kicks-header"))
   scene.remove(getObjectByName("cribs"))
   scene.remove(getObjectByName("cribs-header"))
+  scene.remove(getObjectByName("cyber-soldier-woman"))
+  scene.remove(getObjectByName("cyber-soldier-woman-2"))
 }
 
 // background star effect
@@ -801,7 +803,7 @@ function onWilderWorldLoaded() {
   console.log("\nwilder world loading complete\n")
   wilderPointLightYellow.position.set(-10, 8, -245)
   scene.add(wilderPointLightYellow)
-  wilderPointLightBlue.position.set(0, 12, -275)
+  wilderPointLightBlue.position.set(0, 12, -205)
   scene.add(wilderPointLightBlue)
   wilderPointLightPurple.position.set(10, 8, -225)
   scene.add(wilderPointLightPurple)
@@ -818,6 +820,12 @@ function onWilderWorldLoaded() {
 
   // wilder logo
 
+  // cyber soldier woman
+  loadGLTF('./models/cyber-soldier-woman/scene.gltf', 'cyber-soldier-woman', 6, {x: -7.5, y: 0, z: -225}, true, 0, 0, 0)
+
+  // cyber soldier woman 2
+  loadGLTF('./models/cyber-soldier-woman-2/scene.gltf', 'cyber-soldier-woman-2', 6, {x: 7.5, y: 0, z: -225}, true, 0, 0, 0)
+  
   // wheels
   loadGLTF(alfaRomeoCarResourceUrl, 'alfa-romeo-1967', 30, {x: 0, y: 3, z: -200}, false, 0.1, 0, 0)
 
