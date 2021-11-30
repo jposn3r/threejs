@@ -314,6 +314,8 @@ const moon = new THREE.Mesh(
   sphereMaterial
 )
 
+// moon.callback = () => {openWebsite('https://www.wilderworld.com/')}
+
 moon.name = "wilder-planet"
 
 // set resource variables
@@ -327,6 +329,9 @@ let hoverCarResourceUrl = './models/hover-car/scene.gltf'
 let hoverBikeResourceUrl = './models/hover-bike/scene.gltf'
 let astronautResourceUrl = './models/astronaut/scene.gltf'
 let toriiGateResourceUrl = './models/torii-gate/scene.gltf'
+let airJordanResourceUrl = './models/air-jordan-1/scene.gltf'
+let alfaRomeoCarResourceUrl = './models/alfa-romeo-stradale-1967/scene.gltf'
+let cribsResourceUrl = './models/buildings/scene.gltf'
 
 // set positions
 
@@ -616,6 +621,12 @@ function resetCamera() {
   // work on reset camera from wilder world
   scene.remove(getObjectByName("wilder-planet"))
   scene.remove(getObjectByName("wilder-world-header"))
+  scene.remove(getObjectByName("alfa-romeo-1967"))
+  scene.remove(getObjectByName("wheels-header"))
+  scene.remove(getObjectByName("air-jordan"))
+  scene.remove(getObjectByName("kicks-header"))
+  scene.remove(getObjectByName("cribs"))
+  scene.remove(getObjectByName("cribs-header"))
 }
 
 // background star effect
@@ -808,10 +819,22 @@ function onWilderWorldLoaded() {
   // wilder logo
 
   // wheels
+  loadGLTF(alfaRomeoCarResourceUrl, 'alfa-romeo-1967', 30, {x: 0, y: 3, z: -200}, false, 0.1, 0, 0)
+
+  let wheelsHeader = 'Wheels'
+  loadText(optimerBoldUrl, 'wheels-header', wheelsHeader, 1, .1, [-2.25, 1, -200], true, 0)
 
   // kicks
+  loadGLTF(airJordanResourceUrl, 'air-jordan', 0.20, {x: -10, y: 4, z: -200}, false, 0.1, 0, 0)
+
+  let kicksHeader = 'Kicks'
+  loadText(optimerBoldUrl, 'kicks-header', kicksHeader, 1, .1, [-12, 1, -200], true, 0)
 
   // cribs
+  loadGLTF(cribsResourceUrl, 'cribs', .3, {x: 10, y: 4, z: -200}, false, 0, 0, 0)
+
+  let cribsHeader = 'Cribs'
+  loadText(optimerBoldUrl, 'cribs-header', cribsHeader, 1, .1, [8.4, 1, -200], true, 0)
 
   // land
 
@@ -893,7 +916,7 @@ let sceneStates = {
     id: 3,
     name: "wilder-world",
     cameraPosition: [0, 6, -175],
-    controlsTargetVector: [0, 11, -200],
+    controlsTargetVector: [0, 8, -200],
     callback: onWilderWorldLoaded
   }
 }
