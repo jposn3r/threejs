@@ -390,7 +390,7 @@ loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [-46.5, 22
 let keyHint = 'Use arrows to navigate'
 loadText(optimerBoldUrl, 'key-hint-header', keyHint, .75, .05, [-5, 0, 49], true, 0, 0, 0)
 
-let keyHintEnter = 'press enter to explore'
+let keyHintEnter = 'Press enter to explore'
 loadText(optimerBoldUrl, 'key-hint-enter', keyHintEnter, .75, .05, [-5, 0, 49], true, 0, 0, 0, false)
 
 // lights
