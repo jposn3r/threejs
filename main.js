@@ -684,6 +684,14 @@ function onButtonClick(event) {
   // console.log("\nonButtonClick()")
   resetCamera()
 }
+// {x: -12.5, y: 2.5, z: 40}
+let wilderWorldHintHeader = 'Wilder World'
+loadText(optimerBoldUrl, 'wilder-world-hint-header', wilderWorldHintHeader, 1, .1, [-17, 8.25, 40], true, 0.1, 0, 0, false)
+
+function toggleWilderHintText() {
+  var hint = getObjectByName('wilder-world-hint-header')
+  hint.visible = !hint.visible
+}
 
 // handle key events
 
@@ -717,6 +725,7 @@ function keyDownHandler(event) {
           getObjectByName('snake-eyes').visible = false
           focusTargetPosition = [-12, 0]
           focusState = 'hover-car'
+          toggleWilderHintText()
         } else if(focusState == 'astronaut') {
           getObjectByName('astronaut').visible = false
           focusTargetPosition = [0, 0]
@@ -730,6 +739,7 @@ function keyDownHandler(event) {
           getObjectByName('hover-bike').visible = false
           focusTargetPosition = [-24, 0]
           focusState = 'prome'
+          toggleWilderHintText()
         }
         updateFocusArea(focusState)
         animateObjectToPosition(focusTorus, focusTargetPosition, 250)
@@ -756,9 +766,11 @@ function keyDownHandler(event) {
           getObjectByName('hover-bike').visible = false
           focusTargetPosition = [0, 0]
           focusState = 'landing'
+          toggleWilderHintText()
         } else if(focusState == 'prome') {
           focusTargetPosition = [-12, 0]
           focusState = 'hover-car'
+          toggleWilderHintText()
         }
         updateFocusArea(focusState)
         animateObjectToPosition(focusTorus, focusTargetPosition, 250)
