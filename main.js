@@ -836,9 +836,9 @@ function onWilderWorldLoaded() {
   let cribsHeader = 'Cribs'
   loadText(optimerBoldUrl, 'cribs-header', cribsHeader, 1, .1, [8.4, 1, -200], true, 0)
 
-  // land
+  // land - coming soon
 
-  // new menu to navigate and go back to main menu
+  // new menu to navigate and go back to main menu - coming soon
 
 }
 
