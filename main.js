@@ -496,7 +496,7 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
     function ( error ) {
       console.log( 'An error happened loading GLTF model ' + name )
     }
-  );
+  )
 }
 
 // FBX Loader function
