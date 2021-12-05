@@ -53,8 +53,9 @@ document.addEventListener('mousedown', onDocumentMouseDown, false)
 const items = document.querySelectorAll('ul > li');
 items.forEach(item => {
     item.addEventListener('click',(e)=>{
-      console.log(e.target.textContent);
-      handleMenuEvent(e.target.textContent)
+      // console.log(e.target.textContent)
+      console.log(e.target)
+      handleMenuEvent(e.target)
     }
 	)
 })
@@ -712,11 +713,17 @@ function toggleWilderHintText() {
 }
 
 function handleMenuEvent(itemSelected) {
-  if(itemSelected == "Wilder World") {
+  let textContent = itemSelected.textContent
+  var currentMenuItem = document.getElementsByClassName('menu-selected')
+  currentMenuItem[0].classList.remove("menu-selected")
+  if(textContent == "Wilder World") {
+    // change focused menu item to Wilder World
     animateToScene("wilderWorld")
-  } else if(itemSelected == "Welcome") {
+  } else if(textContent == "Welcome") {
+    // change focused menu item to Welcome
     resetCamera()
   }
+  itemSelected.classList.add("menu-selected")
 }
 
 // handle key events
