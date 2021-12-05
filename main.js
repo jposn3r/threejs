@@ -47,8 +47,17 @@ window.addEventListener('resize', function() {
 document.addEventListener('keydown', keyDownHandler, false)
 document.addEventListener('mousedown', onDocumentMouseDown, false)
 
-var buttons = document.getElementsByTagName('button')
-buttons[0].addEventListener('click', onButtonClick, false)
+// var buttons = document.getElementsByTagName('button')
+// buttons[0].addEventListener('click', onButtonClick, false)
+
+const items = document.querySelectorAll('ul > li');
+items.forEach(item => {
+    item.addEventListener('click',(e)=>{
+      console.log(e.target.textContent);
+      handleMenuEvent(e.target.textContent)
+    }
+	)
+})
 
 // renderer
 
@@ -114,7 +123,7 @@ focusTorus.rotation.x = -1.575
 focusTorus.rotation.y = 0
 focusTorus.rotation.z = 0
 
-scene.add(focusTorus)
+// scene.add(focusTorus)
 
 // lights
 const ambientLight = new THREE.AmbientLight(0xffffff)
@@ -176,19 +185,19 @@ function setupFuboScene() {
   stadiumVisible = true
 
   let fuboHeader = 'fuboTV'
-  loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [39, 11, 40], true, 0)
+  // loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [39, 11, 40], true, 0)
 
   let fuboSubHeader = 'The Future of Interactive Streaming'
-  loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [39, 9.75, 40], true, 0)
+  // loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [39, 9.75, 40], true, 0)
 
   let fuboTVText = 'TV'
-  loadText(optimerBoldUrl, 'fubo-tv-link', fuboTVText, .6, .2, [39.5, 3.75, 40 ], true, 0)
+  // loadText(optimerBoldUrl, 'fubo-tv-link', fuboTVText, .6, .2, [39.5, 3.75, 40 ], true, 0)
 
   let fuboGamingText = 'BET'
-  loadText(optimerBoldUrl, 'fubo-sportsbook-link', fuboGamingText, .6, .2, [44.5, 3.75, 40 ], true, 0)
+  // loadText(optimerBoldUrl, 'fubo-sportsbook-link', fuboGamingText, .6, .2, [44.5, 3.75, 40 ], true, 0)
 
   let fuboNewsText = 'NEWS'
-  loadText(optimerBoldUrl, 'fubo-news-link', fuboNewsText, .6, .2, [49, 3.75, 40 ], true, 0)
+  // loadText(optimerBoldUrl, 'fubo-news-link', fuboNewsText, .6, .2, [49, 3.75, 40 ], true, 0)
 
   const fuboCubeGroup = new THREE.Group()
   fuboCubeGroup.name = 'fubo-cube-group'
@@ -398,10 +407,10 @@ let metaverseHeader = 'Metaverse'
 loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [-46.5, 22, -10], true, 0, 0, 0)
 
 let keyHint = 'Use arrows to navigate'
-loadText(optimerBoldUrl, 'key-hint-header', keyHint, .75, .05, [-5, 0, 49], true, 0, 0, 0)
+// loadText(optimerBoldUrl, 'key-hint-header', keyHint, .75, .05, [-5, 0, 49], true, 0, 0, 0)
 
 let keyHintEnter = 'Press enter to explore'
-loadText(optimerBoldUrl, 'key-hint-enter', keyHintEnter, .75, .05, [-5, 0, 49], true, 0, 0, 0, false)
+// loadText(optimerBoldUrl, 'key-hint-enter', keyHintEnter, .75, .05, [-5, 0, 49], true, 0, 0, 0, false)
 
 // lights
 scene.add(pointLight)
@@ -691,11 +700,19 @@ function onButtonClick(event) {
 }
 // {x: -12.5, y: 2.5, z: 40}
 let wilderWorldHintHeader = 'Wilder World'
-loadText(optimerBoldUrl, 'wilder-world-hint-header', wilderWorldHintHeader, 1, .1, [-17, 8.25, 40], true, 0.1, 0, 0, false)
+// loadText(optimerBoldUrl, 'wilder-world-hint-header', wilderWorldHintHeader, 1, .1, [-17, 8.25, 40], true, 0.1, 0, 0, false)
 
 function toggleWilderHintText() {
   var hint = getObjectByName('wilder-world-hint-header')
   hint.visible = !hint.visible
+}
+
+function handleMenuEvent(itemSelected) {
+  if(itemSelected == "Wilder World") {
+    animateToScene("wilderWorld")
+  } else if(itemSelected == "Welcome") {
+    resetCamera()
+  }
 }
 
 // handle key events
@@ -815,7 +832,7 @@ function leftKeyHandler() {
       toggleWilderHintText()
     }
     updateFocusArea(focusState)
-    animateObjectToPosition(focusTorus, focusTargetPosition, 250)
+    // animateObjectToPosition(focusTorus, focusTargetPosition, 250)
   }
 }
 
@@ -961,8 +978,8 @@ let sceneState = sceneStates.landing
 
 // move camera and controls to new scene location
 function animateToScene(sceneName) {
-  // console.log("animateToScene: " + sceneName)
-  // console.log(sceneStates[sceneName])
+  console.log("\nanimateToScene: " + sceneName)
+  console.log(sceneStates[sceneName])
   let scenePosition = sceneStates[sceneName].cameraPosition
   // console.log("position: " + scenePosition)
   let controlsTargetVector = sceneStates[sceneName].controlsTargetVector
