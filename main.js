@@ -246,7 +246,7 @@ function setupFuboScene() {
   fuboCubeGroup.add(fuboTVCube)
   fuboCubeGroup.add(fuboBetCube)
   fuboCubeGroup.add(fuboNewsCube)
-  scene.add(fuboCubeGroup)
+  // scene.add(fuboCubeGroup)
 }
 
 function openWebsite(url = "", newTab = true) {
@@ -309,10 +309,13 @@ function buildBoxGeometry(scaleX = 1, scaleY = 1, scaleZ = 1, texture = new THRE
 
 // moon
 
-const moonTexture = new THREE.TextureLoader().load('/assets/moon.jpeg')
+// const moonTexture = new THREE.TextureLoader().load('/assets/moon.jpeg')
+const earthTexture = new THREE.TextureLoader().load('/assets/planet-earth.jpeg')
 const normalTexture = new THREE.TextureLoader().load('/assets/moon-normal-map.jpg')
+const earthNormalMap = new THREE.TextureLoader().load('/assets/earth-normal-map.jpeg')
 const sphereMaterial = new THREE.MeshStandardMaterial({
-  normalMap: normalTexture
+  map: earthTexture,
+  normalMap: earthNormalMap
 })
 
 sphereMaterial.color = new THREE.Color(0x292929)
@@ -349,11 +352,9 @@ let airJordanResourceUrl = s3ModelsUrl + "air-jordan-1/scene.gltf"
 
 // set positions
 
-torusGroup.position.set(-40, 22, -10)
+torusGroup.position.set(40, 22, -10)
 
 focusTorus.position.set(0, 0, 41)
-
-moon.position.set(0, 25, -250);
 
 pointLight.position.set(0, 25, 45)
 
@@ -404,7 +405,7 @@ if(window.innerWidth > 1000) {
 }
 
 let metaverseHeader = 'Metaverse'
-loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [-46.5, 22, -10], true, 0, 0, 0)
+loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [33.5, 22, -10], true, 0, 0, 0)
 
 let keyHint = 'Use arrows to navigate'
 // loadText(optimerBoldUrl, 'key-hint-header', keyHint, .75, .05, [-5, 0, 49], true, 0, 0, 0)
@@ -423,8 +424,8 @@ scene.add(torusGroup)
 scene.add(gridHelper)
 
 // cubes
-scene.add(promeCube)
-scene.add(fuboCube)
+// scene.add(promeCube)
+// scene.add(fuboCube)
 
 // tween test area
 
@@ -630,19 +631,22 @@ function updateMixers(clockDelta) {
 function resetCamera() {
   cameraFocus = "origin"
   animateToScene("landing")
-  tearDownFuboScene()
 
-  // work on reset camera from wilder world
-  scene.remove(getObjectByName("wilder-planet"))
-  scene.remove(getObjectByName("wilder-world-header"))
-  scene.remove(getObjectByName("alfa-romeo-1967"))
-  scene.remove(getObjectByName("wheels-header"))
-  scene.remove(getObjectByName("air-jordan"))
-  scene.remove(getObjectByName("kicks-header"))
-  scene.remove(getObjectByName("cribs"))
-  scene.remove(getObjectByName("cribs-header"))
-  // scene.remove(getObjectByName("cyber-soldier-woman"))
-  // scene.remove(getObjectByName("cyber-soldier-woman-2"))
+  if(wilderWorldLoaded) {
+    hideWilderWorldScene()
+  }
+}
+
+function hideWilderWorldScene() {
+  getObjectByName("wilder-planet").visible = false
+  getObjectByName("wilder-world-header").visible = false
+  getObjectByName("alfa-romeo-1967").visible = false
+  getObjectByName("wheels-header").visible = false
+  getObjectByName("air-jordan").visible = false
+  getObjectByName("kicks-header").visible = false
+  getObjectByName("cribs").visible = false
+  getObjectByName("cribs-header").visible = false
+  getObjectByName('air-jordan-large').visible = false
 }
 
 // background star effect
@@ -786,21 +790,13 @@ function rightKeyHandler() {
       getObjectByName('snake-eyes').visible = false
       focusTargetPosition = [12, 0]
       focusState = 'astronaut'
-    } else if(focusState == 'astronaut') {
-      getObjectByName('astronaut').visible = false
-      focusTargetPosition = [24, 0]
-      focusState = 'fubo'
     } else if(focusState == 'hover-car') {
       getObjectByName('hover-car').visible = false
       getObjectByName('hover-bike').visible = false
       focusTargetPosition = [0, 0]
       focusState = 'landing'
       toggleWilderHintText()
-    } else if(focusState == 'prome') {
-      focusTargetPosition = [-12, 0]
-      focusState = 'hover-car'
-      toggleWilderHintText()
-    }
+    } 
     updateFocusArea(focusState)
     animateObjectToPosition(focusTorus, focusTargetPosition, 250)
   }
@@ -809,8 +805,6 @@ function rightKeyHandler() {
 function leftKeyHandler() {
   if(sceneState.name == 'landing') {
     if(focusState == 'landing') {
-      // removeObject('goku')
-      // removeObject('snake-eyes')
       getObjectByName('goku').visible = false
       getObjectByName('snake-eyes').visible = false
       focusTargetPosition = [-12, 0]
@@ -820,16 +814,6 @@ function leftKeyHandler() {
       getObjectByName('astronaut').visible = false
       focusTargetPosition = [0, 0]
       focusState = 'landing'
-    } else if(focusState == 'fubo') {
-      // remove fubo scene
-      focusTargetPosition = [12, 0]
-      focusState = 'astronaut'
-    } else if(focusState == 'hover-car') {
-      getObjectByName('hover-car').visible = false
-      getObjectByName('hover-bike').visible = false
-      focusTargetPosition = [-24, 0]
-      focusState = 'prome'
-      toggleWilderHintText()
     }
     updateFocusArea(focusState)
     animateObjectToPosition(focusTorus, focusTargetPosition, 250)
@@ -844,56 +828,75 @@ const wilderPointLightPurple = new THREE.PointLight(0x6a0dad, 3, 100)
 
 // OnWilderWorldLoaded - called when we have finished animating the camera and controls to the wilder world area
 
+let wilderWorldLoaded = false
+
 function onWilderWorldLoaded() {
   console.log("\nwilder world loading complete\n")
-  wilderPointLightYellow.position.set(-10, 8, -245)
-  scene.add(wilderPointLightYellow)
-  wilderPointLightBlue.position.set(0, 12, -205)
-  scene.add(wilderPointLightBlue)
-  wilderPointLightPurple.position.set(10, 8, -225)
-  scene.add(wilderPointLightPurple)
+  if(!wilderWorldLoaded) {
+    wilderWorldLoaded = true
+    wilderPointLightYellow.position.set(-10, 8, -245)
+    scene.add(wilderPointLightYellow)
+    wilderPointLightBlue.position.set(0, 12, -205)
+    scene.add(wilderPointLightBlue)
+    wilderPointLightPurple.position.set(10, 8, -225)
+    scene.add(wilderPointLightPurple)
+    
+    // load new models for scene
   
-  // load new models for scene
-
-  let wilderWorldHeader = 'Wilder World'
-  loadText(optimerBoldUrl, 'wilder-world-header', wilderWorldHeader, 4, .25, [-17.5, 25, -230], true, 0)
-
-  // planet
-
-  // sphere
-  scene.add(moon)
-
-  // wilder logo
-
-  // cyber soldier woman
-  // loadGLTF('./models/cyber-soldier-woman/scene.gltf', 'cyber-soldier-woman', 6, {x: -7.5, y: 0, z: -225}, true, 0, 0, 0)
-
-  // cyber soldier woman 2
-  // loadGLTF('./models/cyber-soldier-woman-2/scene.gltf', 'cyber-soldier-woman-2', 6, {x: 7.5, y: 0, z: -225}, true, 0, 0, 0)
+    let wilderWorldHeader = 'Wilder World'
+    loadText(optimerBoldUrl, 'wilder-world-header', wilderWorldHeader, 4, .08, [9, 25, -230], true, 0)
   
-  // wheels
-  loadGLTF(alfaRomeoCarResourceUrl, 'alfa-romeo-1967', 30, {x: 0, y: 3, z: -200}, false, 0.1, 0, 0)
-
-  let wheelsHeader = 'Wheels'
-  loadText(optimerBoldUrl, 'wheels-header', wheelsHeader, 1, .1, [-2.25, 1, -200], true, 0)
-
-  // kicks
-  loadGLTF(airJordanResourceUrl, 'air-jordan', 0.20, {x: -10, y: 4, z: -200}, false, 0.1, 0, 0)
-
-  let kicksHeader = 'Kicks'
-  loadText(optimerBoldUrl, 'kicks-header', kicksHeader, 1, .1, [-12, 1, -200], true, 0)
-
-  // cribs
-  loadGLTF(cribsResourceUrl, 'cribs', .3, {x: 10, y: 4, z: -200}, false, 0, 0, 0)
-
-  let cribsHeader = 'Cribs'
-  loadText(optimerBoldUrl, 'cribs-header', cribsHeader, 1, .1, [8.4, 1, -200], true, 0)
-
-  // land - coming soon
-
-  // new menu to navigate and go back to main menu - coming soon
-
+    // planet
+    moon.position.set(32, 22, -250)
+  
+    // sphere
+    scene.add(moon)
+  
+    // wilder logo
+  
+    // cyber soldier woman
+    // loadGLTF('./models/cyber-soldier-woman/scene.gltf', 'cyber-soldier-woman', 6, {x: -7.5, y: 0, z: -225}, true, 0, 0, 0)
+  
+    // cyber soldier woman 2
+    // loadGLTF('./models/cyber-soldier-woman-2/scene.gltf', 'cyber-soldier-woman-2', 6, {x: 7.5, y: 0, z: -225}, true, 0, 0, 0)
+    
+    // wheels
+    loadGLTF(alfaRomeoCarResourceUrl, 'alfa-romeo-1967', 15, {x: -14, y: 8.5, z: -200}, false, 0.2, 0, 0)
+  
+    let wheelsHeader = 'Wheels'
+    loadText(optimerBoldUrl, 'wheels-header', wheelsHeader, .5, .01, [-18, 12, -200], true, 0)
+  
+    // kicks
+    loadGLTF(airJordanResourceUrl, 'air-jordan', 0.10, {x: -14, y: 15, z: -200}, false, .3, 1.5, 0.3)
+    loadGLTF(airJordanResourceUrl, 'air-jordan-large', .5, {x: 0, y: 6, z: -200}, false, 0, 1.25, 0.1)
+    airJordanResourceUrl = getObjectByName('air-jordan-large')
+  
+    let kicksHeader = 'Kicks'
+    loadText(optimerBoldUrl, 'kicks-header', kicksHeader, .5, .01, [-18, 18, -200], true, 0)
+  
+    // cribs
+    loadGLTF(cribsResourceUrl, 'cribs', .18, {x: -14, y: 1, z: -200}, false, 0.1, 0.1, 0)
+  
+    let cribsHeader = 'Cribs'
+    loadText(optimerBoldUrl, 'cribs-header', cribsHeader, .5, .01, [-18, 6, -200], true, 0)
+  
+    // land - coming soon
+  
+    // new menu to navigate and go back to main menu - coming soon
+  } else {
+    getObjectByName("wilder-planet").visible = true
+    getObjectByName("wilder-world-header").visible = true
+    getObjectByName("alfa-romeo-1967").visible = true
+    getObjectByName("wheels-header").visible = true
+    getObjectByName("air-jordan").visible = true
+    getObjectByName("kicks-header").visible = true
+    getObjectByName("cribs").visible = true
+    getObjectByName("cribs-header").visible = true
+    getObjectByName('air-jordan-large').visible = true
+  }
 }
+
+let airJordanLarge = null
 
 let hoverCarLoaded = false
 let astronautLoaded = false
@@ -1034,9 +1037,9 @@ function animate() {
 
   updateTorus()
 
-  updateFuboCube()
+  // updateFuboCube()
 
-  updatePromeCube()
+  // updatePromeCube()
 
   moon.rotation.x -= 0.001
   moon.rotation.y -= 0.001
