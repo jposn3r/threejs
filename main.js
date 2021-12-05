@@ -320,6 +320,8 @@ moon.name = "wilder-planet"
 
 // set resource variables
 
+let s3ModelsUrl = "https://jakonius-assets.s3.us-east-2.amazonaws.com/models/"
+
 let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
 let gokuResourceUrl = './models/goku-rigged-animated/scene.gltf'
 let snakeEyesResourceUrl = './models/snake-eyes/scene.gltf'
@@ -329,9 +331,12 @@ let hoverCarResourceUrl = './models/hover-car/scene.gltf'
 let hoverBikeResourceUrl = './models/hover-bike/scene.gltf'
 let astronautResourceUrl = './models/astronaut/scene.gltf'
 let toriiGateResourceUrl = './models/torii-gate/scene.gltf'
-let airJordanResourceUrl = './models/air-jordan-1/scene.gltf'
-let alfaRomeoCarResourceUrl = './models/alfa-romeo-stradale-1967/scene.gltf'
-let cribsResourceUrl = './models/buildings/scene.gltf'
+
+// remote assets
+let alfaRomeoCarResourceUrl = s3ModelsUrl + "alfa-romeo-stradale-1967/scene.gltf"
+let cribsResourceUrl = s3ModelsUrl + "buildings/scene.gltf"
+let airJordanResourceUrl = s3ModelsUrl + "air-jordan-1/scene.gltf"
+
 
 // set positions
 
@@ -717,33 +722,7 @@ function keyDownHandler(event) {
     case 37: // left
       // move focus torus
       // console.log(focusState)
-      if(sceneState.name == 'landing') {
-        if(focusState == 'landing') {
-          // removeObject('goku')
-          // removeObject('snake-eyes')
-          getObjectByName('goku').visible = false
-          getObjectByName('snake-eyes').visible = false
-          focusTargetPosition = [-12, 0]
-          focusState = 'hover-car'
-          toggleWilderHintText()
-        } else if(focusState == 'astronaut') {
-          getObjectByName('astronaut').visible = false
-          focusTargetPosition = [0, 0]
-          focusState = 'landing'
-        } else if(focusState == 'fubo') {
-          // remove fubo scene
-          focusTargetPosition = [12, 0]
-          focusState = 'astronaut'
-        } else if(focusState == 'hover-car') {
-          getObjectByName('hover-car').visible = false
-          getObjectByName('hover-bike').visible = false
-          focusTargetPosition = [-24, 0]
-          focusState = 'prome'
-          toggleWilderHintText()
-        }
-        updateFocusArea(focusState)
-        animateObjectToPosition(focusTorus, focusTargetPosition, 250)
-      }
+      leftKeyHandler()
       break
     case 40: // down
       // camera.position.z += 3
@@ -751,55 +730,92 @@ function keyDownHandler(event) {
     case 39: // right
       // animateToScene("fubo")
       // console.log(focusState)
-      if(sceneState.name == 'landing') {
-        if(focusState == 'landing') {
-          getObjectByName('goku').visible = false
-          getObjectByName('snake-eyes').visible = false
-          focusTargetPosition = [12, 0]
-          focusState = 'astronaut'
-        } else if(focusState == 'astronaut') {
-          getObjectByName('astronaut').visible = false
-          focusTargetPosition = [24, 0]
-          focusState = 'fubo'
-        } else if(focusState == 'hover-car') {
-          getObjectByName('hover-car').visible = false
-          getObjectByName('hover-bike').visible = false
-          focusTargetPosition = [0, 0]
-          focusState = 'landing'
-          toggleWilderHintText()
-        } else if(focusState == 'prome') {
-          focusTargetPosition = [-12, 0]
-          focusState = 'hover-car'
-          toggleWilderHintText()
-        }
-        updateFocusArea(focusState)
-        animateObjectToPosition(focusTorus, focusTargetPosition, 250)
-      }
+      rightKeyHandler()
       break
     case 13: // enter
       // check where focus is
       // console.log(focusState)
-      if(sceneState.name == 'landing') {
-        switch(focusState) {
-          case 'fubo':
-            //animate to fubo scene
-            // initFuboScene()
-            break
-          case 'hover-car':
-            // animate to Wilder World
-            console.log("\nenter \ncurrent scene: " + sceneState.name)
-            animateToScene("wilderWorld")
-            break
-          case 'prome':
-            // animate to portfolio
-            break
-        }
-      }
+      enterKeyHandler()
       break
       // move to new scene
     case 27: // escape
       resetCamera()
       break
+  }
+}
+
+function enterKeyHandler() {
+  if(sceneState.name == 'landing') {
+    switch(focusState) {
+      case 'fubo':
+        //animate to fubo scene
+        // initFuboScene()
+        break
+      case 'hover-car':
+        // animate to Wilder World
+        animateToScene("wilderWorld")
+        break
+      case 'prome':
+        // animate to portfolio
+        break
+    }
+  }
+}
+
+function rightKeyHandler() {
+  if(sceneState.name == 'landing') {
+    if(focusState == 'landing') {
+      getObjectByName('goku').visible = false
+      getObjectByName('snake-eyes').visible = false
+      focusTargetPosition = [12, 0]
+      focusState = 'astronaut'
+    } else if(focusState == 'astronaut') {
+      getObjectByName('astronaut').visible = false
+      focusTargetPosition = [24, 0]
+      focusState = 'fubo'
+    } else if(focusState == 'hover-car') {
+      getObjectByName('hover-car').visible = false
+      getObjectByName('hover-bike').visible = false
+      focusTargetPosition = [0, 0]
+      focusState = 'landing'
+      toggleWilderHintText()
+    } else if(focusState == 'prome') {
+      focusTargetPosition = [-12, 0]
+      focusState = 'hover-car'
+      toggleWilderHintText()
+    }
+    updateFocusArea(focusState)
+    animateObjectToPosition(focusTorus, focusTargetPosition, 250)
+  }
+}
+
+function leftKeyHandler() {
+  if(sceneState.name == 'landing') {
+    if(focusState == 'landing') {
+      // removeObject('goku')
+      // removeObject('snake-eyes')
+      getObjectByName('goku').visible = false
+      getObjectByName('snake-eyes').visible = false
+      focusTargetPosition = [-12, 0]
+      focusState = 'hover-car'
+      toggleWilderHintText()
+    } else if(focusState == 'astronaut') {
+      getObjectByName('astronaut').visible = false
+      focusTargetPosition = [0, 0]
+      focusState = 'landing'
+    } else if(focusState == 'fubo') {
+      // remove fubo scene
+      focusTargetPosition = [12, 0]
+      focusState = 'astronaut'
+    } else if(focusState == 'hover-car') {
+      getObjectByName('hover-car').visible = false
+      getObjectByName('hover-bike').visible = false
+      focusTargetPosition = [-24, 0]
+      focusState = 'prome'
+      toggleWilderHintText()
+    }
+    updateFocusArea(focusState)
+    animateObjectToPosition(focusTorus, focusTargetPosition, 250)
   }
 }
 
@@ -943,6 +959,7 @@ let sceneStates = {
 
 let sceneState = sceneStates.landing
 
+// move camera and controls to new scene location
 function animateToScene(sceneName) {
   // console.log("animateToScene: " + sceneName)
   // console.log(sceneStates[sceneName])
