@@ -781,7 +781,7 @@ function enterKeyHandler() {
         break
       case 'hover-car':
         // animate to Wilder World
-        animateToScene("wilderWorld")
+        // animateToScene("wilderWorld")
         break
       case 'prome':
         // animate to portfolio
