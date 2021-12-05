@@ -47,6 +47,8 @@ window.addEventListener('resize', function() {
 document.addEventListener('keydown', keyDownHandler, false)
 document.addEventListener('mousedown', onDocumentMouseDown, false)
 
+// On click events
+
 // var buttons = document.getElementsByTagName('button')
 // buttons[0].addEventListener('click', onButtonClick, false)
 
@@ -826,7 +828,6 @@ function leftKeyHandler() {
     animateObjectToPosition(focusTorus, focusTargetPosition, 250)
   }
 }
-
 
 // light
 const wilderPointLightBlue = new THREE.PointLight(0x00beee, 3, 100)
