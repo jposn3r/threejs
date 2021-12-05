@@ -123,7 +123,7 @@ focusTorus.rotation.x = -1.575
 focusTorus.rotation.y = 0
 focusTorus.rotation.z = 0
 
-// scene.add(focusTorus)
+scene.add(focusTorus)
 
 // lights
 const ambientLight = new THREE.AmbientLight(0xffffff)
@@ -700,11 +700,11 @@ function onButtonClick(event) {
 }
 // {x: -12.5, y: 2.5, z: 40}
 let wilderWorldHintHeader = 'Wilder World'
-// loadText(optimerBoldUrl, 'wilder-world-hint-header', wilderWorldHintHeader, 1, .1, [-17, 8.25, 40], true, 0.1, 0, 0, false)
+loadText(optimerBoldUrl, 'wilder-world-hint-header', wilderWorldHintHeader, 1, .1, [-17, 8.25, 40], true, 0.1, 0, 0, false)
 
 function toggleWilderHintText() {
   var hint = getObjectByName('wilder-world-hint-header')
-  hint.visible = !hint.visible
+  // hint.visible = !hint.visible
 }
 
 function handleMenuEvent(itemSelected) {
@@ -832,7 +832,7 @@ function leftKeyHandler() {
       toggleWilderHintText()
     }
     updateFocusArea(focusState)
-    // animateObjectToPosition(focusTorus, focusTargetPosition, 250)
+    animateObjectToPosition(focusTorus, focusTargetPosition, 250)
   }
 }
 
@@ -904,8 +904,8 @@ function updateFocusArea(focusState = "") {
       // load/show goku and snake eyes
       getObjectByName('goku').visible = true
       getObjectByName('snake-eyes').visible = true
-      getObjectByName('key-hint-enter').visible = false
-      getObjectByName('key-hint-header').visible = true
+      // getObjectByName('key-hint-enter').visible = false
+      // getObjectByName('key-hint-header').visible = true
       break
     case "hover-car":
       // load/show hover car and bike
@@ -918,8 +918,8 @@ function updateFocusArea(focusState = "") {
         getObjectByName('hover-bike').visible = true
       }
       // change text to say "click enter to explore"
-      getObjectByName('key-hint-header').visible = false
-      getObjectByName('key-hint-enter').visible = true
+      // getObjectByName('key-hint-header').visible = false
+      // getObjectByName('key-hint-enter').visible = true
       break
     case "astronaut":
       // load/show astronaut
@@ -929,18 +929,18 @@ function updateFocusArea(focusState = "") {
       } else {
         getObjectByName('astronaut').visible = true
       }
-      getObjectByName('key-hint-enter').visible = false
-      getObjectByName('key-hint-header').visible = true
+      // getObjectByName('key-hint-enter').visible = false
+      // getObjectByName('key-hint-header').visible = true
       break
     case "prome":
       // load portfolio
-      getObjectByName('key-hint-enter').visible = false
-      getObjectByName('key-hint-header').visible = true
+      // getObjectByName('key-hint-enter').visible = false
+      // getObjectByName('key-hint-header').visible = true
       break
     case "fubo":
       // load fubo
-      getObjectByName('key-hint-enter').visible = false
-      getObjectByName('key-hint-header').visible = true
+      // getObjectByName('key-hint-enter').visible = false
+      // getObjectByName('key-hint-header').visible = true
       break
   }
 }

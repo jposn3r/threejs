@@ -44,7 +44,9 @@ li {
   float: left;
   width: 25% !important;
   text-align: center;
-  background-color: #FFFFFF;
+  color: #FFFFFF;
+  background-color: #330099;
+  /* background-image: linear-gradient(#330066, #330066); */
 }
 
 ul {
@@ -60,9 +62,9 @@ ul {
 }
 
 li:hover {
-  background-color: #000000;
   color: #FFFFFF;
   cursor: crosshair;
+  background-color: #000000;
 }
   
   
