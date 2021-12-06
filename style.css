@@ -43,11 +43,12 @@ button {
 
 .menu-selected {
   background-color: #000000;
+  color: hsl(174, 100%, 50%);
 }
 
 li {
   float: left;
-  width: 25% !important;
+  width: 33% !important;
   text-align: center;
   color: #FFFFFF;
   background-color: #330099;
@@ -65,12 +66,26 @@ ul {
 }
 
 li:hover {
-  color: #FFFFFF;
+  color: hsl(174, 100%, 22%);
   cursor: crosshair;
-  background-color: #000000;
+  background-image: linear-gradient(to right, #000000 , #ffffff);
 }
   
-  
+#menu-item-1 {
+  background-image: linear-gradient(to right, #061131 , #090533)
+}
+
+#menu-item-2 {
+  background-image: linear-gradient(to right, #090533, #061131)
+}
+
+#menu-item-3 {
+  background-image: linear-gradient(to right, #061131 , #090533)
+}
+
+#menu-item-4 {
+  background-image: linear-gradient(to right, #090533, #061131)
+}
 
 @keyframes flickerAnimation {
   0%   { opacity:1; }

@@ -361,7 +361,7 @@ focusTorus.position.set(0, 0, 41)
 
 pointLight.position.set(0, 25, 45)
 
-updateCameraPosition([0, 20, 75], 50, 1)
+updateCameraPosition([0, 12, 70], 50, 1)
 
 // add objects to the scene
 
@@ -961,7 +961,7 @@ let sceneStates = {
   landing: {
     id: 0,
     name: "landing",
-    cameraPosition: [0, 20, 75],
+    cameraPosition: [0, 12, 70],
     controlsTargetVector: [0, 0, 0]
   },
   portfolio: {
