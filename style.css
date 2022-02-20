@@ -34,6 +34,22 @@ button {
   display: block;
 }
 
+.left-detail-panel {
+  height: 500px;
+  width: 25%;
+  color: #d9e7ff;
+  background-color: #05051690;
+  left: 3%;
+  top: 3%;
+  display: 'none';
+}
+
+.left-detail-panel h1 {
+  margin: 25px 25px 10px 25px;
+  text-align: left;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+}
+
 .main-menu-container {
   width: 100%;
   height: .1vh;
@@ -42,19 +58,20 @@ button {
 }
 
 .menu-selected {
-  background-color: #000000;
-  color: hsl(174, 100%, 50%);
+  /* background-color: #000000; */
+  color: #00ffdd;
 }
 
 li {
   float: left;
-  width: 33.333% !important;
+  width: 50% !important;
   text-align: center;
   color: #FFFFFF;
-  /* background-color: #330099 */
+  background-color: #05051690;
 }
 
 ul {
+  width: 50%;
   margin: 0;
   padding: 0;
   display: block;
@@ -66,21 +83,7 @@ ul {
 }
 
 li:hover {
-  color: hsl(174, 100%, 22%);
   cursor: crosshair;
-  background-image: linear-gradient(to right, #000000 , #ffffff);
-}
-  
-#menu-item-1 {
-  background-image: linear-gradient(to right, #061131 , #090533)
-}
-
-#menu-item-2 {
-  background-image: linear-gradient(to right, #090533, #061131)
-}
-
-#menu-item-3 {
-  background-image: linear-gradient(to right, #061131 , #090533)
 }
 
 @keyframes flickerAnimation {

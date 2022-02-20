@@ -131,9 +131,9 @@ export default class MainScene {
               controlsTargetVector: [0, 8, -200],
             //   callback: onWilderWorldLoaded
             },
-            kaleidoscopic: {
+            inventory: {
               id: 4,
-              name: "kaleidoscopic-scene",
+              name: "inventory",
               cameraPosition: [80, 12, 0],
               controlsTargetVector: [0, -1, 0],
             //   callback: onKaleidoscopicLoaded
