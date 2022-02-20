@@ -9,7 +9,6 @@ import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitCon
 import * as dat from 'dat.gui'
 import TWEEN from '@tweenjs/tween.js'
 import MainScene from './scenes/MainScene'
-import * as utility from './utils'
 
 // NEED TO DO
 
@@ -371,11 +370,14 @@ let sceneState = sceneStates.landing
 // add torii gate
 // loadGLTF(toriiGateResourceUrl, 'torii-gate', 9, {x: 0, y: 0, z: -30}, false)
 
+// Master Chief Walking
+// loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: -5, z: 25}, true)
+
 // add pearl electron (40, 22, -10)
-loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
+loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 30, {x: 0, y: 3, z: -5}, true)
 
 // add kaleidoscopic
-loadGLTF(kaleidoscopicResourceUrl, 'kaleidoscopic', 8, {x: 0, y: 10, z: -40}, true, 0, 0, 0, () => {console.log("bruh")}, 0, .5)
+// loadGLTF(kaleidoscopicResourceUrl, 'kaleidoscopic', 8, {x: 0, y: 10, z: -40}, true, 0, 0, 0, () => {console.log("bruh")}, 0, .5)
 
 // load spaceman
 loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: -2, z: 40}, true, 0, 0, 0, function(){}, 3)
@@ -403,7 +405,7 @@ loadLanding()
 
 // change variables based on screen width
 if(window.innerWidth > 1000) {
-  // loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: 0, z: 25}, true)
+  // loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: -5, z: 25}, true)
   // loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
   // loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
   // fuboCube.position.set(25, 6, 40)

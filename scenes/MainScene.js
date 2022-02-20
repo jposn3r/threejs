@@ -19,16 +19,48 @@ export default class MainScene {
         var focusTorus = config.focusTorus
         var background = config.background
 
+        this.setScene()
+        this.setCamera()
+        this.setRenderer()
+        this.setControls()
+        this.setGui(gui)
+        this.setLights()
+
+        // metaverse floor grid
+        if(gridFloor == true) {
+            this.addGridFloor()
+        }
+        if(torusGroup == true) {
+            this.addTorusGroupToScene()
+        }
+        if(focusTorus == true) {
+            this.addFocusTorus()
+        }
+        if(background !== "") {
+            this.setBackground(config.background)
+        }
+        this.setSceneStates()
+        this.setMetaverseLogo()
+    }
+
+    // pearl electron and metaverse header for now
+    setMetaverseLogo() {
+        let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
+        let metaverseHeader = 'Metaverse'
+        // this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [31, 21, -10], true, 0, -.5, 0)
+        // add pearl electron (40, 22, -10)
+        // let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
+        // this.loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
+    }
+
+    setScene() {
         // main scene
         var scene = new THREE.Scene()
         scene.name = "main"
         this.scene = scene
+    }
 
-        // camera
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-        this.camera.name = "camera-1"
-        this.cameraFocus = "origin"
-
+    setRenderer() {
         let renderer = new THREE.WebGLRenderer({
             canvas: document.querySelector('#world'),
         })
@@ -37,12 +69,23 @@ export default class MainScene {
         renderer.setSize(window.innerWidth, window.innerHeight)
 
         this.renderer = renderer
+    }
 
+    setCamera(){
+        // camera
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+        this.camera.name = "camera-1"
+        this.cameraFocus = "origin"
+    }
+
+    setControls() {
         // controls
         // let controls = new OrbitControls(camera, renderer.domElement)
         // let controls = new MapControls(camera, renderer.domElement)
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+    }
 
+    setGui(gui) {
         // gui
         if(gui) {
             let gui = new dat.GUI()
@@ -60,44 +103,15 @@ export default class MainScene {
             this.addToGui(camera.rotation, 'y')
             this.addToGui(camera.rotation, 'z')
         }
+    }
 
+    setLights() {
         // lights
         this.lights = []
         this.addLightToScene("ambient", "ambient-light")
         this.addLightToScene("point", "point-light-1", 0x00beee, 3, 100)
-
-        // metaverse floor grid
-        if(gridFloor == true) {
-            this.addGridFloor()
-        }
-
-        if(torusGroup == true) {
-            this.addTorusGroupToScene()
-        }
-
-        if(focusTorus == true) {
-            this.addFocusTorus()
-        }
-
-        this.setBackground(config.background)
-        this.setSceneStates()
-        this.setMetaverseLogo()
-
-        // Loaders
-        // this.fontLoader = new FontLoader()
-        // this.gltfLoader = new GLTFLoader()
     }
-
-    // pearl electron and metaverse header for now
-    setMetaverseLogo() {
-        let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
-        let metaverseHeader = 'Metaverse'
-        this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [31, 21, -10], true, 0, -.5, 0)
-        // add pearl electron (40, 22, -10)
-        let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
-        // this.loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
-    }
-
+ 
     setSceneStates() {
         let sceneStates = {
             totalScenes: 5,
