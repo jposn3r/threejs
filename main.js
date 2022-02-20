@@ -8,6 +8,16 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as dat from 'dat.gui'
 import TWEEN from '@tweenjs/tween.js'
+import MainScene from './scenes/MainScene'
+import * as utility from './utils'
+
+// NEED TO DO
+
+// 1. Make multiple scenes and properly structure your code
+// Scene 1: Entrance to the digital world
+// Scene 2: Home area
+// Scene 3: Inventory
+// Scene 4: Another dimension
 
 // Ideas
 // 1. Slow mo button - 
@@ -34,14 +44,30 @@ import TWEEN from '@tweenjs/tween.js'
 // 7. 3D transitions like ESPN/Sports Broadcasts
 // this would be sick
 
-// document event listeners
+// What stays in this file? ------------------------------------------
 
+// document event listeners
+let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
+function updateScaleMultiplier() {
+  windowInnerWidth = window.innerWidth
+  if(windowInnerWidth < 1000) {
+    scaleMultiplyer = .5
+  } else {
+    scaleMultiplyer = 1
+  }
+}
+updateScaleMultiplier()
+
+
+// adjust the scene when the window is resized
 window.addEventListener('resize', function() {
-  var WIDTH = window.innerWidth,
-    HEIGHT = window.innerHeight;
-  renderer.setSize(WIDTH, HEIGHT);
-  camera.aspect = WIDTH / HEIGHT;
+  windowInnerHeight = window.innerHeight
+  windowInnerWidth = window.innerWidth
+  console.log(windowInnerWidth)
+  renderer.setSize(windowInnerWidth, windowInnerHeight);
+  camera.aspect = windowInnerWidth / windowInnerHeight;
   camera.updateProjectionMatrix();
+  updateScaleMultiplier()
 });
 
 document.addEventListener('keydown', keyDownHandler, false)
@@ -62,33 +88,29 @@ items.forEach(item => {
 	)
 })
 
+// main scene
+let mainSceneConfig = {
+    name: "main-scene",
+    gui: false,
+    gridFloor: false,
+    torusGroup: false,
+    focusTorus: false,
+    background: ''
+}
+let mainScene = new MainScene(mainSceneConfig)
+const scene = mainScene.scene
+
 // renderer
-
-const renderer = new THREE.WebGLRenderer({
-  canvas: document.querySelector('#world'),
-})
-
-renderer.setPixelRatio(window.devicePixelRatio)
-renderer.setSize(window.innerWidth, window.innerHeight)
+let renderer = mainScene.renderer
 
 // camera 
-
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-camera.name = "camera-1"
-let cameraFocus = "origin"
+let camera = mainScene.camera
+let cameraFocus = mainScene.cameraFocus
 
 // controls to move the scene
+let controls = mainScene.controls
 
-const controls = new OrbitControls(camera, renderer.domElement)
-// let controls = new MapControls(camera, renderer.domElement)
-
-// gui
-
-// const gui = new dat.GUI()
-
-// main scene
-
-const scene = new THREE.Scene()
+// What stays in this file? ------------------------------------------
 
 // clock used to track time deltas
 
@@ -104,42 +126,13 @@ var mouse = new THREE.Vector2()
 
 let mixers = []
 
-// build and add torus rings
-
-const torusGroup = new THREE.Group()
-
-const geometry = new THREE.TorusGeometry(9, 0.5, 10, 100)
-const blueMaterial = new THREE.MeshStandardMaterial({ color: 0x00dadf})
-
-const torus = new THREE.Mesh(geometry, blueMaterial)
-const torus2 = new THREE.Mesh(geometry, blueMaterial)
-const torus3 = new THREE.Mesh(geometry, blueMaterial)
-
-torusGroup.add(torus)
-torusGroup.add(torus2)
-torusGroup.add(torus3)
-
-const focusTorusGeometry = new THREE.TorusGeometry(5, 0.25, 5)
-const focusTorusMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff})
-const focusTorus = new THREE.Mesh(focusTorusGeometry, focusTorusMaterial)
-focusTorus.rotation.x = -1.575
-focusTorus.rotation.y = 0
-focusTorus.rotation.z = 0
-
-scene.add(focusTorus)
+// torus group and focus torus
+let torusGroup = mainScene.torusGroup
+let focusTorus = mainScene.focusTorus
 
 // lights
-const ambientLight = new THREE.AmbientLight(0xffffff)
-const pointLight = new THREE.PointLight(0x00beee, 3, 100)
-
-// grid floor
-
-const gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf)
-
-// space background texture
-
-const spaceTexture = new THREE.TextureLoader().load('/assets/space-2.jpg')
-scene.background = spaceTexture
+let ambientLight = mainScene.getObjectByName("ambient-light")
+let pointLight = mainScene.getObjectByName("point-light-1")
 
 // fubo cube
 
@@ -188,19 +181,19 @@ function setupFuboScene() {
   stadiumVisible = true
 
   let fuboHeader = 'fuboTV'
-  // loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [39, 11, 40], true, 0)
+  loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [39, 11, 40], true, 0)
 
   let fuboSubHeader = 'The Future of Interactive Streaming'
-  // loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [39, 9.75, 40], true, 0)
+  loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [39, 9.75, 40], true, 0)
 
   let fuboTVText = 'TV'
-  // loadText(optimerBoldUrl, 'fubo-tv-link', fuboTVText, .6, .2, [39.5, 3.75, 40 ], true, 0)
+  loadText(optimerBoldUrl, 'fubo-tv-link', fuboTVText, .6, .2, [39.5, 3.75, 40 ], true, 0)
 
   let fuboGamingText = 'BET'
-  // loadText(optimerBoldUrl, 'fubo-sportsbook-link', fuboGamingText, .6, .2, [44.5, 3.75, 40 ], true, 0)
+  loadText(optimerBoldUrl, 'fubo-sportsbook-link', fuboGamingText, .6, .2, [44.5, 3.75, 40 ], true, 0)
 
   let fuboNewsText = 'NEWS'
-  // loadText(optimerBoldUrl, 'fubo-news-link', fuboNewsText, .6, .2, [49, 3.75, 40 ], true, 0)
+  loadText(optimerBoldUrl, 'fubo-news-link', fuboNewsText, .6, .2, [49, 3.75, 40 ], true, 0)
 
   const fuboCubeGroup = new THREE.Group()
   fuboCubeGroup.name = 'fubo-cube-group'
@@ -242,14 +235,13 @@ function setupFuboScene() {
     openWebsite('https://www.google.com/search?q=fubotv+news')
   }
 
-  // fuboChildCube3.material.color.setHex( 0x00FFF7 )
   fuboNewsCube.position.set(50, 6.5, 40)
   fuboNewsCube.name = 'fubo-news-cube'
 
   fuboCubeGroup.add(fuboTVCube)
   fuboCubeGroup.add(fuboBetCube)
   fuboCubeGroup.add(fuboNewsCube)
-  // scene.add(fuboCubeGroup)
+  scene.add(fuboCubeGroup)
 }
 
 function openWebsite(url = "", newTab = true) {
@@ -296,11 +288,6 @@ promeCube.callback = function () {
   // open prometheus definition
   // window.open('https://www.merriam-webster.com/dictionary/Prometheus', '_blank')
 
-  // find all the meshes
-  // how do you do that?
-  // let masterChief= scene.getObjectByName("master-chief");
-  // console.log(masterChief);
-  // decrease their animation speed to 1/60th normal
 }
 
 function buildBoxGeometry(scaleX = 1, scaleY = 1, scaleZ = 1, texture = new THREE.MeshBasicMaterial()) {
@@ -346,20 +333,15 @@ let hoverCarResourceUrl = './models/hover-car/scene.gltf'
 let hoverBikeResourceUrl = './models/hover-bike/scene.gltf'
 let astronautResourceUrl = './models/astronaut/scene.gltf'
 let toriiGateResourceUrl = './models/torii-gate/scene.gltf'
+let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
+let kaleidoscopicResourceUrl = './models/kaleidoscopic/scene.gltf'
 
 // remote assets
 let alfaRomeoCarResourceUrl = s3ModelsUrl + "alfa-romeo-stradale-1967/scene.gltf"
 let cribsResourceUrl = s3ModelsUrl + "buildings/scene.gltf"
 let airJordanResourceUrl = s3ModelsUrl + "air-jordan-1/scene.gltf"
 
-
 // set positions
-
-torusGroup.position.set(40, 22, -10)
-
-focusTorus.position.set(0, 0, 41)
-
-pointLight.position.set(0, 25, 45)
 
 updateCameraPosition([0, 12, 70], 50, 1)
 
@@ -368,28 +350,54 @@ updateCameraPosition([0, 12, 70], 50, 1)
 // Add stars
 Array(1000).fill().forEach(addStar)
 
+let sceneStates = mainScene.sceneStates
+
+let sceneState = sceneStates.landing
+
 // main menu
 
 // add small car to menu - when clicked it shows the big version
-loadGLTF(hoverCarResourceUrl, 'hover-car-small', 2, {x: -12.5, y: 2.5, z: 40}, true, 0, 45)
+// loadGLTF(hoverCarResourceUrl, 'hover-car-small', 2, {x: -12.5, y: 2.5, z: 40}, true, 0, 45)
 
 // add small astronaut to menu - when focused and click enter it shows the big one
-loadGLTF(astronautResourceUrl, 'astronaut-small', 2.5, {x: 12.5, y: 0, z: 40}, true, 0, 0, 0)
+// loadGLTF(astronautResourceUrl, 'astronaut-small', 2.5, {x: 12.5, y: 0, z: 40}, true, 0, 0, 0)
 
 // add small goku to menu - when focused and click enter it shows the big one
-loadGLTF(gokuResourceUrl, 'goku-small', 3, {x: 3, y: 1, z: 40}, true, 0)
+// loadGLTF(gokuResourceUrl, 'goku-small', 3 * scaleMultiplyer, {x: 3, y: 1, z: 40}, true, 0)
 
 // add small snake eyes to menu - when focused and click enter it shows the big one
-loadGLTF(snakeEyesResourceUrl, 'snake-eyes-small', .055, {x: -3, y: 1, z: 40}, true)
+// loadGLTF(snakeEyesResourceUrl, 'snake-eyes-small', .055, {x: -3, y: 1, z: 40}, true)
 
-// add torii gate to background
-loadGLTF(toriiGateResourceUrl, 'torii-gate', 9, {x: 0, y: 0, z: -30}, false)
+// add torii gate
+// loadGLTF(toriiGateResourceUrl, 'torii-gate', 9, {x: 0, y: 0, z: -30}, false)
+
+// add pearl electron (40, 22, -10)
+loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
+
+// add kaleidoscopic
+loadGLTF(kaleidoscopicResourceUrl, 'kaleidoscopic', 8, {x: 0, y: 10, z: -40}, true, 0, 0, 0, () => {console.log("bruh")}, 0, .5)
+
+// load spaceman
+loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: -2, z: 40}, true, 0, 0, 0, function(){}, 3)
+
+console.log("adding purple light")
+const kaleidoscopicPointLight = new THREE.PointLight(0x6a0dad, 3, 100)
+const kaleidoscopicPointLight2 = new THREE.PointLight(0x6affff, 3, 100)
+kaleidoscopicPointLight.name = "kaleidoscopicPointLight"
+var kaleidoscopic = getObjectByName("kaleidoscopic")
+scene.add(kaleidoscopicPointLight)
+scene.add(kaleidoscopicPointLight2)
+kaleidoscopicPointLight.position.set(0, 10, -40)
+kaleidoscopicPointLight2.position.set(3, 12, -40)
+
+// add kaleidoscopic
+// loadGLTF()
 
 // load intitial layout into focus area
 function loadLanding() {
   // change this to astronaut
-  loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
-  loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
+  // loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
+  // loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
 }
 loadLanding()
 
@@ -407,24 +415,11 @@ if(window.innerWidth > 1000) {
   // promeCube.position.set(-10, 6, 40)
 }
 
-let metaverseHeader = 'Metaverse'
-loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [33.5, 22, -10], true, 0, 0, 0)
-
 let keyHint = 'Use arrows to navigate'
 // loadText(optimerBoldUrl, 'key-hint-header', keyHint, .75, .05, [-5, 0, 49], true, 0, 0, 0)
 
 let keyHintEnter = 'Press enter to explore'
 // loadText(optimerBoldUrl, 'key-hint-enter', keyHintEnter, .75, .05, [-5, 0, 49], true, 0, 0, 0, false)
-
-// lights
-scene.add(pointLight)
-scene.add(ambientLight)
-
-// metaverse rings
-scene.add(torusGroup)
-
-// metaverse floor grid
-scene.add(gridHelper)
 
 // cubes
 // scene.add(promeCube)
@@ -465,7 +460,7 @@ tween2.start()
 // end test area
 
 // GLTF Loader function
-function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}, animationIndex = 0) {
+function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}, animationIndex = 0, timeScale = 1) {
   let mixer
   let loader = new GLTFLoader()
   loader.load(
@@ -491,6 +486,8 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
         // console.log("\n" + name + " animations: \n")
         // console.log(gltf.animations)
         var action = mixer.clipAction(gltf.animations[animationIndex])
+        console.log(timeScale)
+        action.timeScale = timeScale
         action.play()
       }
 
@@ -554,60 +551,13 @@ function loadText(fontUrl, name, text, size, height, position, shadow, xRotation
       new MeshPhongMaterial({ color: 0xffffff}),
       new MeshPhongMaterial({ color: 0x009390}),
     ])
-
     textMesh.name = name
-
     textMesh.castShadow = shadow
     textMesh.position.set(position[0], position[1], position[2])
-
-    textMesh.rotation.x = xRotation
-    textMesh.rotation.y = yRotation
-    textMesh.rotation.z = zRotation
-
+    textMesh.rotation.set(xRotation, yRotation, zRotation)
     textMesh.visible = visible
     scene.add(textMesh)
   })
-}
- 
-// add items to gui
-
-function buildGui() {
-  let moonFolder = gui.addFolder('moon')
-  let fuboCubeFolder = gui.addFolder('fuboCube')
-  let cameraFolder = gui.addFolder('camera')
-  let focusTorusFolder = gui.addFolder('focusTorus')
-
-  focusTorusFolder.add(focusTorus.rotation, 'x')
-
-  moonFolder.add(moon.position, 'x')
-  moonFolder.add(moon.position, 'y')
-  moonFolder.add(moon.position, 'z')
-
-  fuboCubeFolder.add(fuboCube.position, 'x')
-  fuboCubeFolder.add(fuboCube.position, 'y')
-  fuboCubeFolder.add(fuboCube.position, 'z')
-
-  cameraFolder.add(camera.position, 'x')
-  cameraFolder.add(camera.position, 'y')
-  cameraFolder.add(camera.position, 'z')
-
-  cameraFolder.add(camera.rotation, 'x')
-  cameraFolder.add(camera.rotation, 'y')
-  cameraFolder.add(camera.rotation, 'z')
-}
-
-function updateTorus() {
-  torus.rotation.x += 0.01;
-  torus.rotation.y += 0.01;
-  torus.rotation.z += 0.01;
-
-  torus2.rotation.x -= 0.02;
-  torus2.rotation.y -= 0.02;
-  torus2.rotation.z -= 0.02;
-
-  torus3.rotation.x -= 0.02;
-  torus3.rotation.y += 0.02;
-  torus3.rotation.z -= 0.02;
 }
 
 function updateFuboCube() {
@@ -664,8 +614,6 @@ function addStar() {
   scene.add(star);
 }
 
-// buildGui()
-
 // handle mousedown events
 
 function onDocumentMouseDown(event) {
@@ -681,6 +629,7 @@ function onDocumentMouseDown(event) {
   if ( intersects.length > 0 ) {
     // console.log(intersects)
     let object = intersects[0].object
+    console.log(object)
     let callback = object.callback
     // console.log("\ndebug object")
     // console.log(object)
@@ -716,11 +665,14 @@ function toggleWilderHintText() {
 
 function handleMenuEvent(itemSelected) {
   let textContent = itemSelected.textContent
+  console.log(itemSelected)
   var currentMenuItem = document.getElementsByClassName('menu-selected')
   currentMenuItem[0].classList.remove("menu-selected")
   if(textContent == "Wilder World") {
     // change focused menu item to Wilder World
     animateToScene("wilderWorld")
+  } else if(textContent == "Kaleidoscopic") {
+    animateToScene("kaleidoscopic")
   } else if(textContent == "Welcome") {
     // change focused menu item to Welcome
     resetCamera()
@@ -776,6 +728,10 @@ function keyDownHandler(event) {
 
 function enterKeyHandler() {
   if(sceneState.name == 'landing') {
+    // test kaleidoscopic
+    animateToScene("kaleidoscopic")
+
+    // initFuboScene()
     switch(focusState) {
       case 'fubo':
         //animate to fubo scene
@@ -834,6 +790,18 @@ const wilderPointLightBlue = new THREE.PointLight(0x00beee, 3, 100)
 const wilderPointLightYellow = new THREE.PointLight(0xffff00, 3, 100)
 const wilderPointLightPurple = new THREE.PointLight(0x6a0dad, 3, 100)
 
+// onKaleidoscopicLoaded
+
+let kaleidoscopicLoaded = false
+
+function onKaleidoscopicLoaded() {
+  // add a new light?
+  if(getObjectByName("kaleidoscopicPointLight") == undefined) {
+    
+  }
+  // remove background
+}
+
 // OnWilderWorldLoaded - called when we have finished animating the camera and controls to the wilder world area
 
 let wilderWorldLoaded = false
@@ -861,12 +829,6 @@ function onWilderWorldLoaded() {
     scene.add(moon)
   
     // wilder logo
-  
-    // cyber soldier woman
-    // loadGLTF('./models/cyber-soldier-woman/scene.gltf', 'cyber-soldier-woman', 6, {x: -7.5, y: 0, z: -225}, true, 0, 0, 0)
-  
-    // cyber soldier woman 2
-    // loadGLTF('./models/cyber-soldier-woman-2/scene.gltf', 'cyber-soldier-woman-2', 6, {x: 7.5, y: 0, z: -225}, true, 0, 0, 0)
     
     // wheels
     loadGLTF(alfaRomeoCarResourceUrl, 'alfa-romeo-1967', 15, {x: -14, y: 8.5, z: -200}, false, 0.2, 0, 0)
@@ -921,8 +883,8 @@ function updateFocusArea(focusState = "") {
     case "hover-car":
       // load/show hover car and bike
       if(!hoverCarLoaded) {
-        loadGLTF(hoverCarResourceUrl, 'hover-car', 8, {x: -12, y: 9, z: 10}, true, 0, 45)
-        loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: 20, y: 6, z: 14}, true, 0, 45)
+        // loadGLTF(hoverCarResourceUrl, 'hover-car', 8, {x: -12, y: 9, z: 10}, true, 0, 45)
+        // loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: 20, y: 6, z: 14}, true, 0, 45)
         hoverCarLoaded = true
       } else {
         getObjectByName('hover-car').visible = true
@@ -935,7 +897,7 @@ function updateFocusArea(focusState = "") {
     case "astronaut":
       // load/show astronaut
       if(!astronautLoaded) {
-        loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 2, z: 20}, true, 0, 0, 0, function(){}, 3)
+        // loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 2, z: 20}, true, 0, 0, 0, function(){}, 3)
         astronautLoaded = true
       } else {
         getObjectByName('astronaut').visible = true
@@ -955,37 +917,6 @@ function updateFocusArea(focusState = "") {
       break
   }
 }
-
-let sceneStates = {
-  totalScenes: 4,
-  landing: {
-    id: 0,
-    name: "landing",
-    cameraPosition: [0, 12, 70],
-    controlsTargetVector: [0, 0, 0]
-  },
-  portfolio: {
-    id: 1,
-    name: "portfolio",
-    cameraPosition: [-74, 25, 60],
-    controlsTargetVector: [-80, 5, 0]
-  },
-  fubo: {
-    id: 2,
-    name: "fubo",
-    cameraPosition: [40, 8, 63],
-    controlsTargetVector: [40, 8, 50]
-  },
-  wilderWorld: {
-    id: 3,
-    name: "wilder-world",
-    cameraPosition: [0, 6, -175],
-    controlsTargetVector: [0, 8, -200],
-    callback: onWilderWorldLoaded
-  }
-}
-
-let sceneState = sceneStates.landing
 
 // move camera and controls to new scene location
 function animateToScene(sceneName) {
@@ -1043,18 +974,13 @@ function animate() {
 
   TWEEN.update()
 
-  updateTorus()
+  mainScene.animateScene()
 
   // updateFuboCube()
 
   // updatePromeCube()
 
-  moon.rotation.x -= 0.001
-  moon.rotation.y -= 0.001
-  moon.rotation.z -= 0.001
-
   updateMixers(clockDelta)
-
   controls.update()
 
   renderer.render(scene, camera)
