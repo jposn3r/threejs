@@ -99,7 +99,8 @@ export default class MainScene {
         // lights
         this.lights = []
         this.addLightToScene("ambient", "ambient-light")
-        this.addLightToScene("point", "point-light-1", 0x00beee, 3, 100)
+        this.addLightToScene("point", "point-light-1", 0x00beee, [0, 25, 45], 3, 0)
+        this.addLightToScene("point", "point-light-2", 0x00beee, [60, 0, 0], 3, 0)
     }
  
     setSceneStates() {
@@ -108,7 +109,7 @@ export default class MainScene {
             landing: {
               id: 0,
               name: "landing",
-              cameraPosition: [0, 8, 80],
+              cameraPosition: [0, 12, 80],
               controlsTargetVector: [0, 0, 0]
             },
             portfolio: {
@@ -133,7 +134,7 @@ export default class MainScene {
             kaleidoscopic: {
               id: 4,
               name: "kaleidoscopic-scene",
-              cameraPosition: [80, 8, 0],
+              cameraPosition: [80, 12, 0],
               controlsTargetVector: [0, -1, 0],
             //   callback: onKaleidoscopicLoaded
             }
@@ -264,7 +265,7 @@ export default class MainScene {
         return this.scene.remove(this.getObjectByName(name))
     }
 
-    addLightToScene(type, name, color = 0xffffff, intensity = 1, distance = 100, decay = 0) {
+    addLightToScene(type, name, color = 0xffffff, position = [0, 0, 0], intensity = 1, distance = 100, decay = 0) {
         var lightObj = {}
         lightObj.name = name
         lightObj.type = type
@@ -272,7 +273,7 @@ export default class MainScene {
             lightObj.light = new THREE.AmbientLight(color)
         } else if(type == "point") {
             lightObj.light = new THREE.PointLight(color, intensity, distance)
-            lightObj.light.position.set(0, 25, 45)
+            lightObj.light.position.set(position[0], position[1], position[2])
         }
         this.lights.push(lightObj)
         this.scene.add(lightObj.light)

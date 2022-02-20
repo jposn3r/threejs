@@ -342,7 +342,7 @@ let airJordanResourceUrl = s3ModelsUrl + "air-jordan-1/scene.gltf"
 
 // set positions
 
-updateCameraPosition([0, 8, 80], 50, 1)
+updateCameraPosition([0, 12, 80], 50, 1)
 
 // add objects to the scene
 
