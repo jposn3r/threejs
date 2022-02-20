@@ -90,8 +90,8 @@ items.forEach(item => {
 // main scene
 let mainSceneConfig = {
     name: "main-scene",
-    gui: false,
-    gridFloor: false,
+    gui: false, // TODO: fix bug with gui
+    gridFloor: true,
     torusGroup: false,
     focusTorus: false,
     background: ''
@@ -342,7 +342,7 @@ let airJordanResourceUrl = s3ModelsUrl + "air-jordan-1/scene.gltf"
 
 // set positions
 
-updateCameraPosition([0, 12, 70], 50, 1)
+updateCameraPosition([0, 8, 80], 50, 1)
 
 // add objects to the scene
 
@@ -371,16 +371,16 @@ let sceneState = sceneStates.landing
 // loadGLTF(toriiGateResourceUrl, 'torii-gate', 9, {x: 0, y: 0, z: -30}, false)
 
 // Master Chief Walking
-// loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: -5, z: 25}, true)
+loadGLTF(masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5)
 
 // add pearl electron (40, 22, -10)
-loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 30, {x: 0, y: 3, z: -5}, true)
+loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 30, {x: 0, y: 3, z: 0}, true)
 
 // add kaleidoscopic
 // loadGLTF(kaleidoscopicResourceUrl, 'kaleidoscopic', 8, {x: 0, y: 10, z: -40}, true, 0, 0, 0, () => {console.log("bruh")}, 0, .5)
 
 // load spaceman
-loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: -2, z: 40}, true, 0, 0, 0, function(){}, 3)
+loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 40}, true, 0, 0, 0, function(){}, 3)
 
 console.log("adding purple light")
 const kaleidoscopicPointLight = new THREE.PointLight(0x6a0dad, 3, 100)

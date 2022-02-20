@@ -43,16 +43,6 @@ export default class MainScene {
         this.setMetaverseLogo()
     }
 
-    // pearl electron and metaverse header for now
-    setMetaverseLogo() {
-        let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
-        let metaverseHeader = 'Metaverse'
-        // this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [31, 21, -10], true, 0, -.5, 0)
-        // add pearl electron (40, 22, -10)
-        // let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
-        // this.loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
-    }
-
     setScene() {
         // main scene
         var scene = new THREE.Scene()
@@ -118,7 +108,7 @@ export default class MainScene {
             landing: {
               id: 0,
               name: "landing",
-              cameraPosition: [0, 12, 70],
+              cameraPosition: [0, 8, 80],
               controlsTargetVector: [0, 0, 0]
             },
             portfolio: {
@@ -143,15 +133,15 @@ export default class MainScene {
             kaleidoscopic: {
               id: 4,
               name: "kaleidoscopic-scene",
-              cameraPosition: [0, 21, -33],
-              controlsTargetVector: [0, -1, -50],
+              cameraPosition: [80, 8, 0],
+              controlsTargetVector: [0, -1, 0],
             //   callback: onKaleidoscopicLoaded
             }
           }
         this.sceneStates = sceneStates
     }
 
-    // load 3d text
+    // load 3d text - this should be somewhere else to be used by every scene
     loadText(fontUrl, name, text, size, height, position, shadow, xRotation = 0, yRotation = 0, zRotation = 0, visible = true) {
         let loader = new FontLoader()
         let scene = this.scene
@@ -174,6 +164,16 @@ export default class MainScene {
               textMesh.visible = visible
               scene.add(textMesh)
         }
+    }
+
+    // pearl electron and metaverse header for now
+    setMetaverseLogo() {
+        let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
+        let metaverseHeader = 'Metaverse'
+        // this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [31, 21, -10], true, 0, -.5, 0)
+        // add pearl electron (40, 22, -10)
+        // let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
+        // this.loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
     }
 
     setBackground(asset) {

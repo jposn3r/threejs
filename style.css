@@ -48,10 +48,10 @@ button {
 
 li {
   float: left;
-  width: 25% !important;
+  width: 33.333% !important;
   text-align: center;
   color: #FFFFFF;
-  background-color: #330099;
+  /* background-color: #330099 */
 }
 
 ul {
@@ -80,10 +80,6 @@ li:hover {
 }
 
 #menu-item-3 {
-  background-image: linear-gradient(to right, #061131 , #090533)
-}
-
-#menu-item-4 {
   background-image: linear-gradient(to right, #061131 , #090533)
 }
 
