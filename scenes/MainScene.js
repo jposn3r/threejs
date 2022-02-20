@@ -281,7 +281,14 @@ export default class MainScene {
 
     addGridFloor() {
         // grid floor
-        const gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf)
+        let gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf)
+        gridHelper.name = "light-grid"
         this.scene.add(gridHelper)
+    }
+
+    toggleGridFloor() {
+        console.log("\nthis happens yo")
+        var lightGrid = this.scene.getObjectByName('light-grid')
+        lightGrid.visible = !lightGrid.visible
     }
 }

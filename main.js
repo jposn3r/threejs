@@ -50,6 +50,8 @@ let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
 var leftDetailPanel = document.getElementById("left-detail-panel")
 var leftDetailHeading = document.getElementById("left-detail-heading")
 
+hideDetailPanels()
+
 function updateScaleMultiplier() {
 	windowInnerWidth = window.innerWidth
 	if(windowInnerWidth < 1000) {
@@ -74,17 +76,20 @@ window.addEventListener('resize', function() {
 
 function updateDetailPanelVisibility(windowInnerWidth) {
 	if(windowInnerWidth < 700) {
-		removeDetailPanels()
+		hideDetailPanels()
 	} else {
 		showDetailPanels()
 	}
 }
-function removeDetailPanels() {
-	leftDetailPanel.style.display = 'none'
+function hideDetailPanels() {
+	// leftDetailPanel.style.display = 'none'
 }
 
 function showDetailPanels() {
-	leftDetailPanel.style.display = 'block'
+	// console.log(sceneState)
+	// if(sceneState.name == 'inventory') {
+	// leftDetailPanel.style.display = 'block'
+	// }
 }
 
 document.addEventListener('keydown', keyDownHandler, false)
@@ -230,26 +235,28 @@ function setupFuboScene() {
 	fuboTVCube.name = 'fubo-tv-cube'
 
 	const blackTexture2 = new THREE.TextureLoader().load('/assets/silver-texture.jpeg')
-	let fuboBetCube = new THREE.Mesh(
-	new THREE.BoxGeometry(3,3,3),
-	new THREE.MeshBasicMaterial({map: blackTexture2})
-	);
+		let fuboBetCube = new THREE.Mesh(
+			new THREE.BoxGeometry(3,3,3),
+			new THREE.MeshBasicMaterial({map: blackTexture2}
+		)
+	)
 
 	fuboBetCube.callback = () => {
-	openWebsite('https://www.fubosportsbook.com')
+		openWebsite('https://www.fubosportsbook.com')
 	}
 
 	fuboBetCube.position.set(45, 6.5, 40)
 	fuboBetCube.name = 'fubo-bet-cube'
 
 	const blackTexture3 = new THREE.TextureLoader().load('/assets/bronze-texture.jpeg')
-	let fuboNewsCube = new THREE.Mesh(
-	new THREE.BoxGeometry(3,3,3),
-	new THREE.MeshBasicMaterial({map: blackTexture3})
-	);
+		let fuboNewsCube = new THREE.Mesh(
+			new THREE.BoxGeometry(3,3,3),
+			new THREE.MeshBasicMaterial({map: blackTexture3}
+			)
+	)
 
 	fuboNewsCube.callback = () => {
-	openWebsite('https://www.google.com/search?q=fubotv+news')
+		openWebsite('https://www.google.com/search?q=fubotv+news')
 	}
 
 	fuboNewsCube.position.set(50, 6.5, 40)
@@ -263,9 +270,9 @@ function setupFuboScene() {
 
 function openWebsite(url = "", newTab = true) {
 	if(newTab) {
-	window.open(url, '_blank')
+		window.open(url, '_blank')
 	} else {
-	window.open(url)
+		window.open(url)
 	}
 }
 
@@ -429,11 +436,11 @@ kaleidoscopicPointLight2.position.set(3, 12, -40)
 
 // load intitial layout into focus area
 function loadLanding() {
-// change this to astronaut
-// loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
-// loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
+	// change this to astronaut
+	// loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
+	// loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
 }
-loadLanding()
+// loadLanding()
 
 // change variables based on screen width
 if(window.innerWidth > 1000) {
@@ -573,55 +580,55 @@ mixers.push(mixer)
 
 // load 3d text
 function loadText(fontUrl, name, text, size, height, position, shadow, xRotation = 0, yRotation = 0, zRotation = 0, visible = true) {
-const loader = new FontLoader()
+	const loader = new FontLoader()
 
-loader.load(fontUrl, function (font) {
-const geometry = new TextGeometry(text, {
-font: font,
-size: size,
-height: height,
-})
-const textMesh = new THREE.Mesh(geometry, [
-new MeshPhongMaterial({ color: 0xffffff}),
-new MeshPhongMaterial({ color: 0x009390}),
-])
-textMesh.name = name
-textMesh.castShadow = shadow
-textMesh.position.set(position[0], position[1], position[2])
-textMesh.rotation.set(xRotation, yRotation, zRotation)
-textMesh.visible = visible
-scene.add(textMesh)
-})
+	loader.load(fontUrl, function (font) {
+		const geometry = new TextGeometry(text, {
+			font: font,
+			size: size,
+			height: height,
+		})
+		const textMesh = new THREE.Mesh(geometry, [
+			new MeshPhongMaterial({ color: 0xffffff}),
+			new MeshPhongMaterial({ color: 0x009390}),
+		])
+		textMesh.name = name
+		textMesh.castShadow = shadow
+		textMesh.position.set(position[0], position[1], position[2])
+		textMesh.rotation.set(xRotation, yRotation, zRotation)
+		textMesh.visible = visible
+		scene.add(textMesh)
+	})
 }
 
 function updateFuboCube() {
-fuboCube.rotation.x -= 0.005;
-fuboCube.rotation.y -= 0.005;
-fuboCube.rotation.z -= 0.005;
+	fuboCube.rotation.x -= 0.005;
+	fuboCube.rotation.y -= 0.005;
+	fuboCube.rotation.z -= 0.005;
 }
 
 function updatePromeCube() {
-promeCube.rotation.x += 0.005;
-promeCube.rotation.y += 0.005;
-promeCube.rotation.z += 0.005;
+	promeCube.rotation.x += 0.005;
+	promeCube.rotation.y += 0.005;
+	promeCube.rotation.z += 0.005;
 }
 
 function updateMixers(clockDelta) {
-// huge help in fixing the animations being slow! - https://discourse.threejs.org/t/too-slow-animation/2379/6
+	// huge help in fixing the animations being slow! - https://discourse.threejs.org/t/too-slow-animation/2379/6
 
-// update mixers for animation
-for (let i = 0, l = mixers.length; i < l; i ++) {
-mixers[i].update(clockDelta);
-}
+	// update mixers for animation
+	for (let i = 0, l = mixers.length; i < l; i ++) {
+		mixers[i].update(clockDelta);
+	}
 }
 
 function resetCamera() {
-cameraFocus = "origin"
-animateToScene("landing")
+	cameraFocus = "origin"
+	animateToScene("landing")
 
-if(wilderWorldLoaded) {
-hideWilderWorldScene()
-}
+	if(wilderWorldLoaded) {
+		hideWilderWorldScene()
+	}
 }
 
 function hideWilderWorldScene() {
@@ -639,79 +646,80 @@ getObjectByName('air-jordan-large').visible = false
 // background star effect
 
 function addStar() {
-const geometry = new THREE.SphereGeometry(.5, 24, 24);
-const material = new THREE.MeshStandardMaterial({color:0xffffff});
-const star = new THREE.Mesh(geometry, material);
+	const geometry = new THREE.SphereGeometry(.5, 24, 24);
+	const material = new THREE.MeshStandardMaterial({color:0xffffff});
+	const star = new THREE.Mesh(geometry, material);
 
-const [x, y, z] = Array(3).fill().map(()=> THREE.MathUtils.randFloatSpread(1000));
-star.position.set(x,y,z);
-scene.add(star);
+	const [x, y, z] = Array(3).fill().map(()=> THREE.MathUtils.randFloatSpread(1000));
+	star.position.set(x,y,z);
+	scene.add(star);
 }
 
 // handle mousedown events
 
 function onDocumentMouseDown(event) {
-event.preventDefault();
+	event.preventDefault();
 
-mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1
-mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1
+	mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1
+	mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1
 
-raycaster.setFromCamera( mouse, camera )
+	raycaster.setFromCamera( mouse, camera )
 
-var intersects = raycaster.intersectObjects( scene.children )
+	var intersects = raycaster.intersectObjects( scene.children )
 
-if ( intersects.length > 0 ) {
-// console.log(intersects)
-let object = intersects[0].object
-console.log(object)
-let callback = object.callback
-// console.log("\ndebug object")
-// console.log(object)
-// console.log(callback)
-if(callback instanceof Function) {
-callback()
-} else {
-console.log("error: callback not a function")
-}
-}
+	if ( intersects.length > 0 ) {
+		// console.log(intersects)
+		let object = intersects[0].object
+		console.log(object)
+		let callback = object.callback
+		// console.log("\ndebug object")
+		// console.log(object)
+		// console.log(callback)
+		if(callback instanceof Function) {
+			callback()
+		} else {
+			console.log("error: callback not a function")
+		}
+	}
 }
 
 // on the way to hover effects....potentially
 
 function onMouseOver(event) {
-// console.log("on mouse over")
+	// console.log("on mouse over")
 }
 
 // on button click
 
 function onButtonClick(event) {
-// console.log("\nonButtonClick()")
-resetCamera()
+	// console.log("\nonButtonClick()")
+	resetCamera()
 }
 // {x: -12.5, y: 2.5, z: 40}
 let wilderWorldHintHeader = 'Wilder World'
 loadText(optimerBoldUrl, 'wilder-world-hint-header', wilderWorldHintHeader, 1, .1, [-17, 8.25, 40], true, 0.1, 0, 0, false)
 
 function toggleWilderHintText() {
-var hint = getObjectByName('wilder-world-hint-header')
-// hint.visible = !hint.visible
+	var hint = getObjectByName('wilder-world-hint-header')
+	// hint.visible = !hint.visible
 }
 
 function handleMenuEvent(itemSelected) {
-let textContent = itemSelected.textContent
-console.log(itemSelected)
-var currentMenuItem = document.getElementsByClassName('menu-selected')
-currentMenuItem[0].classList.remove("menu-selected")
-if(textContent == "Wilder World") {
-// change focused menu item to Wilder World
-// animateToScene("wilderWorld")
-} else if(textContent == "Inventory") {
-animateToScene("inventory")
-} else if(textContent == "Home") {
-// change focused menu item to Welcome
-resetCamera()
-}
-itemSelected.classList.add("menu-selected")
+	let textContent = itemSelected.textContent
+	console.log(itemSelected)
+	var currentMenuItem = document.getElementsByClassName('menu-selected')
+	currentMenuItem[0].classList.remove("menu-selected")
+	if(textContent == "Wilder World") {
+		// change focused menu item to Wilder World
+		// animateToScene("wilderWorld")
+	} else if(textContent == "Inventory") {
+		showDetailPanels()
+		animateToScene("inventory")
+	} else if(textContent == "Home") {
+		// change focused menu item to Welcome
+		resetCamera()
+	}
+	itemSelected.classList.add("menu-selected")
 }
 
 // handle key events
@@ -720,103 +728,105 @@ let focusState = 'landing'
 let focusTargetPosition
 
 function keyDownHandler(event) {
-// console.log(event.keyCode)
-switch (event.keyCode) {
-case 87: // w
-// camera.position.z -= 5
-break
-case 65: // a
-break
-case 83: // s
-// camera.position.z += 5
-break
-case 68: // d
-break
-case 38: // up
-// camera.position.z -= 3
-break
-case 37: // left
-// move focus torus
-// console.log(focusState)
-leftKeyHandler()
-break
-case 40: // down
-// camera.position.z += 3
-break
-case 39: // right
-// animateToScene("fubo")
-// console.log(focusState)
-rightKeyHandler()
-break
-case 13: // enter
-// check where focus is
-// console.log(focusState)
-enterKeyHandler()
-break
-// move to new scene
-case 27: // escape
-resetCamera()
-break
-}
+	// console.log(event.keyCode)
+	switch (event.keyCode) {
+	case 87: // w
+		// camera.position.z -= 5
+		break
+	case 65: // a
+		
+	case 83: // s
+		// camera.position.z += 5
+		break
+	case 68: // d
+		break
+	case 38: // up
+		// camera.position.z -= 3
+		break
+	case 37: // left
+		// move focus torus
+		// console.log(focusState)
+		leftKeyHandler()
+		break
+	case 40: // down
+		// camera.position.z += 3
+		break
+	case 39: // right
+		// animateToScene("fubo")
+		// console.log(focusState)
+		rightKeyHandler()
+		break
+	case 13: // enter
+		// check where focus is
+		// console.log(focusState)
+		enterKeyHandler()
+		break
+		// move to new scene
+	case 27: // escape
+		resetCamera()
+		break
+	}
 }
 
 function enterKeyHandler() {
-if(sceneState.name == 'landing') {
-// test kaleidoscopic
-animateToScene("kaleidoscopic")
+	if(sceneState.name == 'landing') {
+		// test kaleidoscopic
+		// animateToScene("kaleidoscopic")
 
-// initFuboScene()
-switch(focusState) {
-case 'fubo':
-//animate to fubo scene
-// initFuboScene()
-break
-case 'hover-car':
-// animate to Wilder World
-// animateToScene("wilderWorld")
-break
-case 'prome':
-// animate to portfolio
-break
-}
-}
+		// initFuboScene()
+		switch(focusState) {
+			case 'fubo':
+				//animate to fubo scene
+				// initFuboScene()
+				break
+			case 'hover-car':
+				// animate to Wilder World
+				// animateToScene("wilderWorld")
+				break
+			case 'prome':
+				// animate to portfolio
+				break
+		}
+	}
+	console.log("hi")
+	mainScene.toggleGridFloor()
 }
 
 function rightKeyHandler() {
-if(sceneState.name == 'landing') {
-if(focusState == 'landing') {
-getObjectByName('goku').visible = false
-getObjectByName('snake-eyes').visible = false
-focusTargetPosition = [12, 0]
-focusState = 'astronaut'
-} else if(focusState == 'hover-car') {
-getObjectByName('hover-car').visible = false
-getObjectByName('hover-bike').visible = false
-focusTargetPosition = [0, 0]
-focusState = 'landing'
-toggleWilderHintText()
-} 
-updateFocusArea(focusState)
-animateObjectToPosition(focusTorus, focusTargetPosition, 250)
-}
+	if(sceneState.name == 'landing') {
+		// if(focusState == 'landing') {
+		// 	getObjectByName('goku').visible = false
+		// 	getObjectByName('snake-eyes').visible = false
+		// 	focusTargetPosition = [12, 0]
+		// 	focusState = 'astronaut'
+		// 	} else if(focusState == 'hover-car') {
+		// 	getObjectByName('hover-car').visible = false
+		// 	getObjectByName('hover-bike').visible = false
+		// 	focusTargetPosition = [0, 0]
+		// 	focusState = 'landing'
+		// 	toggleWilderHintText()
+		// } 
+		// updateFocusArea(focusState)
+		// animateObjectToPosition(focusTorus, focusTargetPosition, 250)
+	}
 }
 
 function leftKeyHandler() {
-if(sceneState.name == 'landing') {
-if(focusState == 'landing') {
-getObjectByName('goku').visible = false
-getObjectByName('snake-eyes').visible = false
-focusTargetPosition = [-12, 0]
-focusState = 'hover-car'
-toggleWilderHintText()
-} else if(focusState == 'astronaut') {
-getObjectByName('astronaut').visible = false
-focusTargetPosition = [0, 0]
-focusState = 'landing'
-}
-updateFocusArea(focusState)
-animateObjectToPosition(focusTorus, focusTargetPosition, 250)
-}
+	if(sceneState.name == 'landing') {
+		// if(focusState == 'landing') {
+		// 	getObjectByName('goku').visible = false
+		// 	getObjectByName('snake-eyes').visible = false
+		// 	focusTargetPosition = [-12, 0]
+		// 	focusState = 'hover-car'
+		// 	toggleWilderHintText()
+		// } else if(focusState == 'astronaut') {
+		// 	getObjectByName('astronaut').visible = false
+		// 	focusTargetPosition = [0, 0]
+		// 	focusState = 'landing'
+		// }
+		// updateFocusArea(focusState)
+		// animateObjectToPosition(focusTorus, focusTargetPosition, 250)
+	}
 }
 
 // light
@@ -829,11 +839,11 @@ const wilderPointLightPurple = new THREE.PointLight(0x6a0dad, 3, 100)
 let kaleidoscopicLoaded = false
 
 function onKaleidoscopicLoaded() {
-// add a new light?
-if(getObjectByName("kaleidoscopicPointLight") == undefined) {
+	// add a new light?
+	if(getObjectByName("kaleidoscopicPointLight") == undefined) {
 
-}
-// remove background
+	}
+	// remove background
 }
 
 // OnWilderWorldLoaded - called when we have finished animating the camera and controls to the wilder world area
@@ -841,63 +851,63 @@ if(getObjectByName("kaleidoscopicPointLight") == undefined) {
 let wilderWorldLoaded = false
 
 function onWilderWorldLoaded() {
-console.log("\nwilder world loading complete\n")
-if(!wilderWorldLoaded) {
-wilderWorldLoaded = true
-wilderPointLightYellow.position.set(-10, 8, -245)
-scene.add(wilderPointLightYellow)
-wilderPointLightBlue.position.set(0, 12, -205)
-scene.add(wilderPointLightBlue)
-wilderPointLightPurple.position.set(10, 8, -225)
-scene.add(wilderPointLightPurple)
+	console.log("\nwilder world loading complete\n")
+	if(!wilderWorldLoaded) {
+		wilderWorldLoaded = true
+		wilderPointLightYellow.position.set(-10, 8, -245)
+		scene.add(wilderPointLightYellow)
+		wilderPointLightBlue.position.set(0, 12, -205)
+		scene.add(wilderPointLightBlue)
+		wilderPointLightPurple.position.set(10, 8, -225)
+		scene.add(wilderPointLightPurple)
 
-// load new models for scene
+		// load new models for scene
 
-let wilderWorldHeader = 'Wilder World'
-loadText(optimerBoldUrl, 'wilder-world-header', wilderWorldHeader, 4, .08, [9, 25, -230], true, 0)
+		let wilderWorldHeader = 'Wilder World'
+		loadText(optimerBoldUrl, 'wilder-world-header', wilderWorldHeader, 4, .08, [9, 25, -230], true, 0)
 
-// planet
-moon.position.set(32, 22, -250)
+		// planet
+		moon.position.set(32, 22, -250)
 
-// sphere
-scene.add(moon)
+		// sphere
+		scene.add(moon)
 
-// wilder logo
+		// wilder logo
 
-// wheels
-loadGLTF(alfaRomeoCarResourceUrl, 'alfa-romeo-1967', 15, {x: -14, y: 8.5, z: -200}, false, 0.2, 0, 0)
+		// wheels
+		loadGLTF(alfaRomeoCarResourceUrl, 'alfa-romeo-1967', 15, {x: -14, y: 8.5, z: -200}, false, 0.2, 0, 0)
 
-let wheelsHeader = 'Wheels'
-loadText(optimerBoldUrl, 'wheels-header', wheelsHeader, .5, .01, [-18, 12, -200], true, 0)
+		let wheelsHeader = 'Wheels'
+		loadText(optimerBoldUrl, 'wheels-header', wheelsHeader, .5, .01, [-18, 12, -200], true, 0)
 
-// kicks
-loadGLTF(airJordanResourceUrl, 'air-jordan', 0.10, {x: -14, y: 15, z: -200}, false, .3, 1.5, 0.3)
-loadGLTF(airJordanResourceUrl, 'air-jordan-large', .5, {x: 0, y: 6, z: -200}, false, 0, 1.25, 0.1)
-airJordanResourceUrl = getObjectByName('air-jordan-large')
+		// kicks
+		loadGLTF(airJordanResourceUrl, 'air-jordan', 0.10, {x: -14, y: 15, z: -200}, false, .3, 1.5, 0.3)
+		loadGLTF(airJordanResourceUrl, 'air-jordan-large', .5, {x: 0, y: 6, z: -200}, false, 0, 1.25, 0.1)
+		airJordanResourceUrl = getObjectByName('air-jordan-large')
 
-let kicksHeader = 'Kicks'
-loadText(optimerBoldUrl, 'kicks-header', kicksHeader, .5, .01, [-18, 18, -200], true, 0)
+		let kicksHeader = 'Kicks'
+		loadText(optimerBoldUrl, 'kicks-header', kicksHeader, .5, .01, [-18, 18, -200], true, 0)
 
-// cribs
-loadGLTF(cribsResourceUrl, 'cribs', .18, {x: -14, y: 1, z: -200}, false, 0.1, 0.1, 0)
+		// cribs
+		loadGLTF(cribsResourceUrl, 'cribs', .18, {x: -14, y: 1, z: -200}, false, 0.1, 0.1, 0)
 
-let cribsHeader = 'Cribs'
-loadText(optimerBoldUrl, 'cribs-header', cribsHeader, .5, .01, [-18, 6, -200], true, 0)
+		let cribsHeader = 'Cribs'
+		loadText(optimerBoldUrl, 'cribs-header', cribsHeader, .5, .01, [-18, 6, -200], true, 0)
 
-// land - coming soon
+		// land - coming soon
 
-// new menu to navigate and go back to main menu - coming soon
-} else {
-getObjectByName("wilder-planet").visible = true
-getObjectByName("wilder-world-header").visible = true
-getObjectByName("alfa-romeo-1967").visible = true
-getObjectByName("wheels-header").visible = true
-getObjectByName("air-jordan").visible = true
-getObjectByName("kicks-header").visible = true
-getObjectByName("cribs").visible = true
-getObjectByName("cribs-header").visible = true
-getObjectByName('air-jordan-large').visible = true
-}
+		// new menu to navigate and go back to main menu - coming soon
+	} else {
+		getObjectByName("wilder-planet").visible = true
+		getObjectByName("wilder-world-header").visible = true
+		getObjectByName("alfa-romeo-1967").visible = true
+		getObjectByName("wheels-header").visible = true
+		getObjectByName("air-jordan").visible = true
+		getObjectByName("kicks-header").visible = true
+		getObjectByName("cribs").visible = true
+		getObjectByName("cribs-header").visible = true
+		getObjectByName('air-jordan-large').visible = true
+	}
 }
 
 let airJordanLarge = null
@@ -906,118 +916,118 @@ let hoverCarLoaded = false
 let astronautLoaded = false
 
 function updateFocusArea(focusState = "") {
-switch(focusState) {
-case "landing":
-// load/show goku and snake eyes
-getObjectByName('goku').visible = true
-getObjectByName('snake-eyes').visible = true
-// getObjectByName('key-hint-enter').visible = false
-// getObjectByName('key-hint-header').visible = true
-break
-case "hover-car":
-// load/show hover car and bike
-if(!hoverCarLoaded) {
-// loadGLTF(hoverCarResourceUrl, 'hover-car', 8, {x: -12, y: 9, z: 10}, true, 0, 45)
-// loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: 20, y: 6, z: 14}, true, 0, 45)
-hoverCarLoaded = true
-} else {
-getObjectByName('hover-car').visible = true
-getObjectByName('hover-bike').visible = true
-}
-// change text to say "click enter to explore"
-// getObjectByName('key-hint-header').visible = false
-// getObjectByName('key-hint-enter').visible = true
-break
-case "astronaut":
-// load/show astronaut
-if(!astronautLoaded) {
-// loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 2, z: 20}, true, 0, 0, 0, function(){}, 3)
-astronautLoaded = true
-} else {
-getObjectByName('astronaut').visible = true
-}
-// getObjectByName('key-hint-enter').visible = false
-// getObjectByName('key-hint-header').visible = true
-break
-case "prome":
-// load portfolio
-// getObjectByName('key-hint-enter').visible = false
-// getObjectByName('key-hint-header').visible = true
-break
-case "fubo":
-// load fubo
-// getObjectByName('key-hint-enter').visible = false
-// getObjectByName('key-hint-header').visible = true
-break
-}
+	switch(focusState) {
+	case "landing":
+		// load/show goku and snake eyes
+		getObjectByName('goku').visible = true
+		getObjectByName('snake-eyes').visible = true
+		// getObjectByName('key-hint-enter').visible = false
+		// getObjectByName('key-hint-header').visible = true
+		break
+	case "hover-car":
+		// load/show hover car and bike
+		if(!hoverCarLoaded) {
+			// loadGLTF(hoverCarResourceUrl, 'hover-car', 8, {x: -12, y: 9, z: 10}, true, 0, 45)
+			// loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: 20, y: 6, z: 14}, true, 0, 45)
+			hoverCarLoaded = true
+		} else {
+		getObjectByName('hover-car').visible = true
+		getObjectByName('hover-bike').visible = true
+		}
+		// change text to say "click enter to explore"
+		// getObjectByName('key-hint-header').visible = false
+		// getObjectByName('key-hint-enter').visible = true
+		break
+	case "astronaut":
+		// load/show astronaut
+		if(!astronautLoaded) {
+			// loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 2, z: 20}, true, 0, 0, 0, function(){}, 3)
+			astronautLoaded = true
+		} else {
+			getObjectByName('astronaut').visible = true
+		}
+		// getObjectByName('key-hint-enter').visible = false
+		// getObjectByName('key-hint-header').visible = true
+		break
+	case "prome":
+		// load portfolio
+		// getObjectByName('key-hint-enter').visible = false
+		// getObjectByName('key-hint-header').visible = true
+		break
+	case "fubo":
+		// load fubo
+		// getObjectByName('key-hint-enter').visible = false
+		// getObjectByName('key-hint-header').visible = true
+		break
+	}
 }
 
 // move camera and controls to new scene location
 function animateToScene(sceneName) {
-console.log("\nanimateToScene: " + sceneName)
-console.log(sceneStates[sceneName])
-let scenePosition = sceneStates[sceneName].cameraPosition
-// console.log("position: " + scenePosition)
-let controlsTargetVector = sceneStates[sceneName].controlsTargetVector
-// console.log("controlsTargetVector: " + controlsTargetVector)
+	console.log("\nanimateToScene: " + sceneName)
+	console.log(sceneStates[sceneName])
+	let scenePosition = sceneStates[sceneName].cameraPosition
+	// console.log("position: " + scenePosition)
+	let controlsTargetVector = sceneStates[sceneName].controlsTargetVector
+	// console.log("controlsTargetVector: " + controlsTargetVector)
 
-controls.target = new THREE.Vector3(controlsTargetVector[0], controlsTargetVector[1], controlsTargetVector[2])
+	controls.target = new THREE.Vector3(controlsTargetVector[0], controlsTargetVector[1], controlsTargetVector[2])
 
-// tween test area
-var position = { x : camera.position.x, y: camera.position.y, z: camera.position.z}
-var target = { x : scenePosition[0], y: scenePosition[1], z: scenePosition[2]}
-var tween3 = new TWEEN.Tween(position).to(target, 1500)
+	// tween test area
+	var position = { x : camera.position.x, y: camera.position.y, z: camera.position.z}
+	var target = { x : scenePosition[0], y: scenePosition[1], z: scenePosition[2]}
+	var tween3 = new TWEEN.Tween(position).to(target, 1500)
 
-tween3.onUpdate(function() {
-camera.position.x = position.x
-camera.position.y = position.y
-camera.position.z = position.z
-})
+	tween3.onUpdate(function() {
+		camera.position.x = position.x
+		camera.position.y = position.y
+		camera.position.z = position.z
+	})
 
-tween3.start()
-tween3.onComplete(sceneStates[sceneName].callback)
+	tween3.start()
+	tween3.onComplete(sceneStates[sceneName].callback)
 
-sceneState = sceneStates[sceneName]
+	sceneState = sceneStates[sceneName]
 }
 
 // update camera position
 
 function updateCameraPosition(position = [0, 20, 75], fov = 50, zoom = 1) {
-camera.position.set(position[0], position[1], position[2])
-camera.fov = fov
-camera.zoom = zoom
-camera.updateProjectionMatrix()
+	camera.position.set(position[0], position[1], position[2])
+	camera.fov = fov
+	camera.zoom = zoom
+	camera.updateProjectionMatrix()
 }
 
 // get object from the scene
 
 function getObjectByName(name) {
-return scene.getObjectByName(name)
+	return scene.getObjectByName(name)
 }
 
 // remove object from scene
 
 function removeObject(objectName) {
-scene.remove(getObjectByName(objectName))
+	scene.remove(getObjectByName(objectName))
 }
 
 function animate() {
-requestAnimationFrame(animate)
+	requestAnimationFrame(animate)
 
-clockDelta = clock.getDelta()
+	clockDelta = clock.getDelta()
 
-TWEEN.update()
+	TWEEN.update()
 
-mainScene.animateScene()
+	mainScene.animateScene()
 
-// updateFuboCube()
+	// updateFuboCube()
 
-// updatePromeCube()
+	// updatePromeCube()
 
-updateMixers(clockDelta)
-controls.update()
+	updateMixers(clockDelta)
+	controls.update()
 
-renderer.render(scene, camera)
+	renderer.render(scene, camera)
 }
 
 animate()
