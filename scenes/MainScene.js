@@ -99,8 +99,8 @@ export default class MainScene {
         // lights
         this.lights = []
         this.addLightToScene("ambient", "ambient-light")
-        this.addLightToScene("point", "point-light-1", 0x00beee, [0, 25, 45], 3, 0)
-        this.addLightToScene("point", "point-light-2", 0x00beee, [60, 0, 0], 3, 0)
+        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 25, 45], 3, 0)
+        this.addLightToScene("point", "point-light-2", 0xffffff, [60, 0, 0], 3, 0)
     }
  
     setSceneStates() {
@@ -170,8 +170,8 @@ export default class MainScene {
     // pearl electron and metaverse header for now
     setMetaverseLogo() {
         let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
-        let metaverseHeader = 'Metaverse'
-        // this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .25, [31, 21, -10], true, 0, -.5, 0)
+        let metaverseHeader = 'Welcome to the Metaverse'
+        this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .2, [10, 21, 20], true, 0, -.05, 0)
         // add pearl electron (40, 22, -10)
         // let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
         // this.loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
@@ -255,6 +255,10 @@ export default class MainScene {
 
     animateScene() {
         this.animateTorusGroup()
+        
+        let planetEarth = this.getObjectByName('planet-earth')
+        planetEarth.rotation.x += .0005
+        planetEarth.rotation.y += .0004
     }
 
     getObjectByName(name) {

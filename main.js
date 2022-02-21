@@ -54,7 +54,7 @@ hideDetailPanels()
 
 function updateScaleMultiplier() {
 	windowInnerWidth = window.innerWidth
-	if(windowInnerWidth < 1000) {
+	if(windowInnerWidth < 700) {
 		scaleMultiplyer = .5
 	} else {
 		scaleMultiplyer = 1
@@ -114,7 +114,7 @@ const items = document.querySelectorAll('ul > li');
 let mainSceneConfig = {
 	name: "main-scene",
 	gui: false, // TODO: fix bug with gui
-	gridFloor: true,
+	gridFloor: false,
 	torusGroup: false,
 	focusTorus: false,
 	background: ''
@@ -371,7 +371,7 @@ updateCameraPosition([0, 12, 80], 50, 1)
 // add objects to the scene
 
 // Add stars
-Array(1000).fill().forEach(addStar)
+Array(2000).fill().forEach(addStar)
 
 let sceneStates = mainScene.sceneStates
 
@@ -415,15 +415,22 @@ let sceneState = sceneStates.landing
 // add kaleidoscopic
 // loadGLTF(kaleidoscopicResourceUrl, 'kaleidoscopic', 8, {x: 0, y: 10, z: -40}, true, 0, 0, 0, () => {console.log("bruh")}, 0, .5)
 
-// Master Chief Walking
-loadGLTF(masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5)
+// 90s wave for intro or backdrop
+// loadGLTF('./models/90s-neon/scene.gltf', '90s-neon', .1, {x: 0, y: 0, z: 50}, false, 0)
 
+loadGLTF('./models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -200}, true, 0, 0)
+
+loadGLTF('./models/portal-night-version/scene.gltf', 'portal-scene', .005, {x: 0, y: -10, z: 30}, true, 0, 1.5)
+
+// Master Chief Walking
+// loadGLTF(masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5)
 // load spaceman
-loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 40}, true, 0, 0, 0, function(){}, 3)
+// loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, function(){}, 3)
+// loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, function(){}, 3)
 
 console.log("adding purple light")
-const kaleidoscopicPointLight = new THREE.PointLight(0x6a0dad, 3, 100)
-const kaleidoscopicPointLight2 = new THREE.PointLight(0x6affff, 3, 100)
+const kaleidoscopicPointLight = new THREE.PointLight(0xffffff, 3, 100)
+const kaleidoscopicPointLight2 = new THREE.PointLight(0xffffff, 3, 100)
 kaleidoscopicPointLight.name = "kaleidoscopicPointLight"
 var kaleidoscopic = getObjectByName("kaleidoscopic")
 scene.add(kaleidoscopicPointLight)
