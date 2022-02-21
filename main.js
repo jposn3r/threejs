@@ -222,9 +222,9 @@ function setupFuboScene() {
 
 	// child cubes
 	const blackTexture1 = new THREE.TextureLoader().load('/assets/gold-texture.jpeg')
-	let fuboTVCube = new THREE.Mesh(
-	new THREE.BoxGeometry(3,3,3),
-	new THREE.MeshBasicMaterial({map: blackTexture1})
+		let fuboTVCube = new THREE.Mesh(
+		new THREE.BoxGeometry(3,3,3),
+		new THREE.MeshBasicMaterial({map: blackTexture1})
 	)
 
 	fuboTVCube.callback = () => {
@@ -291,13 +291,15 @@ function tearDownFuboScene() {
 }
 
 function animateObjectToPosition(object, target, time) {
+	console.log(object)
 	var position = { x : object.position.x, y: object.position.y}
-	var target = { x : target[0], y: target[1]}
+	var target = { x : target[0], y: target[1], z: target[2]}
 	var tween = new TWEEN.Tween(position).to(target, time)
 
 	tween.onUpdate(function() {
-	object.position.x = position.x
-	object.position.y = position.y
+		object.position.x = position.x
+		object.position.y = position.y
+		object.position.z = position.z
 	})
 
 	tween.start()
@@ -366,7 +368,7 @@ let airJordanResourceUrl = s3ModelsUrl + "air-jordan-1/scene.gltf"
 
 // set positions
 
-updateCameraPosition([0, 12, 80], 50, 1)
+updateCameraPosition([0, 18, 90], 50, 1)
 
 // add objects to the scene
 
@@ -420,13 +422,14 @@ let sceneState = sceneStates.landing
 
 loadGLTF('./models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -200}, true, 0, 0)
 
-loadGLTF('./models/portal-night-version/scene.gltf', 'portal-scene', .005, {x: 0, y: -10, z: 30}, true, 0, 1.5)
+loadGLTF('./models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
 
 // Master Chief Walking
 // loadGLTF(masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5)
 // load spaceman
 // loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, function(){}, 3)
-// loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, function(){}, 3)
+
+loadGLTF('./models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true)
 
 console.log("adding purple light")
 const kaleidoscopicPointLight = new THREE.PointLight(0xffffff, 3, 100)
@@ -1028,7 +1031,6 @@ function animate() {
 	mainScene.animateScene()
 
 	// updateFuboCube()
-
 	// updatePromeCube()
 
 	updateMixers(clockDelta)

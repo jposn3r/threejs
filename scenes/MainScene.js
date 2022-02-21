@@ -99,8 +99,8 @@ export default class MainScene {
         // lights
         this.lights = []
         this.addLightToScene("ambient", "ambient-light")
-        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 25, 45], 3, 0)
-        this.addLightToScene("point", "point-light-2", 0xffffff, [60, 0, 0], 3, 0)
+        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 10, 30], 3, 0)
+        // this.addLightToScene("point", "point-light-2", 0xffffff, [0, -20, 40], 3, 0)
     }
  
     setSceneStates() {
@@ -110,7 +110,7 @@ export default class MainScene {
               id: 0,
               name: "landing",
               cameraPosition: [0, 12, 80],
-              controlsTargetVector: [0, 0, 0]
+              controlsTargetVector: [0, 0, -20]
             },
             portfolio: {
               id: 1,
@@ -134,8 +134,8 @@ export default class MainScene {
             inventory: {
               id: 4,
               name: "inventory",
-              cameraPosition: [80, 12, 0],
-              controlsTargetVector: [0, -1, 0],
+              cameraPosition: [43, 12, 25],
+              controlsTargetVector: [40, 15, -20],
             //   callback: onKaleidoscopicLoaded
             }
           }
@@ -156,7 +156,7 @@ export default class MainScene {
               })
               const textMesh = new THREE.Mesh(geometry, [
                 new MeshPhongMaterial({ color: 0xffffff}),
-                new MeshPhongMaterial({ color: 0x009390}),
+                new MeshPhongMaterial({ color: 0x000000}),
               ])
               textMesh.name = name
               textMesh.castShadow = shadow
@@ -171,7 +171,7 @@ export default class MainScene {
     setMetaverseLogo() {
         let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
         let metaverseHeader = 'Welcome to the Metaverse'
-        this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .2, [10, 21, 20], true, 0, -.05, 0)
+        this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .2, [-16, 0, 45], true, 0, -.05, 0)
         // add pearl electron (40, 22, -10)
         // let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
         // this.loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
@@ -255,10 +255,16 @@ export default class MainScene {
 
     animateScene() {
         this.animateTorusGroup()
-        
-        let planetEarth = this.getObjectByName('planet-earth')
-        planetEarth.rotation.x += .0005
-        planetEarth.rotation.y += .0004
+        this.rotateObject('planet-earth', [.0005, .0004, 0])
+    }
+
+    rotateObject(name, rotation = [0, 0, 0]) {
+        let object = this.getObjectByName(name)
+        if(object !== undefined) {
+            object.rotation.x += rotation[0]
+            object.rotation.y += rotation[1]
+            object.rotation.z += rotation[2]
+        }
     }
 
     getObjectByName(name) {
