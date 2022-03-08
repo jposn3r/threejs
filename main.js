@@ -143,7 +143,7 @@ function loadLanding() {
 		loadGLTF('./models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
 		loadGLTF('./models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
 	} else {
-		// loadMessageAboutCrappyMobileExperience()
+		loadGLTF('./models/portal-night-version/scene.gltf', 'portal', .003, {x: 0, y: 0, z: 30}, true, 0, 1.5)
 	}
 }
 loadLanding()
