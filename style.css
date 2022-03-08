@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
 }
 
 canvas {
@@ -9,7 +10,7 @@ canvas {
 }
 
 h2 {
-  font-size: 100px;;
+  margin: 0px 10px 10px 25px;
 }
 
 p {
@@ -35,19 +36,59 @@ button {
 }
 
 .left-detail-panel {
-  height: 500px;
-  width: 25%;
+  height: 85%;
+  width: 50%;
   color: #d9e7ff;
   background-color: #05051690;
-  left: 3%;
-  top: 3%;
   display: 'none';
+}
+
+#inventory-details-view {
+  height: 24%;
+  background-color: #a9fff410;
+  margin: 0px;
+  padding: 20px;
+}
+
+#inventory-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 20% 20% 20%;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.inventory-item {
+  height: 100px;
+  border-color: #ffffff;
+  border: 4px;
+}
+
+.item-card {
+  height: 100%;
+  width: 100%;
+  /* background-color: #ff0000; */
 }
 
 .left-detail-panel h1 {
   margin: 25px 25px 10px 25px;
   text-align: left;
   font-family: 'Yanone Kaffeesatz', sans-serif;
+}
+
+#item-1 {
+  width: 1fr;
+  height: 1fr;
+}
+
+.loading-screen {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  display: block;
+  position: absolute;
+  background-color: #000b22;
+  opacity: 0;
 }
 
 .main-menu-container {
@@ -84,31 +125,4 @@ ul {
 
 li:hover {
   cursor: crosshair;
-}
-
-@keyframes flickerAnimation {
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
-}
-@-o-keyframes flickerAnimation{
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
-}
-@-moz-keyframes flickerAnimation{
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
-}
-@-webkit-keyframes flickerAnimation{
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
-}
-.animate-flicker {
-   -webkit-animation: flickerAnimation 1s infinite;
-   -moz-animation: flickerAnimation 1s infinite;
-   -o-animation: flickerAnimation 1s infinite;
-    animation: flickerAnimation 1s infinite;
 }

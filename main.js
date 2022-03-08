@@ -82,14 +82,15 @@ function updateDetailPanelVisibility(windowInnerWidth) {
 	}
 }
 function hideDetailPanels() {
-	// leftDetailPanel.style.display = 'none'
+	leftDetailPanel.style.display = 'none'
 }
 
 function showDetailPanels() {
-	// console.log(sceneState)
-	// if(sceneState.name == 'inventory') {
-	// leftDetailPanel.style.display = 'block'
-	// }
+	console.log("showDetailPanels")
+	console.log(sceneState)
+	if(sceneState.name == 'inventory') {
+		leftDetailPanel.style.display = 'block'
+	}
 }
 
 document.addEventListener('keydown', keyDownHandler, false)
@@ -156,117 +157,6 @@ let focusTorus = mainScene.focusTorus
 let ambientLight = mainScene.getObjectByName("ambient-light")
 let pointLight = mainScene.getObjectByName("point-light-1")
 
-// fubo cube
-
-const fuboTexture = new THREE.TextureLoader().load('/assets/fubo-bg.jpg')
-
-const fuboCube = buildBoxGeometry(4, 4, 4, fuboTexture)
-
-fuboCube.name = "fuboCube"
-let stadiumVisible = false
-
-fuboCube.callback = function () {
-	// initFuboScene()
-}
-
-function initFuboScene() {
-	if(cameraFocus != "fuboCube") {
-		cameraFocus = "fuboCube"
-
-	// add floating stadium
-	if(!stadiumVisible) {
-		setupFuboScene()
-		var position = { x : 17, y: 6}
-
-		var target = { x : 32, y: 6}
-		var tween = new TWEEN.Tween(position).to(target, 1500)
-
-		tween.onUpdate(function() {
-			fuboCube.position.x = position.x
-			fuboCube.position.y = position.y
-		})
-
-		tween.start()
-	}
-
-	// animate to fubo scene
-	animateToScene("fubo")
-
-	} else {
-	// open fubo website in new tab
-	// window.open('http://www.fubo.tv', '_blank');
-	}
-}
-
-function setupFuboScene() {
-	// console.log("\nsetupFuboScene()")
-	stadiumVisible = true
-
-	let fuboHeader = 'fuboTV'
-	loadText(optimerBoldUrl, 'fubo-header', fuboHeader, 1, .25, [39, 11, 40], true, 0)
-
-	let fuboSubHeader = 'The Future of Interactive Streaming'
-	loadText(optimerBoldUrl, 'fubo-sub-header', fuboSubHeader, .6, .20, [39, 9.75, 40], true, 0)
-
-	let fuboTVText = 'TV'
-	loadText(optimerBoldUrl, 'fubo-tv-link', fuboTVText, .6, .2, [39.5, 3.75, 40 ], true, 0)
-
-	let fuboGamingText = 'BET'
-	loadText(optimerBoldUrl, 'fubo-sportsbook-link', fuboGamingText, .6, .2, [44.5, 3.75, 40 ], true, 0)
-
-	let fuboNewsText = 'NEWS'
-	loadText(optimerBoldUrl, 'fubo-news-link', fuboNewsText, .6, .2, [49, 3.75, 40 ], true, 0)
-
-	const fuboCubeGroup = new THREE.Group()
-	fuboCubeGroup.name = 'fubo-cube-group'
-
-	// child cubes
-	const blackTexture1 = new THREE.TextureLoader().load('/assets/gold-texture.jpeg')
-		let fuboTVCube = new THREE.Mesh(
-		new THREE.BoxGeometry(3,3,3),
-		new THREE.MeshBasicMaterial({map: blackTexture1})
-	)
-
-	fuboTVCube.callback = () => {
-	openWebsite('https://www.fubo.tv')
-	}
-
-	fuboTVCube.position.set(40, 6.5, 40)
-	fuboTVCube.name = 'fubo-tv-cube'
-
-	const blackTexture2 = new THREE.TextureLoader().load('/assets/silver-texture.jpeg')
-		let fuboBetCube = new THREE.Mesh(
-			new THREE.BoxGeometry(3,3,3),
-			new THREE.MeshBasicMaterial({map: blackTexture2}
-		)
-	)
-
-	fuboBetCube.callback = () => {
-		openWebsite('https://www.fubosportsbook.com')
-	}
-
-	fuboBetCube.position.set(45, 6.5, 40)
-	fuboBetCube.name = 'fubo-bet-cube'
-
-	const blackTexture3 = new THREE.TextureLoader().load('/assets/bronze-texture.jpeg')
-		let fuboNewsCube = new THREE.Mesh(
-			new THREE.BoxGeometry(3,3,3),
-			new THREE.MeshBasicMaterial({map: blackTexture3}
-			)
-	)
-
-	fuboNewsCube.callback = () => {
-		openWebsite('https://www.google.com/search?q=fubotv+news')
-	}
-
-	fuboNewsCube.position.set(50, 6.5, 40)
-	fuboNewsCube.name = 'fubo-news-cube'
-
-	fuboCubeGroup.add(fuboTVCube)
-	fuboCubeGroup.add(fuboBetCube)
-	fuboCubeGroup.add(fuboNewsCube)
-	scene.add(fuboCubeGroup)
-}
 
 function openWebsite(url = "", newTab = true) {
 	if(newTab) {
@@ -274,20 +164,6 @@ function openWebsite(url = "", newTab = true) {
 	} else {
 		window.open(url)
 	}
-}
-
-function tearDownFuboScene() {
-	stadiumVisible = false
-	removeObject('fubo-header')
-	removeObject('fubo-sub-header')
-	removeObject('fubo-website-link')
-	removeObject('fubo-scene-floor')
-	removeObject('fubo-scene-background')
-	removeObject('fubo-cube-group')
-	removeObject('fubo-news-link')
-	removeObject('fubo-tv-link')
-	removeObject('fubo-sportsbook-link')
-	// animateObjectToPosition(fuboCube, [17, 6], 1500)
 }
 
 function animateObjectToPosition(object, target, time) {
@@ -303,16 +179,6 @@ function animateObjectToPosition(object, target, time) {
 	})
 
 	tween.start()
-}
-
-// prome cube
-
-const promeTexture = new THREE.TextureLoader().load('/assets/prometheus.jpg')
-const promeCube = buildBoxGeometry(4, 4, 4, promeTexture)
-
-promeCube.callback = function () {
-	// open prometheus definition
-	// window.open('https://www.merriam-webster.com/dictionary/Prometheus', '_blank')
 }
 
 function buildBoxGeometry(scaleX = 1, scaleY = 1, scaleZ = 1, texture = new THREE.MeshBasicMaterial()) {
@@ -359,7 +225,6 @@ let hoverBikeResourceUrl = './models/hover-bike/scene.gltf'
 let astronautResourceUrl = './models/astronaut/scene.gltf'
 let toriiGateResourceUrl = './models/torii-gate/scene.gltf'
 let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
-let kaleidoscopicResourceUrl = './models/kaleidoscopic/scene.gltf'
 
 // remote assets
 let alfaRomeoCarResourceUrl = s3ModelsUrl + "alfa-romeo-stradale-1967/scene.gltf"
@@ -414,34 +279,14 @@ let sceneState = sceneStates.landing
 // Sick imperial hangar
 // loadGLTF('./models/imperial-spaceship/scene.gltf', 'imperial-spaceship', 7, {x: 0, y: 10, z: 50}, true, 0, 0, 0, null, 0, 1)
 
-// add kaleidoscopic
-// loadGLTF(kaleidoscopicResourceUrl, 'kaleidoscopic', 8, {x: 0, y: 10, z: -40}, true, 0, 0, 0, () => {console.log("bruh")}, 0, .5)
-
 // 90s wave for intro or backdrop
 // loadGLTF('./models/90s-neon/scene.gltf', '90s-neon', .1, {x: 0, y: 0, z: 50}, false, 0)
-
-loadGLTF('./models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -200}, true, 0, 0)
-
-loadGLTF('./models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
 
 // Master Chief Walking
 // loadGLTF(masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5)
 // load spaceman
 // loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, function(){}, 3)
 
-loadGLTF('./models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true)
-
-console.log("adding purple light")
-const kaleidoscopicPointLight = new THREE.PointLight(0xffffff, 3, 100)
-const kaleidoscopicPointLight2 = new THREE.PointLight(0xffffff, 3, 100)
-kaleidoscopicPointLight.name = "kaleidoscopicPointLight"
-var kaleidoscopic = getObjectByName("kaleidoscopic")
-scene.add(kaleidoscopicPointLight)
-scene.add(kaleidoscopicPointLight2)
-kaleidoscopicPointLight.position.set(0, 10, -40)
-kaleidoscopicPointLight2.position.set(3, 12, -40)
-
-// add kaleidoscopic
 // loadGLTF()
 
 // load intitial layout into focus area
@@ -449,21 +294,23 @@ function loadLanding() {
 	// change this to astronaut
 	// loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
 	// loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
+
+	if(windowInnerWidth > 700) {
+		loadGLTF('./models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -200}, true, 0, 0)
+		loadGLTF('./models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
+		loadGLTF('./models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true)
+	}
 }
-// loadLanding()
+loadLanding()
 
 // change variables based on screen width
 if(window.innerWidth > 1000) {
 	// loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: -5, z: 25}, true)
 	// loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
 	// loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
-	// fuboCube.position.set(25, 6, 40)
-	// promeCube.position.set(-25, 6, 40)
 } else {
 	// loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -7, y: 0, z: 20}, true)
 	// loadGLTF(gokuResourceUrl, 'goku', 8, {x: 7, y: 0, z: 20}, true)
-	// fuboCube.position.set(10, 6, 40)
-	// promeCube.position.set(-10, 6, 40)
 }
 
 let keyHint = 'Use arrows to navigate'
@@ -471,44 +318,6 @@ let keyHint = 'Use arrows to navigate'
 
 let keyHintEnter = 'Press enter to explore'
 // loadText(optimerBoldUrl, 'key-hint-enter', keyHintEnter, .75, .05, [-5, 0, 49], true, 0, 0, 0, false)
-
-// cubes
-// scene.add(promeCube)
-// scene.add(fuboCube)
-
-// tween test area
-
-var position = { x : 0, y: 0, z: 40}
-var target = { x : 25, y: 5, z: 40}
-var tween = new TWEEN.Tween(position).to(target, 2500)
-
-tween.onUpdate(function() {
-	fuboCube.position.x = position.x
-	fuboCube.position.y = position.y
-	fuboCube.position.z = position.z
-})
-
-tween.start()
-
-// promecube opposite animation
-
-var position2 = { x : 0, y: 0, z: 40}
-var target2 = { x : 25, y: 5, z: 40}
-var tween2 = new TWEEN.Tween(position2).to(target2, 2500)
-
-tween2.easing(TWEEN.Easing.Quadratic.Out)
-
-tween2.onUpdate(function(){
-	promeCube.position.x = -position.x
-	promeCube.position.y = position.y
-	promeCube.position.z = position.z
-})
-
-tween2.start()
-
-// camera tween : todo for animation to focus on fubo cube from wherever you are when you click it
-
-// end test area
 
 // GLTF Loader function
 function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}, animationIndex = 0, timeScale = 1) {
@@ -567,25 +376,25 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
 
 // FBX Loader function
 function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
-let loader = new FBXLoader()
-loader.load(resourceUrl, model => {
-model.scale.set(scale, scale, scale)
-model.position.set(position.x, position.y, position.z)
+	let loader = new FBXLoader()
+	loader.load(resourceUrl, model => {
+		model.scale.set(scale, scale, scale)
+		model.position.set(position.x, position.y, position.z)
 
-let mixer = new THREE.AnimationMixer(model)
+		let mixer = new THREE.AnimationMixer(model)
 
-if(animate) {
-let anim = new FBXLoader()
-anim.setPath('./models/')
-anim.load(animationUrl, (anim) => {
-let action = mixer.clipAction(anim.animations[0])
-action.play()
-})
-}
+		if(animate) {
+			let anim = new FBXLoader()
+			anim.setPath('./models/')
+			anim.load(animationUrl, (anim) => {
+			let action = mixer.clipAction(anim.animations[0])
+				action.play()
+			})
+		}
 
-scene.add(model)
-mixers.push(mixer)
-})
+		scene.add(model)
+		mixers.push(mixer)
+	})
 }
 
 // load 3d text
@@ -611,18 +420,6 @@ function loadText(fontUrl, name, text, size, height, position, shadow, xRotation
 	})
 }
 
-function updateFuboCube() {
-	fuboCube.rotation.x -= 0.005;
-	fuboCube.rotation.y -= 0.005;
-	fuboCube.rotation.z -= 0.005;
-}
-
-function updatePromeCube() {
-	promeCube.rotation.x += 0.005;
-	promeCube.rotation.y += 0.005;
-	promeCube.rotation.z += 0.005;
-}
-
 function updateMixers(clockDelta) {
 	// huge help in fixing the animations being slow! - https://discourse.threejs.org/t/too-slow-animation/2379/6
 
@@ -641,20 +438,21 @@ function resetCamera() {
 	}
 }
 
+// TODO: Move to new file
 function hideWilderWorldScene() {
-getObjectByName("wilder-planet").visible = false
-getObjectByName("wilder-world-header").visible = false
-getObjectByName("alfa-romeo-1967").visible = false
-getObjectByName("wheels-header").visible = false
-getObjectByName("air-jordan").visible = false
-getObjectByName("kicks-header").visible = false
-getObjectByName("cribs").visible = false
-getObjectByName("cribs-header").visible = false
-getObjectByName('air-jordan-large').visible = false
+	getObjectByName("wilder-planet").visible = false
+	getObjectByName("wilder-world-header").visible = false
+	getObjectByName("alfa-romeo-1967").visible = false
+	getObjectByName("wheels-header").visible = false
+	getObjectByName("air-jordan").visible = false
+	getObjectByName("kicks-header").visible = false
+	getObjectByName("cribs").visible = false
+	getObjectByName("cribs-header").visible = false
+	getObjectByName('air-jordan-large').visible = false
 }
 
+// TODO: Move to new file
 // background star effect
-
 function addStar() {
 	const geometry = new THREE.SphereGeometry(.5, 24, 24);
 	const material = new THREE.MeshStandardMaterial({color:0xffffff});
@@ -723,7 +521,6 @@ function handleMenuEvent(itemSelected) {
 		// change focused menu item to Wilder World
 		// animateToScene("wilderWorld")
 	} else if(textContent == "Inventory") {
-		showDetailPanels()
 		animateToScene("inventory")
 	} else if(textContent == "Home") {
 		// change focused menu item to Welcome
@@ -762,7 +559,6 @@ function keyDownHandler(event) {
 		// camera.position.z += 3
 		break
 	case 39: // right
-		// animateToScene("fubo")
 		// console.log(focusState)
 		rightKeyHandler()
 		break
@@ -783,18 +579,10 @@ function enterKeyHandler() {
 		// test kaleidoscopic
 		// animateToScene("kaleidoscopic")
 
-		// initFuboScene()
 		switch(focusState) {
-			case 'fubo':
-				//animate to fubo scene
-				// initFuboScene()
-				break
 			case 'hover-car':
 				// animate to Wilder World
 				// animateToScene("wilderWorld")
-				break
-			case 'prome':
-				// animate to portfolio
 				break
 		}
 	}
@@ -805,16 +593,16 @@ function enterKeyHandler() {
 function rightKeyHandler() {
 	if(sceneState.name == 'landing') {
 		// if(focusState == 'landing') {
-		// 	getObjectByName('goku').visible = false
-		// 	getObjectByName('snake-eyes').visible = false
-		// 	focusTargetPosition = [12, 0]
-		// 	focusState = 'astronaut'
+			// 	getObjectByName('goku').visible = false
+			// 	getObjectByName('snake-eyes').visible = false
+			// 	focusTargetPosition = [12, 0]
+			// 	focusState = 'astronaut'
 		// 	} else if(focusState == 'hover-car') {
-		// 	getObjectByName('hover-car').visible = false
-		// 	getObjectByName('hover-bike').visible = false
-		// 	focusTargetPosition = [0, 0]
-		// 	focusState = 'landing'
-		// 	toggleWilderHintText()
+			// 	getObjectByName('hover-car').visible = false
+			// 	getObjectByName('hover-bike').visible = false
+			// 	focusTargetPosition = [0, 0]
+			// 	focusState = 'landing'
+			// 	toggleWilderHintText()
 		// } 
 		// updateFocusArea(focusState)
 		// animateObjectToPosition(focusTorus, focusTargetPosition, 250)
@@ -843,18 +631,6 @@ function leftKeyHandler() {
 const wilderPointLightBlue = new THREE.PointLight(0x00beee, 3, 100)
 const wilderPointLightYellow = new THREE.PointLight(0xffff00, 3, 100)
 const wilderPointLightPurple = new THREE.PointLight(0x6a0dad, 3, 100)
-
-// onKaleidoscopicLoaded
-
-let kaleidoscopicLoaded = false
-
-function onKaleidoscopicLoaded() {
-	// add a new light?
-	if(getObjectByName("kaleidoscopicPointLight") == undefined) {
-
-	}
-	// remove background
-}
 
 // OnWilderWorldLoaded - called when we have finished animating the camera and controls to the wilder world area
 
@@ -998,6 +774,8 @@ function animateToScene(sceneName) {
 	tween3.onComplete(sceneStates[sceneName].callback)
 
 	sceneState = sceneStates[sceneName]
+	// hideDetailPanels()
+	// showDetailPanels()
 }
 
 // update camera position
@@ -1029,9 +807,6 @@ function animate() {
 	TWEEN.update()
 
 	mainScene.animateScene()
-
-	// updateFuboCube()
-	// updatePromeCube()
 
 	updateMixers(clockDelta)
 	controls.update()

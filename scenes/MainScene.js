@@ -134,7 +134,7 @@ export default class MainScene {
             inventory: {
               id: 4,
               name: "inventory",
-              cameraPosition: [43, 12, 25],
+              cameraPosition: [43, 12, 30],
               controlsTargetVector: [40, 15, -20],
             //   callback: onKaleidoscopicLoaded
             }

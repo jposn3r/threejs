@@ -12,8 +12,6 @@
 	<body>
 		<canvas id="world"></canvas>
 
-		<!-- <h1 class="position-center z-top">Test Text</h1> -->
-
 		<!-- main menu -->
 		<div class="main-menu-container z-top">
 			<ul id="main-menu-list">
@@ -23,10 +21,38 @@
 			</ul>
 		</div>
 
-		<!-- <div id="left-detail-panel" class="left-detail-panel z-top">
-			<h1 id="left-detail-heading">Chase the Future</h1>
+		<div id="left-detail-panel" class="left-detail-panel z-top">
+			<h1 id="left-detail-heading">Inventory</h1>
 			<hr>
-		</div> -->
+			<div id="inventory-details-view">
+				<h2>Filter by category</h2>
+			</div>
+			<!-- GRID SECTION -->
+			<div id="inventory-grid">
+				<div class="inventory-item">
+					<div class="item-card">
+						<h1>Item 3</h1>
+					</div>
+				</div>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+				<h1 class="inventory-item">Item</h1>
+			</div>
+		</div>
 
 		<!-- <button>RESET CAMERA</button> -->
 
@@ -36,6 +62,11 @@
 			contractAddress="0xc2e9678a71e50e5aed036e00e9c5caeb1ac5987d"
 			tokenId="56889379372895915089292518516834127797639507055422799743903594675041500326246">
 		</nft-card> -->
+		
+		<!-- Load scene first then reveal -->
+		<!-- <div class="loading-screen">
+			<h1>Loading...</h1>
+		</div> -->
 
 		<script src="https://unpkg.com/embeddable-nfts/dist/nft-card.min.js"></script>
 		<script type="module" src="/main.js"></script>
