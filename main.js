@@ -82,7 +82,7 @@ function updateDetailPanelVisibility(windowInnerWidth) {
 	}
 }
 function hideDetailPanels() {
-	leftDetailPanel.style.display = 'none'
+	// leftDetailPanel.style.display = 'none'
 }
 
 function showDetailPanels() {
