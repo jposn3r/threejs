@@ -35,13 +35,14 @@ button {
   display: block;
 }
 
-.left-detail-panel {
+/* ToDo: Fix implementation of detail panel */
+/* .left-detail-panel {
   height: 85%;
   width: 50%;
   color: #d9e7ff;
   background-color: #05051690;
   display: 'none';
-}
+} */
 
 #inventory-details-view {
   height: 24%;
