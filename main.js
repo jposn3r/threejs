@@ -136,8 +136,6 @@ let sceneState = sceneStates.landing
 // load spaceman
 // loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, function(){}, 3)
 
-// loadGLTF()
-
 // load intitial layout into focus area
 function loadLanding() {
 	if(windowInnerWidth > 700) {
