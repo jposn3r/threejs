@@ -141,7 +141,7 @@ let sceneState = sceneStates.landing
 // load intitial layout into focus area
 function loadLanding() {
 	if(windowInnerWidth > 700) {
-		loadGLTF('./models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -200}, true, 0, 0)
+		loadGLTF('./models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
 		loadGLTF('./models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
 		loadGLTF('./models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
 	} else {
