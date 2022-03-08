@@ -43,6 +43,7 @@ export default class MainScene {
         this.setMetaverseLogo()
     }
 
+    // comment here
     setScene() {
         // main scene
         var scene = new THREE.Scene()
@@ -50,6 +51,7 @@ export default class MainScene {
         this.scene = scene
     }
 
+    // comment here
     setRenderer() {
         let renderer = new THREE.WebGLRenderer({
             canvas: document.querySelector('#world'),
@@ -61,6 +63,7 @@ export default class MainScene {
         this.renderer = renderer
     }
 
+    // comment here
     setCamera(){
         // camera
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
@@ -68,6 +71,7 @@ export default class MainScene {
         this.cameraFocus = "origin"
     }
 
+    // comment here
     setControls() {
         // controls
         // let controls = new OrbitControls(camera, renderer.domElement)
@@ -75,6 +79,7 @@ export default class MainScene {
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
     }
 
+    // comment here
     setGui(gui) {
         // gui
         if(gui) {
@@ -95,6 +100,7 @@ export default class MainScene {
         }
     }
 
+    // comment here
     setLights() {
         // lights
         this.lights = []
@@ -103,40 +109,24 @@ export default class MainScene {
         // this.addLightToScene("point", "point-light-2", 0xffffff, [0, -20, 40], 3, 0)
     }
  
+    // comment here
     setSceneStates() {
         let sceneStates = {
-            totalScenes: 5,
             landing: {
-              id: 0,
               name: "landing",
               cameraPosition: [0, 12, 80],
               controlsTargetVector: [0, 0, -20]
             },
-            portfolio: {
-              id: 1,
-              name: "portfolio",
-              cameraPosition: [-74, 25, 60],
-              controlsTargetVector: [-80, 5, 0]
-            },
-            fubo: {
-              id: 2,
-              name: "fubo",
-              cameraPosition: [40, 8, 63],
-              controlsTargetVector: [40, 8, 50]
-            },
             wilderWorld: {
-              id: 3,
               name: "wilder-world",
               cameraPosition: [0, 6, -175],
               controlsTargetVector: [0, 8, -200],
             //   callback: onWilderWorldLoaded
             },
             inventory: {
-              id: 4,
               name: "inventory",
-              cameraPosition: [43, 12, 30],
-              controlsTargetVector: [40, 15, -20],
-            //   callback: onKaleidoscopicLoaded
+              cameraPosition: [63, 6, 50],
+              controlsTargetVector: [0, 0, -20],
             }
           }
         this.sceneStates = sceneStates
@@ -177,11 +167,13 @@ export default class MainScene {
         // this.loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
     }
 
+    // comment here
     setBackground(asset) {
         let spaceTexture = new THREE.TextureLoader().load(asset)
         this.scene.background = spaceTexture
     }
 
+    // comment here
     addToGui(field, name, folder = "") {
         if(folder !== "") {
             // check if folder exists
@@ -193,6 +185,7 @@ export default class MainScene {
         this.gui.add(field, name)
     }
 
+    // comment here
     addTorusGroupToScene() {
         // build and add torus rings
         let torusGroup = new THREE.Group()
@@ -219,6 +212,7 @@ export default class MainScene {
         this.scene.add(torusGroup)
     }
 
+    // comment here
     addFocusTorus() {
         // focus torus
         let focusTorusGeometry = new THREE.TorusGeometry(5, 0.25, 5)
@@ -253,11 +247,13 @@ export default class MainScene {
         }
     }
 
+    // comment here
     animateScene() {
         this.animateTorusGroup()
         this.rotateObject('planet-earth', [.0005, .0004, 0])
     }
 
+    // comment here
     rotateObject(name, rotation = [0, 0, 0]) {
         let object = this.getObjectByName(name)
         if(object !== undefined) {
@@ -267,14 +263,17 @@ export default class MainScene {
         }
     }
 
+    // comment here
     getObjectByName(name) {
         return this.scene.getObjectByName(name)
     }
 
+    // comment here
     removeObjectByName(name) {
         return this.scene.remove(this.getObjectByName(name))
     }
 
+    // comment here
     addLightToScene(type, name, color = 0xffffff, position = [0, 0, 0], intensity = 1, distance = 100, decay = 0) {
         var lightObj = {}
         lightObj.name = name
@@ -289,6 +288,7 @@ export default class MainScene {
         this.scene.add(lightObj.light)
     }
 
+    // comment here
     addGridFloor() {
         // grid floor
         let gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf)
@@ -296,6 +296,7 @@ export default class MainScene {
         this.scene.add(gridHelper)
     }
 
+    // comment here
     toggleGridFloor() {
         console.log("\nthis happens yo")
         var lightGrid = this.scene.getObjectByName('light-grid')

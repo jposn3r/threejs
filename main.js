@@ -9,46 +9,11 @@ import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitCon
 import * as dat from 'dat.gui'
 import TWEEN from '@tweenjs/tween.js'
 import MainScene from './scenes/MainScene'
-
-// NEED TO DO
-
-// 1. Make multiple scenes and properly structure your code
-// Scene 1: Entrance to the digital world
-// Scene 2: Home area
-// Scene 3: Inventory
-// Scene 4: Another dimension
-
-// Ideas
-// 1. Slow mo button - 
-// turns all animations to 1/60th of time scale and maybe zooms in on master chief walking
-
-// 2. Fubo cube additional metadata overlay
-// when you click on fubo cube it should give you an indicator like a glow or ring underneath to show it's being focused
-// also to do additional things like see website or see when the stock price
-
-// 3. Joystick navigation
-// https://codepen.io/ogames/pen/rNmYpdo
-
-// 4. Arcade Cabinet 
-// Build a portal to games as an old school arcade cabinet
-// Build a cabinet that has all the old games loaded in aka linked to a website where they can play them on the screen
-// could get the joystick navigation as input
-
-// 5. Interactivity with animation
-// https://tympanus.net/codrops/2019/10/14/how-to-create-an-interactive-3d-character-with-three-js/
-
-// 6. 3D OG Pong
-// nuff said
-
-// 7. 3D transitions like ESPN/Sports Broadcasts
-// this would be sick
-
-// What stays in this file? ------------------------------------------
+import openWebsite from './utils'
 
 // document event listeners
 let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
 var leftDetailPanel = document.getElementById("left-detail-panel")
-var leftDetailHeading = document.getElementById("left-detail-heading")
 
 hideDetailPanels()
 
@@ -62,7 +27,6 @@ function updateScaleMultiplier() {
 }
 updateScaleMultiplier()
 
-// adjust the scene when the window is resized
 window.addEventListener('resize', function() {
 	windowInnerHeight = window.innerHeight
 	windowInnerWidth = window.innerWidth
@@ -98,10 +62,8 @@ document.addEventListener('mousedown', onDocumentMouseDown, false)
 
 // On click events
 
-// var buttons = document.getElementsByTagName('button')
-// buttons[0].addEventListener('click', onButtonClick, false)
-
-const items = document.querySelectorAll('ul > li');
+// main menu click events - move to it's own file and load the menu independently
+const items = document.querySelectorAll('ul > li')
 	items.forEach(item => {
 			item.addEventListener('click',(e)=>{
 			// console.log(e.target.textContent)
@@ -149,38 +111,6 @@ var mouse = new THREE.Vector2()
 
 let mixers = []
 
-// torus group and focus torus
-let torusGroup = mainScene.torusGroup
-let focusTorus = mainScene.focusTorus
-
-// lights
-let ambientLight = mainScene.getObjectByName("ambient-light")
-let pointLight = mainScene.getObjectByName("point-light-1")
-
-
-function openWebsite(url = "", newTab = true) {
-	if(newTab) {
-		window.open(url, '_blank')
-	} else {
-		window.open(url)
-	}
-}
-
-function animateObjectToPosition(object, target, time) {
-	console.log(object)
-	var position = { x : object.position.x, y: object.position.y}
-	var target = { x : target[0], y: target[1], z: target[2]}
-	var tween = new TWEEN.Tween(position).to(target, time)
-
-	tween.onUpdate(function() {
-		object.position.x = position.x
-		object.position.y = position.y
-		object.position.z = position.z
-	})
-
-	tween.start()
-}
-
 function buildBoxGeometry(scaleX = 1, scaleY = 1, scaleZ = 1, texture = new THREE.MeshBasicMaterial()) {
 	return new THREE.Mesh(
 		new THREE.BoxGeometry(scaleX,scaleY,scaleX),
@@ -188,54 +118,11 @@ function buildBoxGeometry(scaleX = 1, scaleY = 1, scaleZ = 1, texture = new THRE
 	)
 }
 
-// moon
-
-// const moonTexture = new THREE.TextureLoader().load('/assets/moon.jpeg')
-const earthTexture = new THREE.TextureLoader().load('/assets/planet-earth.jpeg')
-const normalTexture = new THREE.TextureLoader().load('/assets/moon-normal-map.jpg')
-const earthNormalMap = new THREE.TextureLoader().load('/assets/earth-normal-map.jpeg')
-const sphereMaterial = new THREE.MeshStandardMaterial({
-	map: earthTexture,
-	normalMap: earthNormalMap
-})
-
-sphereMaterial.color = new THREE.Color(0x292929)
-const sphereGeometry = new THREE.SphereGeometry(20, 30, 30)
-
-const moon = new THREE.Mesh(
-	sphereGeometry,
-	sphereMaterial
-)
-
-// moon.callback = () => {openWebsite('https://www.wilderworld.com/')}
-
-moon.name = "wilder-planet"
-
-// set resource variables
-
-let s3ModelsUrl = "https://jakonius-assets.s3.us-east-2.amazonaws.com/models/"
-
-let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
-let gokuResourceUrl = './models/goku-rigged-animated/scene.gltf'
-let snakeEyesResourceUrl = './models/snake-eyes/scene.gltf'
 let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
-let barcelonaStadiumResourceUrl = './models/camp-nou-stadium/scene.gltf'
-let hoverCarResourceUrl = './models/hover-car/scene.gltf'
-let hoverBikeResourceUrl = './models/hover-bike/scene.gltf'
 let astronautResourceUrl = './models/astronaut/scene.gltf'
-let toriiGateResourceUrl = './models/torii-gate/scene.gltf'
-let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
 
-// remote assets
-let alfaRomeoCarResourceUrl = s3ModelsUrl + "alfa-romeo-stradale-1967/scene.gltf"
-let cribsResourceUrl = s3ModelsUrl + "buildings/scene.gltf"
-let airJordanResourceUrl = s3ModelsUrl + "air-jordan-1/scene.gltf"
-
-// set positions
-
+// set positions - figure out why I need this :sweat-smile:
 updateCameraPosition([0, 18, 90], 50, 1)
-
-// add objects to the scene
 
 // Add stars
 Array(2000).fill().forEach(addStar)
@@ -243,44 +130,6 @@ Array(2000).fill().forEach(addStar)
 let sceneStates = mainScene.sceneStates
 
 let sceneState = sceneStates.landing
-
-// main menu
-
-// add small car to menu - when clicked it shows the big version
-// loadGLTF(hoverCarResourceUrl, 'hover-car-small', 2, {x: -12.5, y: 2.5, z: 40}, true, 0, 45)
-
-// add small astronaut to menu - when focused and click enter it shows the big one
-// loadGLTF(astronautResourceUrl, 'astronaut-small', 2.5, {x: 12.5, y: 0, z: 40}, true, 0, 0, 0)
-
-// add small goku to menu - when focused and click enter it shows the big one
-// loadGLTF(gokuResourceUrl, 'goku-small', 3 * scaleMultiplyer, {x: 3, y: 1, z: 40}, true, 0)
-
-// add small snake eyes to menu - when focused and click enter it shows the big one
-// loadGLTF(snakeEyesResourceUrl, 'snake-eyes-small', .055, {x: -3, y: 1, z: 40}, true)
-
-// add torii gate
-// loadGLTF(toriiGateResourceUrl, 'torii-gate', 9, {x: 0, y: 0, z: -30}, false)
-
-// add pearl electron (40, 22, -10)
-// loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 30, {x: 0, y: 3, z: 0}, true)
-
-// add trees of yestiny
-// loadGLTF('./models/yin-trees/scene.gltf', 'yin-trees', 5, {x: 0, y: 0, z: 0}, true)
-
-// arc for inventory
-// loadGLTF('./models/arc/scene.gltf', 'arc', 7, {x: 0, y: -10, z: 0}, true)
-
-// Loading animation for initial entry transition
-// loadGLTF('./models/countdown/scene.gltf', 'countdown', 7, {x: 0, y: 10, z: 50}, true, 0, 0, 0, null, 0, 1, false)
-
-// Space station if you need it
-// loadGLTF('./models/space-station/scene.gltf', 'space-station', 7, {x: 0, y: 10, z: 50}, true, 0, 0, 0, null, 0, 1)
-
-// Sick imperial hangar
-// loadGLTF('./models/imperial-spaceship/scene.gltf', 'imperial-spaceship', 7, {x: 0, y: 10, z: 50}, true, 0, 0, 0, null, 0, 1)
-
-// 90s wave for intro or backdrop
-// loadGLTF('./models/90s-neon/scene.gltf', '90s-neon', .1, {x: 0, y: 0, z: 50}, false, 0)
 
 // Master Chief Walking
 // loadGLTF(masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5)
@@ -291,33 +140,15 @@ let sceneState = sceneStates.landing
 
 // load intitial layout into focus area
 function loadLanding() {
-	// change this to astronaut
-	// loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
-	// loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
-
 	if(windowInnerWidth > 700) {
 		loadGLTF('./models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -200}, true, 0, 0)
 		loadGLTF('./models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
-		loadGLTF('./models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true)
+		loadGLTF('./models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
+	} else {
+		// loadMessageAboutCrappyMobileExperience()
 	}
 }
 loadLanding()
-
-// change variables based on screen width
-if(window.innerWidth > 1000) {
-	// loadGLTF(masterChiefResourceUrl, 'master-chief', 7.5, {x: 0, y: -5, z: 25}, true)
-	// loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -10, y: 0, z: 20}, true)
-	// loadGLTF(gokuResourceUrl, 'goku', 8, {x: 10, y: 0, z: 20}, true)
-} else {
-	// loadGLTF(snakeEyesResourceUrl, 'snake-eyes', .15, {x: -7, y: 0, z: 20}, true)
-	// loadGLTF(gokuResourceUrl, 'goku', 8, {x: 7, y: 0, z: 20}, true)
-}
-
-let keyHint = 'Use arrows to navigate'
-// loadText(optimerBoldUrl, 'key-hint-header', keyHint, .75, .05, [-5, 0, 49], true, 0, 0, 0)
-
-let keyHintEnter = 'Press enter to explore'
-// loadText(optimerBoldUrl, 'key-hint-enter', keyHintEnter, .75, .05, [-5, 0, 49], true, 0, 0, 0, false)
 
 // GLTF Loader function
 function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}, animationIndex = 0, timeScale = 1) {
@@ -432,23 +263,6 @@ function updateMixers(clockDelta) {
 function resetCamera() {
 	cameraFocus = "origin"
 	animateToScene("landing")
-
-	if(wilderWorldLoaded) {
-		hideWilderWorldScene()
-	}
-}
-
-// TODO: Move to new file
-function hideWilderWorldScene() {
-	getObjectByName("wilder-planet").visible = false
-	getObjectByName("wilder-world-header").visible = false
-	getObjectByName("alfa-romeo-1967").visible = false
-	getObjectByName("wheels-header").visible = false
-	getObjectByName("air-jordan").visible = false
-	getObjectByName("kicks-header").visible = false
-	getObjectByName("cribs").visible = false
-	getObjectByName("cribs-header").visible = false
-	getObjectByName('air-jordan-large').visible = false
 }
 
 // TODO: Move to new file
@@ -491,83 +305,42 @@ function onDocumentMouseDown(event) {
 	}
 }
 
-// on the way to hover effects....potentially
-
-function onMouseOver(event) {
-	// console.log("on mouse over")
-}
-
-// on button click
-
-function onButtonClick(event) {
-	// console.log("\nonButtonClick()")
-	resetCamera()
-}
-// {x: -12.5, y: 2.5, z: 40}
-let wilderWorldHintHeader = 'Wilder World'
-loadText(optimerBoldUrl, 'wilder-world-hint-header', wilderWorldHintHeader, 1, .1, [-17, 8.25, 40], true, 0.1, 0, 0, false)
-
-function toggleWilderHintText() {
-	var hint = getObjectByName('wilder-world-hint-header')
-	// hint.visible = !hint.visible
-}
-
 function handleMenuEvent(itemSelected) {
 	let textContent = itemSelected.textContent
 	console.log(itemSelected)
 	var currentMenuItem = document.getElementsByClassName('menu-selected')
 	currentMenuItem[0].classList.remove("menu-selected")
-	if(textContent == "Wilder World") {
-		// change focused menu item to Wilder World
-		// animateToScene("wilderWorld")
-	} else if(textContent == "Inventory") {
+	if(textContent == "Inventory") {
 		animateToScene("inventory")
 	} else if(textContent == "Home") {
-		// change focused menu item to Welcome
 		resetCamera()
 	}
 	itemSelected.classList.add("menu-selected")
 }
 
-// handle key events
-
-let focusState = 'landing'
-let focusTargetPosition
-
 function keyDownHandler(event) {
-	// console.log(event.keyCode)
 	switch (event.keyCode) {
 	case 87: // w
-		// camera.position.z -= 5
 		break
 	case 65: // a
 		
 	case 83: // s
-		// camera.position.z += 5
 		break
 	case 68: // d
 		break
 	case 38: // up
-		// camera.position.z -= 3
 		break
 	case 37: // left
-		// move focus torus
-		// console.log(focusState)
 		leftKeyHandler()
 		break
 	case 40: // down
-		// camera.position.z += 3
 		break
 	case 39: // right
-		// console.log(focusState)
 		rightKeyHandler()
 		break
 	case 13: // enter
-		// check where focus is
-		// console.log(focusState)
 		enterKeyHandler()
 		break
-		// move to new scene
 	case 27: // escape
 		resetCamera()
 		break
@@ -576,175 +349,17 @@ function keyDownHandler(event) {
 
 function enterKeyHandler() {
 	if(sceneState.name == 'landing') {
-		// test kaleidoscopic
-		// animateToScene("kaleidoscopic")
-
-		switch(focusState) {
-			case 'hover-car':
-				// animate to Wilder World
-				// animateToScene("wilderWorld")
-				break
-		}
 	}
-	console.log("hi")
 	mainScene.toggleGridFloor()
 }
 
 function rightKeyHandler() {
 	if(sceneState.name == 'landing') {
-		// if(focusState == 'landing') {
-			// 	getObjectByName('goku').visible = false
-			// 	getObjectByName('snake-eyes').visible = false
-			// 	focusTargetPosition = [12, 0]
-			// 	focusState = 'astronaut'
-		// 	} else if(focusState == 'hover-car') {
-			// 	getObjectByName('hover-car').visible = false
-			// 	getObjectByName('hover-bike').visible = false
-			// 	focusTargetPosition = [0, 0]
-			// 	focusState = 'landing'
-			// 	toggleWilderHintText()
-		// } 
-		// updateFocusArea(focusState)
-		// animateObjectToPosition(focusTorus, focusTargetPosition, 250)
 	}
 }
 
 function leftKeyHandler() {
 	if(sceneState.name == 'landing') {
-		// if(focusState == 'landing') {
-		// 	getObjectByName('goku').visible = false
-		// 	getObjectByName('snake-eyes').visible = false
-		// 	focusTargetPosition = [-12, 0]
-		// 	focusState = 'hover-car'
-		// 	toggleWilderHintText()
-		// } else if(focusState == 'astronaut') {
-		// 	getObjectByName('astronaut').visible = false
-		// 	focusTargetPosition = [0, 0]
-		// 	focusState = 'landing'
-		// }
-		// updateFocusArea(focusState)
-		// animateObjectToPosition(focusTorus, focusTargetPosition, 250)
-	}
-}
-
-// light
-const wilderPointLightBlue = new THREE.PointLight(0x00beee, 3, 100)
-const wilderPointLightYellow = new THREE.PointLight(0xffff00, 3, 100)
-const wilderPointLightPurple = new THREE.PointLight(0x6a0dad, 3, 100)
-
-// OnWilderWorldLoaded - called when we have finished animating the camera and controls to the wilder world area
-
-let wilderWorldLoaded = false
-
-function onWilderWorldLoaded() {
-	console.log("\nwilder world loading complete\n")
-	if(!wilderWorldLoaded) {
-		wilderWorldLoaded = true
-		wilderPointLightYellow.position.set(-10, 8, -245)
-		scene.add(wilderPointLightYellow)
-		wilderPointLightBlue.position.set(0, 12, -205)
-		scene.add(wilderPointLightBlue)
-		wilderPointLightPurple.position.set(10, 8, -225)
-		scene.add(wilderPointLightPurple)
-
-		// load new models for scene
-
-		let wilderWorldHeader = 'Wilder World'
-		loadText(optimerBoldUrl, 'wilder-world-header', wilderWorldHeader, 4, .08, [9, 25, -230], true, 0)
-
-		// planet
-		moon.position.set(32, 22, -250)
-
-		// sphere
-		scene.add(moon)
-
-		// wilder logo
-
-		// wheels
-		loadGLTF(alfaRomeoCarResourceUrl, 'alfa-romeo-1967', 15, {x: -14, y: 8.5, z: -200}, false, 0.2, 0, 0)
-
-		let wheelsHeader = 'Wheels'
-		loadText(optimerBoldUrl, 'wheels-header', wheelsHeader, .5, .01, [-18, 12, -200], true, 0)
-
-		// kicks
-		loadGLTF(airJordanResourceUrl, 'air-jordan', 0.10, {x: -14, y: 15, z: -200}, false, .3, 1.5, 0.3)
-		loadGLTF(airJordanResourceUrl, 'air-jordan-large', .5, {x: 0, y: 6, z: -200}, false, 0, 1.25, 0.1)
-		airJordanResourceUrl = getObjectByName('air-jordan-large')
-
-		let kicksHeader = 'Kicks'
-		loadText(optimerBoldUrl, 'kicks-header', kicksHeader, .5, .01, [-18, 18, -200], true, 0)
-
-		// cribs
-		loadGLTF(cribsResourceUrl, 'cribs', .18, {x: -14, y: 1, z: -200}, false, 0.1, 0.1, 0)
-
-		let cribsHeader = 'Cribs'
-		loadText(optimerBoldUrl, 'cribs-header', cribsHeader, .5, .01, [-18, 6, -200], true, 0)
-
-		// land - coming soon
-
-		// new menu to navigate and go back to main menu - coming soon
-	} else {
-		getObjectByName("wilder-planet").visible = true
-		getObjectByName("wilder-world-header").visible = true
-		getObjectByName("alfa-romeo-1967").visible = true
-		getObjectByName("wheels-header").visible = true
-		getObjectByName("air-jordan").visible = true
-		getObjectByName("kicks-header").visible = true
-		getObjectByName("cribs").visible = true
-		getObjectByName("cribs-header").visible = true
-		getObjectByName('air-jordan-large').visible = true
-	}
-}
-
-let airJordanLarge = null
-
-let hoverCarLoaded = false
-let astronautLoaded = false
-
-function updateFocusArea(focusState = "") {
-	switch(focusState) {
-	case "landing":
-		// load/show goku and snake eyes
-		getObjectByName('goku').visible = true
-		getObjectByName('snake-eyes').visible = true
-		// getObjectByName('key-hint-enter').visible = false
-		// getObjectByName('key-hint-header').visible = true
-		break
-	case "hover-car":
-		// load/show hover car and bike
-		if(!hoverCarLoaded) {
-			// loadGLTF(hoverCarResourceUrl, 'hover-car', 8, {x: -12, y: 9, z: 10}, true, 0, 45)
-			// loadGLTF(hoverBikeResourceUrl, 'hover-bike', 0.04, {x: 20, y: 6, z: 14}, true, 0, 45)
-			hoverCarLoaded = true
-		} else {
-		getObjectByName('hover-car').visible = true
-		getObjectByName('hover-bike').visible = true
-		}
-		// change text to say "click enter to explore"
-		// getObjectByName('key-hint-header').visible = false
-		// getObjectByName('key-hint-enter').visible = true
-		break
-	case "astronaut":
-		// load/show astronaut
-		if(!astronautLoaded) {
-			// loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 2, z: 20}, true, 0, 0, 0, function(){}, 3)
-			astronautLoaded = true
-		} else {
-			getObjectByName('astronaut').visible = true
-		}
-		// getObjectByName('key-hint-enter').visible = false
-		// getObjectByName('key-hint-header').visible = true
-		break
-	case "prome":
-		// load portfolio
-		// getObjectByName('key-hint-enter').visible = false
-		// getObjectByName('key-hint-header').visible = true
-		break
-	case "fubo":
-		// load fubo
-		// getObjectByName('key-hint-enter').visible = false
-		// getObjectByName('key-hint-header').visible = true
-		break
 	}
 }
 
@@ -753,9 +368,7 @@ function animateToScene(sceneName) {
 	console.log("\nanimateToScene: " + sceneName)
 	console.log(sceneStates[sceneName])
 	let scenePosition = sceneStates[sceneName].cameraPosition
-	// console.log("position: " + scenePosition)
 	let controlsTargetVector = sceneStates[sceneName].controlsTargetVector
-	// console.log("controlsTargetVector: " + controlsTargetVector)
 
 	controls.target = new THREE.Vector3(controlsTargetVector[0], controlsTargetVector[1], controlsTargetVector[2])
 
@@ -774,8 +387,6 @@ function animateToScene(sceneName) {
 	tween3.onComplete(sceneStates[sceneName].callback)
 
 	sceneState = sceneStates[sceneName]
-	// hideDetailPanels()
-	// showDetailPanels()
 }
 
 // update camera position
@@ -785,18 +396,6 @@ function updateCameraPosition(position = [0, 20, 75], fov = 50, zoom = 1) {
 	camera.fov = fov
 	camera.zoom = zoom
 	camera.updateProjectionMatrix()
-}
-
-// get object from the scene
-
-function getObjectByName(name) {
-	return scene.getObjectByName(name)
-}
-
-// remove object from scene
-
-function removeObject(objectName) {
-	scene.remove(getObjectByName(objectName))
 }
 
 function animate() {
