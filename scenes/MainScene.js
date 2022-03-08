@@ -160,8 +160,18 @@ export default class MainScene {
     // pearl electron and metaverse header for now
     setMetaverseLogo() {
         let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
-        let metaverseHeader = 'Welcome to the Metaverse'
-        this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, 2, .2, [-16, 0, 45], true, 0, -.05, 0)
+        let metaverseHeader = ''
+        let headerScale = 2
+        let headerTranslation = [-16, 0, 45]
+        if(window.innerWidth > 700) {
+            metaverseHeader = 'Welcome to the Metaverse'
+        } else {    
+            metaverseHeader = "Mobile coming soon"
+            headerScale = 1.2
+            headerTranslation = [-8, 0, 45]
+        }
+        
+        this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, headerScale,  .2, headerTranslation, true, 0, 0, 0)
         // add pearl electron (40, 22, -10)
         // let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
         // this.loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
