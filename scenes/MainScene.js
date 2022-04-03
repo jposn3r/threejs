@@ -46,6 +46,7 @@ export default class MainScene {
     // comment here
     setScene() {
         // main scene
+        console.log("setScene()")
         var scene = new THREE.Scene()
         scene.name = "main"
         this.scene = scene
@@ -53,6 +54,7 @@ export default class MainScene {
 
     // comment here
     setRenderer() {
+        console.log("setRenderer()")
         let renderer = new THREE.WebGLRenderer({
             canvas: document.querySelector('#world'),
         })

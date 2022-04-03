@@ -5,11 +5,9 @@ import { AnimationObjectGroup, MeshPhongMaterial, Vector3 } from 'three'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
-import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import * as dat from 'dat.gui'
 import TWEEN from '@tweenjs/tween.js'
 import MainScene from './scenes/MainScene'
-import openWebsite from './utils'
+import WilderWorldScene from './scenes/WilderWorldScene'
 
 // document event listeners
 let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
@@ -83,7 +81,7 @@ let mainSceneConfig = {
 	background: ''
 }
 let mainScene = new MainScene(mainSceneConfig)
-const scene = mainScene.scene
+let scene = mainScene.scene
 
 // renderer
 let renderer = mainScene.renderer
@@ -142,6 +140,7 @@ function loadLanding() {
 		loadGLTF('./models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
 		loadGLTF('./models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
 		loadGLTF('./models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
+		
 	} else {
 		loadGLTF('./models/portal-night-version/scene.gltf', 'portal', .003, {x: 0, y: 0, z: 30}, true, 0, 1.5)
 	}
@@ -309,6 +308,7 @@ function handleMenuEvent(itemSelected) {
 	var currentMenuItem = document.getElementsByClassName('menu-selected')
 	currentMenuItem[0].classList.remove("menu-selected")
 	if(textContent == "Inventory") {
+		showDetailPanels()
 		animateToScene("inventory")
 	} else if(textContent == "Home") {
 		resetCamera()
@@ -346,6 +346,7 @@ function keyDownHandler(event) {
 }
 
 function enterKeyHandler() {
+	scene = new WilderWorldScene(mainSceneConfig)
 	if(sceneState.name == 'landing') {
 	}
 	mainScene.toggleGridFloor()

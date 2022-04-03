@@ -1,6 +1,9 @@
-export default class WilderWorldScene {
+import MainScene from "./MainScene"
+
+export default class WilderWorldScene extends MainScene {
     constructor(config) {
         // coming soon!
+        super(config)
     }
 }
 
