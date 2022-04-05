@@ -248,8 +248,7 @@ export default class MetaScene {
     // comment here
     animateScene() {
         this.animateTorusGroup()
-        // this.rotateObject('planet-earth', [.0005, .0004, 0])
-        this.rotateObject('quest-2', [.0005, .0004, 0])
+        this.rotateObject('quest-2', [0, .005, 0])
     }
 
     // comment here
