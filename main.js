@@ -142,25 +142,26 @@ let sceneStates = mainScene.sceneStates
 let sceneState = sceneStates.landing
 
 // Master Chief Walking
-// loadGLTF(masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5)
+// loadGLTF(currentScene.scene, masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5)
 // load spaceman
-// loadGLTF(astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, function(){}, 3)
+// loadGLTF(currentScene.scene, astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, function(){}, 3)
 
 // load intitial layout into focus area
 function loadLanding() {
 	if(windowInnerWidth > 700) {
-		loadGLTF('./models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
-		loadGLTF('./models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
-		loadGLTF('./models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
+		loadGLTF(currentScene.scene, './models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
+		loadGLTF(currentScene.scene, './models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
+		// loadGLTF(currentScene.scene, './models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
+		// loadGLTF(currentScene.scene, masterChiefResourceUrl, 'master-chief', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
 		
 	} else {
-		loadGLTF('./models/portal-night-version/scene.gltf', 'portal', .003, {x: 0, y: 0, z: 30}, true, 0, 1.5)
+		loadGLTF(currentScene.scene, './models/portal-night-version/scene.gltf', 'portal', .003, {x: 0, y: 0, z: 30}, true, 0, 1.5)
 	}
 }
 loadLanding()
 
 // GLTF Loader function
-function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}, animationIndex = 0, timeScale = 1) {
+function loadGLTF(scene, resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}, animationIndex = 0, timeScale = 1) {
 	let mixer
 	let loader = new GLTFLoader()
 	loader.load(
@@ -183,12 +184,12 @@ function loadGLTF(resourceUrl, name, scale, position, animate, xRotation = 0, yR
 			mixer = new THREE.AnimationMixer( gltf.scene )
 
 			if(animate) {
-			// console.log("\n" + name + " animations: \n")
-			// console.log(gltf.animations)
-			var action = mixer.clipAction(gltf.animations[animationIndex])
-			console.log(timeScale)
-			action.timeScale = timeScale
-			action.play()
+				// console.log("\n" + name + " animations: \n")
+				// console.log(gltf.animations)
+				var action = mixer.clipAction(gltf.animations[animationIndex])
+				console.log(timeScale)
+				action.timeScale = timeScale
+				action.play()
 			}
 
 			// console.log("\ndebug callback")
@@ -313,20 +314,22 @@ function onDocumentMouseDown(event) {
 		}
 	}
 }
-
+let questLoaded = false
 function handleMenuEvent(itemSelected) {
 	let textContent = itemSelected.textContent
 	console.log(itemSelected)
 	var currentMenuItem = document.getElementsByClassName('menu-selected')
 	currentMenuItem[0].classList.remove("menu-selected")
 	if(textContent == "Meta") { // todo primary
-		// showDetailPanels()
-		// animateToScene("inventory")
 		currentScene = metaScene
+		if(!questLoaded) {
+			loadGLTF(currentScene.scene, './models/oculus-quest-2/scene.gltf', 'quest-2', 70 * scaleMultiplyer, {x: 0, y: 5, z: 0}, false, 0.1, 0, 0)
+			questLoaded = true
+		}
 	} else if(textContent == "Kaizen") {
 		currentScene = mainScene
-		resetCamera()
 	}
+	resetCamera()
 	itemSelected.classList.add("menu-selected")
 }
 

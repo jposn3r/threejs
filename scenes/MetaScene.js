@@ -15,7 +15,6 @@ export default class MetaScene {
         this.name = config.name
         var gridFloor = config.gridFloor
         var gui = config.gui
-        var background = config.background
 
         this.setScene()
         this.setCamera()
@@ -28,10 +27,7 @@ export default class MetaScene {
         if(gridFloor == true) {
             this.addGridFloor()
         }
-        // background 
-        if(background !== "") {
-            this.setBackground(config.background)
-        }
+        this.setBackground('/assets/color-bg.png')
         this.setSceneStates()
         this.setMetaverseLogo()
     }
@@ -99,7 +95,7 @@ export default class MetaScene {
     setLights() {
         // lights
         this.addLightToScene("ambient", "ambient-light")
-        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 10, 30], 3, 0)
+        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 10, 30], 1, 0)
     }
  
     // comment here
@@ -155,7 +151,7 @@ export default class MetaScene {
         let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
         let metaverseHeader = ''
         let headerScale = 2
-        let headerTranslation = [-16, 0, 45]
+        let headerTranslation = [-11, -2, 45]
         if(window.innerWidth > 700) {
             metaverseHeader = 'Meta - Reality Labs'
         } else {    
@@ -165,15 +161,14 @@ export default class MetaScene {
         }
         
         this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, headerScale,  .2, headerTranslation, true, 0, 0, 0)
-        // add pearl electron (40, 22, -10)
-        // let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
-        // this.loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
     }
 
     // comment here
     setBackground(asset) {
-        let spaceTexture = new THREE.TextureLoader().load(asset)
-        this.scene.background = spaceTexture
+        console.log('setBackground()\n')
+        let texture = new THREE.TextureLoader().load(asset)
+        console.log(texture)
+        this.scene.background = texture
     }
 
     // comment here
@@ -253,7 +248,8 @@ export default class MetaScene {
     // comment here
     animateScene() {
         this.animateTorusGroup()
-        this.rotateObject('planet-earth', [.0005, .0004, 0])
+        // this.rotateObject('planet-earth', [.0005, .0004, 0])
+        this.rotateObject('quest-2', [.0005, .0004, 0])
     }
 
     // comment here
