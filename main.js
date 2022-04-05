@@ -8,6 +8,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import TWEEN from '@tweenjs/tween.js'
 import MainScene from './scenes/MainScene'
 import WilderWorldScene from './scenes/WilderWorldScene'
+import MetaScene from './scenes/MetaScene'
 
 // document event listeners
 let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
@@ -80,7 +81,18 @@ let mainSceneConfig = {
 	focusTorus: false,
 	background: ''
 }
+
+// emta scene
+let metaSceneConfig = {
+	name: "meta-scene",
+	gui: false, // TODO: fix bug with gui
+	background: ''
+}
 let mainScene = new MainScene(mainSceneConfig)
+let metaScene = new MetaScene(mainSceneConfig)
+
+let currentScene = mainScene
+
 let scene = mainScene.scene
 
 // renderer
@@ -307,10 +319,12 @@ function handleMenuEvent(itemSelected) {
 	console.log(itemSelected)
 	var currentMenuItem = document.getElementsByClassName('menu-selected')
 	currentMenuItem[0].classList.remove("menu-selected")
-	if(textContent == "Inventory") {
-		showDetailPanels()
-		animateToScene("inventory")
-	} else if(textContent == "Home") {
+	if(textContent == "Meta") { // todo primary
+		// showDetailPanels()
+		// animateToScene("inventory")
+		currentScene = metaScene
+	} else if(textContent == "Kaizen") {
+		currentScene = mainScene
 		resetCamera()
 	}
 	itemSelected.classList.add("menu-selected")
@@ -321,7 +335,7 @@ function keyDownHandler(event) {
 	case 87: // w
 		break
 	case 65: // a
-		
+		break
 	case 83: // s
 		break
 	case 68: // d
@@ -349,7 +363,7 @@ function enterKeyHandler() {
 	scene = new WilderWorldScene(mainSceneConfig)
 	if(sceneState.name == 'landing') {
 	}
-	mainScene.toggleGridFloor()
+	// currentScene.toggleGridFloor()
 }
 
 function rightKeyHandler() {
@@ -404,12 +418,12 @@ function animate() {
 
 	TWEEN.update()
 
-	mainScene.animateScene()
+	currentScene.animateScene()
 
 	updateMixers(clockDelta)
 	controls.update()
 
-	renderer.render(scene, camera)
+	renderer.render(currentScene.scene, camera)
 }
 
 animate()
