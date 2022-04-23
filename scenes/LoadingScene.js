@@ -32,11 +32,7 @@ export default class LoadingScene extends ParentScene {
 
     // comment here
     setLights() {
-        // lights
-        this.lights = []
-        this.addLightToScene("ambient", "ambient-light")
-        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 10, 30], 3, 0)
-        // this.addLightToScene("point", "point-light-2", 0xffffff, [0, -20, 40], 3, 0)
+        // add additional lights
     }
  
     // comment here
