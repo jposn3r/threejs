@@ -27,6 +27,7 @@ export default class LoadingScene {
         this.setControls()
         this.setGui(gui)
         this.setLights()
+        this.setMixers()
 
         // metaverse floor grid
         if(gridFloor == true) {
@@ -38,6 +39,82 @@ export default class LoadingScene {
         }
         this.setSceneStates()
         this.setMetaverseLogo()
+        this.setSceneObjects()
+    }
+
+    setSceneObjects() {
+        this.portalSample = this.loadGLTF(this.scene, './models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
+    }
+
+    setMixers() {
+        this.mixers = []
+    }
+
+    updateMixers(clockDelta) {
+        // huge help in fixing the animations being slow! - https://discourse.threejs.org/t/too-slow-animation/2379/6
+    
+        // update mixers for animation
+        for (let i = 0, l = this.mixers.length; i < l; i ++) {
+            this.mixers[i].update(clockDelta)
+        }
+    }
+
+    loadGLTF(scene, resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}, animationIndex = 0, timeScale = 1) {
+        let mixer
+        let loader = new GLTFLoader()
+        let mixers = this.mixers
+
+        loader.load(
+            // resource URL
+            resourceUrl,
+            // called when the resource is loaded
+            function ( gltf ) {
+                gltf.scene.scale.set(scale,scale,scale)
+
+                gltf.scene.name = name
+
+                gltf.scene.position.x = position.x
+                gltf.scene.position.y = position.y
+                gltf.scene.position.z = position.z
+
+                gltf.scene.rotation.x = xRotation
+                gltf.scene.rotation.y = yRotation
+                gltf.scene.rotation.z = zRotation
+
+                mixer = new THREE.AnimationMixer( gltf.scene )
+
+                if(animate) {
+                    // console.log("\n" + name + " animations: \n")
+                    // console.log(gltf.animations)
+                    var action = mixer.clipAction(gltf.animations[animationIndex])
+                    console.log(timeScale)
+                    action.timeScale = timeScale
+                    action.play()
+                }
+
+                // console.log("\ndebug callback")
+                // console.log(gltf.scene)
+                // console.log(callback)
+                // gltf.scene.callback = callback
+                // console.log(gltf.scene.callback)
+
+                scene.add(gltf.scene)
+                mixers.push(mixer)
+                console.log(mixers)
+                return gltf
+            },
+            // called while loading is progressing
+            function ( xhr ) {
+                // console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+                if(xhr.loaded / xhr.total == 1) {
+                    // console.log("\nloading finished, proceed with operation")
+                }
+            },
+            // called when loading has errors
+            function ( error ) {
+                console.log( 'An error happened loading GLTF model ' + name )
+            }
+        )
     }
 
     // comment here
@@ -184,8 +261,11 @@ export default class LoadingScene {
     }
 
     // comment here
-    animateScene() {
+    animateScene(clockDelta) {
         this.rotateObject('planet-earth', [.0005, .0004, 0])
+        if(this.mixers) {
+            this.updateMixers(clockDelta)
+        }
     }
 
     // comment here

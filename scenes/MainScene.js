@@ -260,7 +260,7 @@ export default class MainScene {
     }
 
     // comment here
-    animateScene() {
+    animateScene(clockDelta) {
         this.animateTorusGroup()
         this.rotateObject('planet-earth', [.0005, .0004, 0])
     }

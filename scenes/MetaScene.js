@@ -178,7 +178,7 @@ export default class MetaScene {
     }
 
     // comment here
-    animateScene() {
+    animateScene(clockDelta) {
         this.rotateObject('quest-2', [0, .0025, 0])
     }
 

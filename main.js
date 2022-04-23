@@ -11,11 +11,13 @@ import WilderWorldScene from './scenes/WilderWorldScene'
 import MetaScene from './scenes/MetaScene'
 import LoadingScene from './scenes/LoadingScene'
 
-// document event listeners
 let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
 var leftDetailPanel = document.getElementById("left-detail-panel")
 
-// hideDetailPanels()
+// document event listeners
+document.addEventListener('keydown', keyDownHandler, false)
+document.addEventListener('mousedown', onDocumentMouseDown, false)
+
 // scaleMultiplier is used to change object size based on window width
 function updateScaleMultiplier() {
 	windowInnerWidth = window.innerWidth
@@ -27,6 +29,7 @@ function updateScaleMultiplier() {
 }
 updateScaleMultiplier()
 
+//if the user resizes the window you have to adjust the scene to fit within it
 window.addEventListener('resize', function() {
 	windowInnerHeight = window.innerHeight
 	windowInnerWidth = window.innerWidth
@@ -56,9 +59,6 @@ function showDetailPanels() {
 		leftDetailPanel.style.display = 'block'
 	}
 }
-
-document.addEventListener('keydown', keyDownHandler, false)
-document.addEventListener('mousedown', onDocumentMouseDown, false)
 
 // On click events
 
@@ -303,6 +303,8 @@ function onDocumentMouseDown(event) {
 		}
 	}
 }
+
+// handleMenuEvent is for the main navbar
 let questLoaded = false
 function handleMenuEvent(itemSelected) {
 	let textContent = itemSelected.textContent
@@ -412,7 +414,7 @@ function animate() {
 
 	TWEEN.update()
 
-	currentScene.animateScene()
+	currentScene.animateScene(clockDelta)
 
 	updateMixers(clockDelta)
 	controls.update()
