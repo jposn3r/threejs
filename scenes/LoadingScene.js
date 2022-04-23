@@ -8,13 +8,18 @@ import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitCon
 import * as dat from 'dat.gui'
 import TWEEN from '@tweenjs/tween.js'
 
-export default class MetaScene {
+// Notes
+// 
+
+export default class LoadingScene {
+
     constructor(config) {
         console.log(config)
         // read config values
         this.name = config.name
         var gridFloor = config.gridFloor
         var gui = config.gui
+        var background = config.background
 
         this.setScene()
         this.setCamera()
@@ -27,7 +32,10 @@ export default class MetaScene {
         if(gridFloor == true) {
             this.addGridFloor()
         }
-        // this.setBackground('/assets/color-bg.png')
+
+        if(background !== "") {
+            this.setBackground(config.background)
+        }
         this.setSceneStates()
         this.setMetaverseLogo()
     }
@@ -37,7 +45,7 @@ export default class MetaScene {
         // main scene
         console.log("setScene()")
         var scene = new THREE.Scene()
-        scene.name = "meta"
+        scene.name = "main"
         this.scene = scene
     }
 
@@ -94,22 +102,19 @@ export default class MetaScene {
     // comment here
     setLights() {
         // lights
+        this.lights = []
         this.addLightToScene("ambient", "ambient-light")
-        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 10, 30], 1, 0)
+        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 10, 30], 3, 0)
+        // this.addLightToScene("point", "point-light-2", 0xffffff, [0, -20, 40], 3, 0)
     }
  
     // comment here
     setSceneStates() {
         let sceneStates = {
             landing: {
-              name: "reality-labs",
+              name: "landing",
               cameraPosition: [0, 12, 80],
               controlsTargetVector: [0, 0, -20]
-            },
-            inventory: {
-              name: "portal",
-              cameraPosition: [63, 6, 50],
-              controlsTargetVector: [0, 0, -20],
             }
           }
         this.sceneStates = sceneStates
@@ -144,25 +149,26 @@ export default class MetaScene {
     setMetaverseLogo() {
         let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
         let metaverseHeader = ''
-        let headerScale = 1.5
-        let headerTranslation = [-5, 5, 60]
+        let headerScale = 2
+        let headerTranslation = [-16, 0, 45]
         if(window.innerWidth > 700) {
-            metaverseHeader = 'Reality Labs'
+            metaverseHeader = 'Loading into the Metaverse'
         } else {    
             metaverseHeader = "Mobile coming soon"
             headerScale = 1.2
             headerTranslation = [-8, 0, 45]
         }
         
-        this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, headerScale,  .2, headerTranslation, true, 0, 0, 0)
+        this.loadText(optimerBoldUrl, 'loading-header', metaverseHeader, headerScale,  .2, headerTranslation, true, 0, 0, 0)
+        // add pearl electron (40, 22, -10)
+        // let pearlElectronResourceUrl = './models/pearl-electron/scene.gltf'
+        // this.loadGLTF(pearlElectronResourceUrl, 'pearl-electron', 9, {x: 40, y: 22, z: -13}, true)
     }
 
     // comment here
     setBackground(asset) {
-        console.log('setBackground()\n')
-        let texture = new THREE.TextureLoader().load(asset)
-        console.log(texture)
-        this.scene.background = texture
+        let spaceTexture = new THREE.TextureLoader().load(asset)
+        this.scene.background = spaceTexture
     }
 
     // comment here
@@ -179,7 +185,7 @@ export default class MetaScene {
 
     // comment here
     animateScene() {
-        this.rotateObject('quest-2', [0, .0025, 0])
+        this.rotateObject('planet-earth', [.0005, .0004, 0])
     }
 
     // comment here
@@ -213,7 +219,7 @@ export default class MetaScene {
             lightObj.light = new THREE.PointLight(color, intensity, distance)
             lightObj.light.position.set(position[0], position[1], position[2])
         }
-        // this.lights.push(lightObj)
+        this.lights.push(lightObj)
         this.scene.add(lightObj.light)
     }
 

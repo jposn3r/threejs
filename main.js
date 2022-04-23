@@ -9,13 +9,14 @@ import TWEEN from '@tweenjs/tween.js'
 import MainScene from './scenes/MainScene'
 import WilderWorldScene from './scenes/WilderWorldScene'
 import MetaScene from './scenes/MetaScene'
+import LoadingScene from './scenes/LoadingScene'
 
 // document event listeners
 let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
 var leftDetailPanel = document.getElementById("left-detail-panel")
 
-hideDetailPanels()
-
+// hideDetailPanels()
+// scaleMultiplier is used to change object size based on window width
 function updateScaleMultiplier() {
 	windowInnerWidth = window.innerWidth
 	if(windowInnerWidth < 700) {
@@ -82,14 +83,25 @@ let mainSceneConfig = {
 	background: ''
 }
 
-// emta scene
+// meta scene
 let metaSceneConfig = {
 	name: "meta-scene",
 	gui: false, // TODO: fix bug with gui
-	background: ''
+	background: '',
+	gridFloor: true
 }
+
+// loading scene
+let loadingSceneConfig = {
+	name: "loading-scene",
+	gui: false, // TODO: fix bug with gui
+	background: '',
+	gridFloor: true
+}
+
 let mainScene = new MainScene(mainSceneConfig)
-let metaScene = new MetaScene(mainSceneConfig)
+let metaScene = new MetaScene(metaSceneConfig)
+let loadingScene = new LoadingScene(loadingSceneConfig)
 
 let currentScene = mainScene
 
@@ -238,29 +250,6 @@ function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
 	})
 }
 
-// load 3d text
-function loadText(fontUrl, name, text, size, height, position, shadow, xRotation = 0, yRotation = 0, zRotation = 0, visible = true) {
-	const loader = new FontLoader()
-
-	loader.load(fontUrl, function (font) {
-		const geometry = new TextGeometry(text, {
-			font: font,
-			size: size,
-			height: height,
-		})
-		const textMesh = new THREE.Mesh(geometry, [
-			new MeshPhongMaterial({ color: 0xffffff}),
-			new MeshPhongMaterial({ color: 0x009390}),
-		])
-		textMesh.name = name
-		textMesh.castShadow = shadow
-		textMesh.position.set(position[0], position[1], position[2])
-		textMesh.rotation.set(xRotation, yRotation, zRotation)
-		textMesh.visible = visible
-		scene.add(textMesh)
-	})
-}
-
 function updateMixers(clockDelta) {
 	// huge help in fixing the animations being slow! - https://discourse.threejs.org/t/too-slow-animation/2379/6
 
@@ -323,11 +312,13 @@ function handleMenuEvent(itemSelected) {
 	if(textContent == "Meta") { // todo primary
 		currentScene = metaScene
 		if(!questLoaded) {
-			loadGLTF(currentScene.scene, './models/oculus-quest-2/scene.gltf', 'quest-2', 70 * scaleMultiplyer, {x: 0, y: 5, z: 0}, false, 0.1, 0, 0)
+			loadGLTF(currentScene.scene, './models/oculus-quest-2/scene.gltf', 'quest-2', 50 * scaleMultiplyer, {x: 0, y: 14, z: 20}, false, 0.1, 0, 0)
 			questLoaded = true
 		}
 	} else if(textContent == "Kaizen") {
 		currentScene = mainScene
+	} else if(textContent == "Loading") {
+		currentScene = loadingScene
 	}
 	resetCamera()
 	itemSelected.classList.add("menu-selected")
