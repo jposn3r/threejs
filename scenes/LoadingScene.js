@@ -33,6 +33,10 @@ export default class LoadingScene extends ParentScene {
     // comment here
     setLights() {
         // add additional lights
+        this.lights = []
+        this.addLightToScene("ambient", "ambient-light")
+        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 10, 30], 3, 0)
+        // this.addLightToScene("point", "point-light-2", 0xffffff, [0, -20, 40], 3, 0)
     }
  
     // comment here
@@ -45,31 +49,6 @@ export default class LoadingScene extends ParentScene {
             }
           }
         this.sceneStates = sceneStates
-    }
-
-    // load 3d text - this should be somewhere else to be used by every scene
-    loadText(fontUrl, name, text, size, height, position, shadow, xRotation = 0, yRotation = 0, zRotation = 0, visible = true) {
-        let loader = new FontLoader()
-        let scene = this.scene
-        
-        loader.load(fontUrl, addFontToScene)
-        function addFontToScene(font) {
-            const geometry = new TextGeometry(text, {
-                font: font,
-                size: size,
-                height: height,
-              })
-              const textMesh = new THREE.Mesh(geometry, [
-                new MeshPhongMaterial({ color: 0xffffff}),
-                new MeshPhongMaterial({ color: 0x000000}),
-              ])
-              textMesh.name = name
-              textMesh.castShadow = shadow
-              textMesh.position.set(position[0], position[1], position[2])
-              textMesh.rotation.set(xRotation, yRotation, zRotation)
-              textMesh.visible = visible
-              scene.add(textMesh)
-        }
     }
 
     // pearl electron and metaverse header for now

@@ -51,7 +51,6 @@ export default class ParentScene {
 
     // SCENE
 
-    // comment here
     setScene() {
         // main scene
         console.log("\nparent scene set scene")
@@ -67,7 +66,6 @@ export default class ParentScene {
 
     // RENDERER
 
-    // comment here
     setRenderer() {
         console.log("setRenderer()")
         let renderer = new THREE.WebGLRenderer({
@@ -82,7 +80,6 @@ export default class ParentScene {
 
     // CAMERA
 
-    // comment here
     setCamera(){
         // camera
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
@@ -92,7 +89,6 @@ export default class ParentScene {
 
     // CONTROLS
 
-    // comment here
     setControls() {
         // controls
         // let controls = new OrbitControls(camera, renderer.domElement)
@@ -102,7 +98,6 @@ export default class ParentScene {
 
     // GUI 
 
-    // comment here
     setGui(gui) {
         // gui
         if(gui) {
@@ -225,6 +220,33 @@ export default class ParentScene {
         console.log("\nthis happens yo")
         var lightGrid = this.scene.getObjectByName('light-grid')
         lightGrid.visible = !lightGrid.visible
+    }
+
+    // TEXT
+
+     // load 3d text - this should be somewhere else to be used by every scene
+     loadText(fontUrl, name, text, size, height, position, shadow, xRotation = 0, yRotation = 0, zRotation = 0, visible = true) {
+        let loader = new FontLoader()
+        let scene = this.scene
+        
+        loader.load(fontUrl, addFontToScene)
+        function addFontToScene(font) {
+            const geometry = new TextGeometry(text, {
+                font: font,
+                size: size,
+                height: height,
+              })
+              const textMesh = new THREE.Mesh(geometry, [
+                new MeshPhongMaterial({ color: 0xffffff}),
+                new MeshPhongMaterial({ color: 0x000000}),
+              ])
+              textMesh.name = name
+              textMesh.castShadow = shadow
+              textMesh.position.set(position[0], position[1], position[2])
+              textMesh.rotation.set(xRotation, yRotation, zRotation)
+              textMesh.visible = visible
+              scene.add(textMesh)
+        }
     }
 
     // LIGHTS
