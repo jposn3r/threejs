@@ -39,6 +39,7 @@ export default class ParentScene {
         this.setControls()
         this.setGui(gui)
         this.setMixers()
+        this.setLights()
     
         if(gridFloor == true) {
             this.addGridFloor()
@@ -85,6 +86,16 @@ export default class ParentScene {
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
         this.camera.name = "camera-1"
         this.cameraFocus = "origin"
+    }
+
+    // update camera position
+
+    updateCameraPosition(position = [0, 20, 75], fov = 50, zoom = 1) {
+        var camera = this.camera
+        camera.position.set(position[0], position[1], position[2])
+        camera.fov = fov
+        camera.zoom = zoom
+        camera.updateProjectionMatrix()
     }
 
     // CONTROLS

@@ -17,8 +17,6 @@ export default class MainScene extends ParentScene {
         var torusGroup = config.torusGroup
         var focusTorus = config.focusTorus
 
-        this.setLights()
-
         if(torusGroup == true) {
             this.addTorusGroupToScene()
         }
@@ -27,15 +25,6 @@ export default class MainScene extends ParentScene {
         }
         this.setSceneStates()
         this.setMetaverseLogo()
-    }
-
-    // comment here
-    setLights() {
-        // lights
-        this.lights = []
-        this.addLightToScene("ambient", "ambient-light")
-        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 10, 30], 3, 0)
-        // this.addLightToScene("point", "point-light-2", 0xffffff, [0, -20, 40], 3, 0)
     }
  
     // comment here

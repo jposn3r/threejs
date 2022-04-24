@@ -13,17 +13,9 @@ export default class MetaScene extends ParentScene {
     constructor(config) {
         console.log(config)
         super(config)
-        this.setLights()
         this.setSceneStates()
         this.setMetaverseLogo()
-    }
-
-    // comment here
-    setLights() {
-        // lights
-        this.lights = []
-        this.addLightToScene("ambient", "ambient-light")
-        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 10, 30], 1, 0)
+        this.loadGLTF(this.scene, './models/oculus-quest-2/scene.gltf', 'quest-2', 50, {x: 0, y: 14, z: 20}, false, 0.1, 0, 0)
     }
  
     // comment here

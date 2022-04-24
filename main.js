@@ -144,7 +144,7 @@ let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./s
 let astronautResourceUrl = './models/astronaut/scene.gltf'
 
 // set positions - figure out why I need this :sweat-smile:
-updateCameraPosition([0, 18, 90], 50, 1)
+currentScene.updateCameraPosition([0, 18, 90], 50, 1)
 
 // Add stars
 Array(2000).fill().forEach(addStar)
@@ -154,78 +154,24 @@ let sceneStates = mainScene.sceneStates
 let sceneState = sceneStates.landing
 
 // Master Chief Walking
-// loadGLTF(currentScene.scene, masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5)
+// currentScene.loadGLTF(currentScene.scene, masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5)
 // load spaceman
-// loadGLTF(currentScene.scene, astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, function(){}, 3)
+// currentScene.loadGLTF(currentScene.scene, astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, function(){}, 3)
 
 // load intitial layout into focus area
 function loadLanding() {
 	if(windowInnerWidth > 700) {
-		loadGLTF(currentScene.scene, './models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
-		loadGLTF(currentScene.scene, './models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
-		// loadGLTF(currentScene.scene, './models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
-		// loadGLTF(currentScene.scene, masterChiefResourceUrl, 'master-chief', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
+		currentScene.loadGLTF(currentScene.scene, './models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
+		// currentScene.loadGLTF(currentScene.scene, './models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
+		currentScene.loadGLTF(currentScene.scene, './models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
+		// currentScene.loadGLTF(currentScene.scene, './models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
+		// currentScene.loadGLTF(currentScene.scene, masterChiefResourceUrl, 'master-chief', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
 		
 	} else {
-		loadGLTF(currentScene.scene, './models/portal-night-version/scene.gltf', 'portal', .003, {x: 0, y: 0, z: 30}, true, 0, 1.5)
+		currentScene.loadGLTF(currentScene.scene, './models/portal-night-version/scene.gltf', 'portal', .003, {x: 0, y: 0, z: 30}, true, 0, 1.5)
 	}
 }
 loadLanding()
-
-// GLTF Loader function
-function loadGLTF(scene, resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}, animationIndex = 0, timeScale = 1) {
-	let mixer
-	let loader = new GLTFLoader()
-	loader.load(
-		// resource URL
-		resourceUrl,
-		// called when the resource is loaded
-		function ( gltf ) {
-			gltf.scene.scale.set(scale,scale,scale)
-
-			gltf.scene.name = name
-
-			gltf.scene.position.x = position.x
-			gltf.scene.position.y = position.y
-			gltf.scene.position.z = position.z
-
-			gltf.scene.rotation.x = xRotation
-			gltf.scene.rotation.y = yRotation
-			gltf.scene.rotation.z = zRotation
-
-			mixer = new THREE.AnimationMixer( gltf.scene )
-
-			if(animate) {
-				// console.log("\n" + name + " animations: \n")
-				// console.log(gltf.animations)
-				var action = mixer.clipAction(gltf.animations[animationIndex])
-				console.log(timeScale)
-				action.timeScale = timeScale
-				action.play()
-			}
-
-			// console.log("\ndebug callback")
-			// console.log(gltf.scene)
-			// console.log(callback)
-			gltf.scene.callback = callback
-			// console.log(gltf.scene.callback)
-
-			scene.add(gltf.scene)
-			mixers.push(mixer)
-		},
-		// called while loading is progressing
-		function ( xhr ) {
-			// console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
-			if(xhr.loaded / xhr.total == 1) {
-				// console.log("\nloading finished, proceed with operation")
-			}
-		},
-		// called when loading has errors
-		function ( error ) {
-			console.log( 'An error happened loading GLTF model ' + name )
-		}
-	)
-}
 
 // FBX Loader function
 function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
@@ -305,7 +251,6 @@ function onDocumentMouseDown(event) {
 }
 
 // handleMenuEvent is for the main navbar
-let questLoaded = false
 function handleMenuEvent(itemSelected) {
 	let textContent = itemSelected.textContent
 	console.log(itemSelected)
@@ -313,10 +258,6 @@ function handleMenuEvent(itemSelected) {
 	currentMenuItem[0].classList.remove("menu-selected")
 	if(textContent == "Meta") { // todo primary
 		currentScene = metaScene
-		if(!questLoaded) {
-			loadGLTF(currentScene.scene, './models/oculus-quest-2/scene.gltf', 'quest-2', 50 * scaleMultiplyer, {x: 0, y: 14, z: 20}, false, 0.1, 0, 0)
-			questLoaded = true
-		}
 	} else if(textContent == "Kaizen") {
 		currentScene = mainScene
 	} else if(textContent == "Loading") {
@@ -396,15 +337,6 @@ function animateToScene(sceneName) {
 	tween3.onComplete(sceneStates[sceneName].callback)
 
 	sceneState = sceneStates[sceneName]
-}
-
-// update camera position
-
-function updateCameraPosition(position = [0, 20, 75], fov = 50, zoom = 1) {
-	camera.position.set(position[0], position[1], position[2])
-	camera.fov = fov
-	camera.zoom = zoom
-	camera.updateProjectionMatrix()
 }
 
 function animate() {

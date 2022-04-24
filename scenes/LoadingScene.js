@@ -19,8 +19,6 @@ export default class LoadingScene extends ParentScene {
         console.log(config)
         // read config values
 
-        this.setLights()
-
         this.setSceneStates()
         this.setMetaverseLogo()
         this.setSceneObjects()
@@ -28,15 +26,6 @@ export default class LoadingScene extends ParentScene {
 
     setSceneObjects() {
         this.portalSample = this.loadGLTF(this.scene, './models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
-    }
-
-    // comment here
-    setLights() {
-        // add additional lights
-        this.lights = []
-        this.addLightToScene("ambient", "ambient-light")
-        this.addLightToScene("point", "point-light-1", 0xffffff, [0, 10, 30], 3, 0)
-        // this.addLightToScene("point", "point-light-2", 0xffffff, [0, -20, 40], 3, 0)
     }
  
     // comment here
