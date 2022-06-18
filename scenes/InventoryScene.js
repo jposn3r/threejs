@@ -19,12 +19,12 @@ export default class InventoryScene extends ParentScene {
         this.setInitialSceneObjects()
     }
  
-    // comment here
+    // comment here - are these values used at all?
     setSceneStates() {
         let sceneStates = {
             inventoryLanding: {
               name: "inventory-landing",
-              cameraPosition: [0, 12, 80],
+              cameraPosition: [0, 20, 80],
               controlsTargetVector: [0, 0, -20],
             }
           }
@@ -33,7 +33,20 @@ export default class InventoryScene extends ParentScene {
 
     // comment here
     setInitialSceneObjects() {
-        this.loadGLTF(this.scene, './models/eddie-skyline-r34/scene.gltf', 'eddie-skyline', 10, {x: 0, y: 2, z: 10}, false, 0, 1, 0)
+        this.loadGLTF(this.scene, './models/eddie-skyline-r34/scene.gltf', 'eddie-skyline', 10, {x: 0, y: 2, z: 0}, false, 0, 1, 0)
+        this.loadGLTF(this.scene, './models/death-star/scene.gltf', 'death-star', 2, {x: 0, y: 40, z: -200}, false, 0, 1, 0)
+        this.loadGLTF(this.scene, './models/crusader-knight/scene.gltf', 'crusader-knight-right', .09, {x: 27, y: 10, z: 25}, false, 0, -.5, 0)
+        this.loadGLTF(this.scene, './models/crusader-knight/scene.gltf', 'crusader-knight-left', .09, {x: -27, y: 10, z: 25}, false, 0, .5, 0)
+    }
+
+    // comment here
+    setLights() {
+        // lights
+        this.lights = []
+        this.addLightToScene("ambient", "ambient-light")
+        this.addLightToScene("point", "point-light-1", 0xffffff, [-10, 5, 30], 2, 0)
+        // add more lights
+        this.addLightToScene("point", "point-light-red", 0xff0000, [50, 5, -100], 4, 500)
     }
 
     // pearl electron and metaverse header for now
@@ -117,6 +130,7 @@ export default class InventoryScene extends ParentScene {
 
     // comment here
     animateScene(clockDelta) {
-        this.animateTorusGroup()
+        // this.animateTorusGroup()
+        this.rotateObject('death-star', [.0005, -.0004, 0])
     }
 }

@@ -87,7 +87,7 @@ let metaSceneConfig = {
 	gridFloor: true
 }
 
-// meta scene
+// inventory scene
 let inventorySceneConfig = {
 	name: "inventory-scene",
 	gui: false, // TODO: fix bug with gui
@@ -105,7 +105,7 @@ let loadingSceneConfig = {
 
 let mainScene = new MainScene(mainSceneConfig)
 let metaScene = new MetaScene(metaSceneConfig)
-let inventoryScene = new InventoryScene(metaSceneConfig)
+let inventoryScene = new InventoryScene(inventorySceneConfig)
 let loadingScene = new LoadingScene(loadingSceneConfig)
 
 let currentScene = mainScene
@@ -145,7 +145,7 @@ function buildBoxGeometry(scaleX = 1, scaleY = 1, scaleZ = 1, texture = new THRE
 	)
 }
 
-let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk./scene.gltf'
+let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk/scene.gltf'
 let astronautResourceUrl = './models/astronaut/scene.gltf'
 
 // set positions - figure out why I need this :sweat-smile:
