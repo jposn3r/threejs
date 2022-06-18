@@ -1,17 +1,8 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { AnimationObjectGroup, MeshPhongMaterial, Vector3 } from 'three'
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
-import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import * as dat from 'dat.gui'
-import TWEEN from '@tweenjs/tween.js'
 import ParentScene from './ParentScene'
 
 export default class MetaScene extends ParentScene {
     constructor(config) {
-        console.log(config)
         super(config)
         this.setSceneStates()
         this.setMetaverseLogo()

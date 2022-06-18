@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import ParentScene from './ParentScene'
 
-export default class MainScene extends ParentScene {
+export default class InventoryScene extends ParentScene {
     constructor(config) {
         super(config)
         // read config values
@@ -16,29 +16,24 @@ export default class MainScene extends ParentScene {
         }
         this.setSceneStates()
         this.setMetaverseLogo()
+        this.setInitialSceneObjects()
     }
  
     // comment here
     setSceneStates() {
         let sceneStates = {
-            landing: {
-              name: "landing",
+            inventoryLanding: {
+              name: "inventory-landing",
               cameraPosition: [0, 12, 80],
-              controlsTargetVector: [0, 0, -20]
-            },
-            wilderWorld: {
-              name: "wilder-world",
-              cameraPosition: [0, 6, -175],
-              controlsTargetVector: [0, 8, -200],
-            //   callback: onWilderWorldLoaded
-            },
-            inventory: {
-              name: "inventory",
-              cameraPosition: [63, 6, 50],
               controlsTargetVector: [0, 0, -20],
             }
           }
         this.sceneStates = sceneStates
+    }
+
+    // comment here
+    setInitialSceneObjects() {
+        this.loadGLTF(this.scene, './models/eddie-skyline-r34/scene.gltf', 'eddie-skyline', 10, {x: 0, y: 2, z: 10}, false, 0, 1, 0)
     }
 
     // pearl electron and metaverse header for now
@@ -46,9 +41,9 @@ export default class MainScene extends ParentScene {
         let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
         let metaverseHeader = ''
         let headerScale = 2
-        let headerTranslation = [-16, 0, 45]
+        let headerTranslation = [-10.5, 0, 45]
         if(window.innerWidth > 700) {
-            metaverseHeader = 'Welcome to the Metaverse'
+            metaverseHeader = 'Behold....My Stuff'
         } else {    
             metaverseHeader = "Mobile coming soon"
             headerScale = 1.2
@@ -123,6 +118,5 @@ export default class MainScene extends ParentScene {
     // comment here
     animateScene(clockDelta) {
         this.animateTorusGroup()
-        this.rotateObject('planet-earth', [.0005, .0004, 0])
     }
 }

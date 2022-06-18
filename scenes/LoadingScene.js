@@ -1,22 +1,12 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { AnimationObjectGroup, MeshPhongMaterial, Vector3 } from 'three'
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
-import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import * as dat from 'dat.gui'
-import TWEEN from '@tweenjs/tween.js'
 import ParentScene from './ParentScene'
 
 // Notes
-// 
 
 export default class LoadingScene extends ParentScene {
 
     constructor(config) {
         super(config)
-        console.log(config)
         // read config values
 
         this.setSceneStates()

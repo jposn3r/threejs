@@ -188,7 +188,31 @@ export default class ParentScene {
         )
     }
 
-    moveObject() {
+
+    // FBX Loader function
+    loadFBX(resourceUrl, scale, position, animate, animationUrl) {
+	let loader = new FBXLoader()
+	loader.load(resourceUrl, model => {
+		model.scale.set(scale, scale, scale)
+		model.position.set(position.x, position.y, position.z)
+
+		let mixer = new THREE.AnimationMixer(model)
+
+		if(animate) {
+			let anim = new FBXLoader()
+			anim.setPath('./models/')
+			anim.load(animationUrl, (anim) => {
+			let action = mixer.clipAction(anim.animations[0])
+				action.play()
+			})
+		}
+
+		scene.add(model)
+		mixers.push(mixer)
+	})
+}
+
+    moveObject(name, currentPosition, targetPosition, tweenDuration) {
 
     }
 

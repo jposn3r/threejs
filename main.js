@@ -1,15 +1,11 @@
 import './style.css'
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { AnimationObjectGroup, MeshPhongMaterial, Vector3 } from 'three'
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import TWEEN from '@tweenjs/tween.js'
 import MainScene from './scenes/MainScene'
 import WilderWorldScene from './scenes/WilderWorldScene'
 import MetaScene from './scenes/MetaScene'
 import LoadingScene from './scenes/LoadingScene'
+import InventoryScene from './scenes/InventoryScene'
 
 let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
 var leftDetailPanel = document.getElementById("left-detail-panel")
@@ -91,6 +87,14 @@ let metaSceneConfig = {
 	gridFloor: true
 }
 
+// meta scene
+let inventorySceneConfig = {
+	name: "inventory-scene",
+	gui: false, // TODO: fix bug with gui
+	background: '',
+	gridFloor: false
+}
+
 // loading scene
 let loadingSceneConfig = {
 	name: "loading-scene",
@@ -101,6 +105,7 @@ let loadingSceneConfig = {
 
 let mainScene = new MainScene(mainSceneConfig)
 let metaScene = new MetaScene(metaSceneConfig)
+let inventoryScene = new InventoryScene(metaSceneConfig)
 let loadingScene = new LoadingScene(loadingSceneConfig)
 
 let currentScene = mainScene
@@ -173,29 +178,6 @@ function loadLanding() {
 }
 loadLanding()
 
-// FBX Loader function
-function loadFBX(resourceUrl, scale, position, animate, animationUrl) {
-	let loader = new FBXLoader()
-	loader.load(resourceUrl, model => {
-		model.scale.set(scale, scale, scale)
-		model.position.set(position.x, position.y, position.z)
-
-		let mixer = new THREE.AnimationMixer(model)
-
-		if(animate) {
-			let anim = new FBXLoader()
-			anim.setPath('./models/')
-			anim.load(animationUrl, (anim) => {
-			let action = mixer.clipAction(anim.animations[0])
-				action.play()
-			})
-		}
-
-		scene.add(model)
-		mixers.push(mixer)
-	})
-}
-
 function updateMixers(clockDelta) {
 	// huge help in fixing the animations being slow! - https://discourse.threejs.org/t/too-slow-animation/2379/6
 
@@ -262,6 +244,8 @@ function handleMenuEvent(itemSelected) {
 		currentScene = mainScene
 	} else if(textContent == "Loading") {
 		currentScene = loadingScene
+	} else if(textContent == "Inventory") {
+		currentScene = inventoryScene
 	}
 	resetCamera()
 	itemSelected.classList.add("menu-selected")
