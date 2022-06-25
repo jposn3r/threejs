@@ -113,7 +113,8 @@ button {
 
 .menu-selected {
   /* background-color: #000000; */
-  color: #00ffdd;
+  /* color: #00ffdd; */
+  color: #00E605;
 }
 
 li {

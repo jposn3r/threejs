@@ -92,7 +92,7 @@ let inventorySceneConfig = {
 	name: "inventory-scene",
 	gui: false, // TODO: fix bug with gui
 	background: '',
-	gridFloor: false
+	gridFloor: true
 }
 
 // loading scene
@@ -244,7 +244,7 @@ function handleMenuEvent(itemSelected) {
 		currentScene = mainScene
 	} else if(textContent == "Loading") {
 		currentScene = loadingScene
-	} else if(textContent == "Inventory") {
+	} else if(textContent == "Wild Riders") {
 		currentScene = inventoryScene
 	}
 	resetCamera()
