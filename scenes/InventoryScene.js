@@ -49,13 +49,16 @@ export default class InventoryScene extends ParentScene {
         if(this.isLoaded == false) {
             this.isLoaded = true
 
-            let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk/scene.gltf'
-            let astronautResourceUrl = './models/astronaut/scene.gltf'
+            let masterChiefResourceUrl = 'halo-infinite-master-chief-rigged-walk/scene.gltf'
+            let astronautResourceUrl = 'astronaut/scene.gltf'
 
             // Master Chief Walking
             // this.loadGLTF(this.scene, masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5, 0, 3)
             // spaceman walking
             // this.loadGLTF(this.scene, astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, 3)
+
+            // Parking lots
+            this.loadGLTF(this.scene, '/parking-garage/scene.gltf', 'parking-garage-center', 10, {x: 0, y: 0, z: -5}, false, 0, 1.5, 0)
             
             // random
             // this.loadGLTF(this.scene, './models/eddie-skyline-r34/scene.gltf', 'eddie-skyline', 10, {x: 5, y: 2, z: -5}, false, 0, 1, 0)
@@ -64,18 +67,13 @@ export default class InventoryScene extends ParentScene {
             // this.loadGLTF(this.scene, './models/crusader-knight/scene.gltf', 'crusader-knight-left', .12, {x: -50, y: 13, z: 5}, false, 0, .5, 0)
             
             // Bikes
-            this.loadGLTF(this.scene, './models/akira-bike/scene.gltf', 'akira-bike', 16, {x: 1, y: 37, z: -17}, false, 0, 1, 0)
-            this.loadGLTF(this.scene, './models/scifi-moto/scene.gltf', 'scifi-moto', .045, {x: -8, y: 8.1, z: -7}, false, 0, 1, 0)
-            this.loadGLTF(this.scene, './models/harley-davidson_police/scene.gltf', 'moto-bike', .015, {x: -30, y: 0, z: -7}, false, 0, -0.5, 0)
-            this.loadGLTF(this.scene, './models/tron-moto/scene.gltf', 'tron-moto', 5, {x: 32, y: 0, z: -7}, false, 0, -0.55, 0)
+            this.loadGLTF(this.scene, '/akira-bike/scene.gltf', 'akira-bike', 16, {x: 1, y: 37, z: -17}, false, 0, 1, 0)
+            this.loadGLTF(this.scene, '/scifi-moto/scene.gltf', 'scifi-moto', .045, {x: -8, y: 8.1, z: -7}, false, 0, 1, 0)
+            this.loadGLTF(this.scene, '/harley-davidson_police/scene.gltf', 'moto-bike', .015, {x: -30, y: 0, z: -7}, false, 0, -0.5, 0)
+            this.loadGLTF(this.scene, '/tron-moto/scene.gltf', 'tron-moto', 4.8, {x: 32, y: 0, z: -4}, false, 0, -0.55, 0)
             // this.loadGLTF(this.scene, './models/akira-bike/scene.gltf', 'akira-bike', 14, {x: -5, y: 32, z: 6}, false, 0, -0.5, 0)
 
-            this.loadGLTF(this.scene, 'https://jakonius-assets.s3.us-east-2.amazonaws.com/models/air-jordan-1/scene.gltf', 'air-jordan', 1, {x: -5, y: 32, z: 6}, false, 0, -0.5, 0)
-
-            // Parking lots
-            this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-enter', 10, {x: 0, y: 0, z: -5}, false, 0, 1.5, 0)
-            this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-left', 10, {x: -175, y: 0, z: -5}, false, 0, 1.5, 0)
-            this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-right', 10, {x: 175, y: 0, z: -5}, false, 0, 1.5, 0)
+            // this.loadGLTF(this.scene, 'https://jakonius-assets.s3.us-east-2.amazonaws.com/models/air-jordan-1/scene.gltf', 'air-jordan', 1, {x: -5, y: 32, z: 6}, false, 0, -0.5, 0)
 
             // this.loadGLTF(this.scene, './models/phoenix/scene.gltf', 'phoenix', .15, {x: 16, y: 5, z: -150}, false, 0, -.5, 0)
 

@@ -138,10 +138,11 @@ export default class ParentScene {
         let mixer
         let loader = new GLTFLoader()
         let mixers = this.mixers
+        let modelUrl = "https://jakonius-assets.s3.us-east-2.amazonaws.com/models"
 
         loader.load(
             // resource URL
-            resourceUrl,
+            modelUrl + resourceUrl,
             // called when the resource is loaded
             function ( gltf ) {
                 gltf.scene.scale.set(scale,scale,scale)

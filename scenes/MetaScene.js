@@ -11,7 +11,7 @@ export default class MetaScene extends ParentScene {
 
     setSceneObjects() {
         if(this.isLoaded == false) {
-            this.loadGLTF(this.scene, './models/oculus-quest-2/scene.gltf', 'quest-2', 50, {x: 0, y: 14, z: 20}, false, 0.1, 0, 0)
+            this.loadGLTF(this.scene, '/oculus-quest-2/scene.gltf', 'quest-2', 50, {x: 0, y: 14, z: 20}, false, 0.1, 0, 0)
             this.isLoaded = true
         }
     }
