@@ -70,6 +70,8 @@ export default class InventoryScene extends ParentScene {
             this.loadGLTF(this.scene, './models/tron-moto/scene.gltf', 'tron-moto', 5, {x: 32, y: 0, z: -7}, false, 0, -0.55, 0)
             // this.loadGLTF(this.scene, './models/akira-bike/scene.gltf', 'akira-bike', 14, {x: -5, y: 32, z: 6}, false, 0, -0.5, 0)
 
+            this.loadGLTF(this.scene, 'https://jakonius-assets.s3.us-east-2.amazonaws.com/models/air-jordan-1/scene.gltf', 'air-jordan', 1, {x: -5, y: 32, z: 6}, false, 0, -0.5, 0)
+
             // Parking lots
             this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-enter', 10, {x: 0, y: 0, z: -5}, false, 0, 1.5, 0)
             this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-left', 10, {x: -175, y: 0, z: -5}, false, 0, 1.5, 0)
@@ -113,18 +115,18 @@ export default class InventoryScene extends ParentScene {
         this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, headerScale,  .2, headerTranslation, true, 0, 0, 0)
 
         // riders -----------------------------------------------------
-        let nameHeaderScale = 1
-        let jakoniusHeader = "Jakonius"
-        this.loadText(optimerBoldUrl, 'jakonius-header', jakoniusHeader, nameHeaderScale,  .2, [-11, 1, 53], true, 0, 0, 0)
+        // let nameHeaderScale = 1
+        // let jakoniusHeader = "Jakonius"
+        // this.loadText(optimerBoldUrl, 'jakonius-header', jakoniusHeader, nameHeaderScale,  .2, [-11, 1, 53], true, 0, 0, 0)
 
-        let fitchesHeader = "Fitches"
-        this.loadText(optimerBoldUrl, 'jakonius-header', fitchesHeader, nameHeaderScale,  .2, [-5, 1, 53], true, 0, 0, 0)
+        // let fitchesHeader = "Fitches"
+        // this.loadText(optimerBoldUrl, 'jakonius-header', fitchesHeader, nameHeaderScale,  .2, [-5, 1, 53], true, 0, 0, 0)
 
-        let ardentHeader = "Ardent"
-        this.loadText(optimerBoldUrl, 'jakonius-header', ardentHeader, nameHeaderScale,  .2, [.7, 1, 53], true, 0, 0, 0)
+        // let ardentHeader = "Ardent"
+        // this.loadText(optimerBoldUrl, 'jakonius-header', ardentHeader, nameHeaderScale,  .2, [.7, 1, 53], true, 0, 0, 0)
 
-        let castorTroyHeader = "CastorTroy"
-        this.loadText(optimerBoldUrl, 'jakonius-header', castorTroyHeader, nameHeaderScale,  .2, [5.5, 1, 53], true, 0, 0, 0)
+        // let castorTroyHeader = "CastorTroy"
+        // this.loadText(optimerBoldUrl, 'jakonius-header', castorTroyHeader, nameHeaderScale,  .2, [5.5, 1, 53], true, 0, 0, 0)
     }
 
     // comment here

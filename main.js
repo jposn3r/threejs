@@ -223,7 +223,7 @@ function handleMenuEvent(itemSelected) {
 		currentScene = mainScene
 	} else if(textContent == "Loading") {
 		currentScene = loadingScene
-	} else if(textContent == "Wild Riders") {
+	} else if(textContent == "Clubhouse") {
 		currentScene = inventoryScene
 	}
 	resetCamera()
