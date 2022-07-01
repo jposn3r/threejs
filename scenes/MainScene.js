@@ -26,10 +26,8 @@ export default class MainScene extends ParentScene {
             // load intitial layout into focus area
             if(window.innerWidth > 700) {
                 this.loadGLTF(this.scene, '/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
-                // currentScene.loadGLTF(currentScene.scene, './models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
                 this.loadGLTF(this.scene, '/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
-                // currentScene.loadGLTF(currentScene.scene, './models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
-                // currentScene.loadGLTF(currentScene.scene, masterChiefResourceUrl, 'master-chief', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
+                this.loadGLTF(this.scene, '/death-star/scene.gltf', 'death-star', .5, {x: 80, y: 20, z: -80}, false, 1, 0, 0)
                 
             } else {
                 this.loadGLTF(this.scene, '/portal-night-version/scene.gltf', 'portal', .003, {x: 0, y: 0, z: 30}, true, 0, 1.5)
@@ -142,6 +140,7 @@ export default class MainScene extends ParentScene {
     // comment here
     animateScene(clockDelta) {
         this.rotateObject('planet-earth', [.0005, .0004, 0])
+        this.rotateObject('death-star', [-.0005, -.0004, 0])
         this.updateMixers(clockDelta)
     }
 }

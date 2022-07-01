@@ -295,7 +295,7 @@ function animateToScene(sceneName) {
 	// tween test area
 	var position = { x : camera.position.x, y: camera.position.y, z: camera.position.z}
 	var target = { x : scenePosition[0], y: scenePosition[1], z: scenePosition[2]}
-	var tween3 = new TWEEN.Tween(position).to(target, 3500)
+	var tween3 = new TWEEN.Tween(position).to(target, 1500)
 
 	tween3.onUpdate(function() {
 		camera.position.x = position.x
