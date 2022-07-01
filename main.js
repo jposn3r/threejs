@@ -6,6 +6,7 @@ import WilderWorldScene from './scenes/WilderWorldScene'
 import MetaScene from './scenes/MetaScene'
 import LoadingScene from './scenes/LoadingScene'
 import InventoryScene from './scenes/InventoryScene'
+import SandboxScene from './scenes/SandboxScene'
 
 let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
 var leftDetailPanel = document.getElementById("left-detail-panel")
@@ -104,10 +105,19 @@ let loadingSceneConfig = {
 	gridFloor: true
 }
 
+// loading scene
+let sandboxSceneConfig = {
+	name: "sandbox-scene",
+	gui: false, // TODO: fix bug with gui
+	background: '',
+	gridFloor: true
+}
+
 let mainScene = new MainScene(mainSceneConfig)
 let metaScene = new MetaScene(metaSceneConfig)
 let inventoryScene = new InventoryScene(inventorySceneConfig)
 // let loadingScene = new LoadingScene(loadingSceneConfig)
+let sandboxScene = new SandboxScene(loadingSceneConfig)
 
 let currentScene = mainScene
 currentScene.setSceneObjects()
@@ -216,6 +226,8 @@ function handleMenuEvent(itemSelected) {
 		currentScene = loadingScene
 	} else if(textContent == "Clubhouse") {
 		currentScene = inventoryScene
+	} else if(textContent == "Sandbox") {
+		currentScene = sandboxScene
 	}
 	resetCamera()
 	if(!currentScene.isLoaded) {

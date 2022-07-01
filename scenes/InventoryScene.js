@@ -33,17 +33,6 @@ export default class InventoryScene extends ParentScene {
         this.sceneStates = sceneStates
     }
 
-    addCube(name, textureUri, height, width, depth, translation, rotation) {
-        const geometry = new THREE.BoxGeometry( height, width, depth);
-        const texture = new THREE.TextureLoader().load('./assets/' + textureUri)
-        const material = new THREE.MeshBasicMaterial( {color: 0x00ffdd, map: texture} );
-        const cube = new THREE.Mesh( geometry, material );
-        cube.position.set(translation[0], translation[1], translation[2])
-        cube.rotation.set(0, rotation, 0)
-        cube.name = name
-        this.scene.add(cube);
-    }
-
     // comment here
     setSceneObjects() {
         if(this.isLoaded == false) {
@@ -60,8 +49,8 @@ export default class InventoryScene extends ParentScene {
 
             // add cubes
             let wilderLogoUri = "wilder-white-black-logo.jpeg"
-            this.addCube("cube-1", wilderLogoUri, 15, 15, 15, [-45,30,-50], .6)
-            this.addCube("cube-2", wilderLogoUri, 15, 15, 15, [45,30,-50], -.6)
+            this.addCube("cube-1", wilderLogoUri, 15, 15, 15, [-45,30,-50], [0, .6, 0])
+            this.addCube("cube-2", wilderLogoUri, 15, 15, 15, [45,30,-50], [0, -.6, 0])
         }
         
     }

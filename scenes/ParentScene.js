@@ -89,8 +89,9 @@ export default class ParentScene {
     }
 
     // update camera position
-
     updateCameraPosition(position = [0, 20, 75], fov = 50, zoom = 1) {
+        console.log("\nupdateCameraPosition")
+        console.log("position: " + position)
         var camera = this.camera
         camera.position.set(position[0], position[1], position[2])
         camera.fov = fov
@@ -253,6 +254,18 @@ export default class ParentScene {
         lightGrid.visible = !lightGrid.visible
     }
 
+    // load box geometry
+    addCube(name, textureUri, height, width, depth, translation, rotation) {
+        const geometry = new THREE.BoxGeometry( height, width, depth);
+        const texture = new THREE.TextureLoader().load('./assets/' + textureUri)
+        const material = new THREE.MeshBasicMaterial( {color: 0x00ffdd, map: texture} );
+        const cube = new THREE.Mesh( geometry, material );
+        cube.position.set(translation[0], translation[1], translation[2])
+        cube.rotation.set(rotation[0], rotation[1], rotation[2])
+        cube.name = name
+        this.scene.add(cube);
+    }
+
     // TEXT
 
      // load 3d text - this should be somewhere else to be used by every scene
@@ -300,6 +313,10 @@ export default class ParentScene {
             lightObj.light = new THREE.AmbientLight(color)
         } else if(type == "point") {
             lightObj.light = new THREE.PointLight(color, intensity, distance)
+            lightObj.light.position.set(position[0], position[1], position[2])
+        } else if(type == "directional") {
+            lightObj.light = new THREE.DirectionalLight(color, intensity)
+            
             lightObj.light.position.set(position[0], position[1], position[2])
         }
         this.lights.push(lightObj)
