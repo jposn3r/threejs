@@ -199,15 +199,6 @@ function onDocumentMouseDown(event) {
 		// console.log(intersects)
 		let object = intersects[0].object
 		console.log(object)
-		let callback = object.callback
-		// console.log("\ndebug object")
-		// console.log(object)
-		// console.log(callback)
-		if(callback instanceof Function) {
-			callback()
-		} else {
-			console.log("error: callback not a function")
-		}
 	}
 }
 

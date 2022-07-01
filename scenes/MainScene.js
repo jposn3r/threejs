@@ -139,6 +139,7 @@ export default class MainScene extends ParentScene {
 
     // comment here
     animateScene(clockDelta) {
+        // make the death star orbit the earth - https://en.threejs-university.com/2021/08/04/satellite-placing-a-3d-object-into-orbit-around-a-target/
         this.rotateObject('planet-earth', [.0005, .0004, 0])
         this.rotateObject('death-star', [-.0005, -.0004, 0])
         this.updateMixers(clockDelta)

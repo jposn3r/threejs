@@ -49,33 +49,14 @@ export default class InventoryScene extends ParentScene {
         if(this.isLoaded == false) {
             this.isLoaded = true
 
-            let masterChiefResourceUrl = 'halo-infinite-master-chief-rigged-walk/scene.gltf'
-            let astronautResourceUrl = 'astronaut/scene.gltf'
-
-            // Master Chief Walking
-            // this.loadGLTF(this.scene, masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5, 0, 3)
-            // spaceman walking
-            // this.loadGLTF(this.scene, astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, 3)
-
-            // Parking lots
+            // Parking lot
             this.loadGLTF(this.scene, '/parking-garage/scene.gltf', 'parking-garage-center', 10, {x: 0, y: 0, z: -5}, false, 0, 1.5, 0)
-            
-            // random
-            // this.loadGLTF(this.scene, './models/eddie-skyline-r34/scene.gltf', 'eddie-skyline', 10, {x: 5, y: 2, z: -5}, false, 0, 1, 0)
-            // this.loadGLTF(this.scene, './models/death-star/scene.gltf', 'death-star', 2, {x: 0, y: 40, z: -250}, false, 0, 1, -5)
-            // this.loadGLTF(this.scene, './models/crusader-knight/scene.gltf', 'crusader-knight-right', .12, {x: 50, y: 13, z: 5}, false, 0, -.7, 0)
-            // this.loadGLTF(this.scene, './models/crusader-knight/scene.gltf', 'crusader-knight-left', .12, {x: -50, y: 13, z: 5}, false, 0, .5, 0)
-            
+
             // Bikes
             this.loadGLTF(this.scene, '/akira-bike/scene.gltf', 'akira-bike', 16, {x: 1, y: 37, z: -17}, false, 0, 1, 0)
             this.loadGLTF(this.scene, '/scifi-moto/scene.gltf', 'scifi-moto', .045, {x: -8, y: 8.1, z: -7}, false, 0, 1, 0)
             this.loadGLTF(this.scene, '/harley-davidson_police/scene.gltf', 'moto-bike', .015, {x: -30, y: 0, z: -7}, false, 0, -0.5, 0)
             this.loadGLTF(this.scene, '/tron-moto/scene.gltf', 'tron-moto', 4.8, {x: 32, y: 0, z: -4}, false, 0, -0.55, 0)
-            // this.loadGLTF(this.scene, './models/akira-bike/scene.gltf', 'akira-bike', 14, {x: -5, y: 32, z: 6}, false, 0, -0.5, 0)
-
-            // this.loadGLTF(this.scene, 'https://jakonius-assets.s3.us-east-2.amazonaws.com/models/air-jordan-1/scene.gltf', 'air-jordan', 1, {x: -5, y: 32, z: 6}, false, 0, -0.5, 0)
-
-            // this.loadGLTF(this.scene, './models/phoenix/scene.gltf', 'phoenix', .15, {x: 16, y: 5, z: -150}, false, 0, -.5, 0)
 
             // add cubes
             let wilderLogoUri = "wilder-white-black-logo.jpeg"
