@@ -101,6 +101,9 @@ export default class ParentScene {
     // CONTROLS
 
     setControls() {
+        // Youtube helpers
+        // https://www.youtube.com/watch?v=C3s0UHpwlf8 - Basic Character Controls - 3rd person
+        // 
         // controls
         // let controls = new OrbitControls(camera, renderer.domElement)
         // let controls = new MapControls(camera, renderer.domElement)
@@ -156,8 +159,8 @@ export default class ParentScene {
                 mixer = new THREE.AnimationMixer( gltf.scene )
 
                 if(animate) {
-                    // console.log("\n" + name + " animations: \n")
-                    // console.log(gltf.animations)
+                    console.log("\n" + name + " animations: \n")
+                    console.log(gltf.animations)
                     var action = mixer.clipAction(gltf.animations[animationIndex])
                     console.log(timeScale)
                     action.timeScale = timeScale
@@ -208,7 +211,7 @@ export default class ParentScene {
 		}
 
 		scene.add(model)
-		mixers.push(mixer)
+		this.mixers.push(mixer)
 	})
 }
 
@@ -245,8 +248,8 @@ export default class ParentScene {
      // comment here
      addGridFloor() {
         // grid floor
-        // let gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf)
-        let gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00E605)
+        let gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf)
+        // let gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00E605)
         gridHelper.name = "light-grid"
         this.scene.add(gridHelper)
     }
@@ -328,6 +331,7 @@ export default class ParentScene {
         // huge help in fixing the animations being slow! - https://discourse.threejs.org/t/too-slow-animation/2379/6
     
         // update mixers for animation
+        console.log(this.mixers)
         for (let i = 0, l = this.mixers.length; i < l; i ++) {
             this.mixers[i].update(clockDelta)
         }

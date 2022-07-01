@@ -31,13 +31,14 @@ export default class InventoryScene extends ParentScene {
         this.sceneStates = sceneStates
     }
 
-    addCube(textureUri, height, width, depth, translation) {
+    addCube(name, textureUri, height, width, depth, translation, rotation) {
         const geometry = new THREE.BoxGeometry( height, width, depth);
         const texture = new THREE.TextureLoader().load('./assets/' + textureUri)
-        const material = new THREE.MeshBasicMaterial( {color: 0x00ff00, map: texture} );
+        const material = new THREE.MeshBasicMaterial( {color: 0x00ffdd, map: texture} );
         const cube = new THREE.Mesh( geometry, material );
         cube.position.set(translation[0], translation[1], translation[2])
-        cube.rotation.set(0, .25, 0)
+        cube.rotation.set(0, rotation, 0)
+        cube.name = name
         this.scene.add(cube);
     }
 
@@ -50,20 +51,23 @@ export default class InventoryScene extends ParentScene {
         // this.loadGLTF(this.scene, './models/crusader-knight/scene.gltf', 'crusader-knight-left', .12, {x: -50, y: 13, z: 5}, false, 0, .5, 0)
         
         // Bikes
-        this.loadGLTF(this.scene, './models/akira-bike/scene.gltf', 'akira-bike', 16, {x: 1, y: 37, z: -22}, false, 0, 1, 0)
-        this.loadGLTF(this.scene, './models/scifi-moto/scene.gltf', 'scifi-moto', .045, {x: -8, y: 8.1, z: -12}, false, 0, 1, 0)
-        this.loadGLTF(this.scene, './models/harley-davidson_police/scene.gltf', 'moto-bike', .015, {x: -30, y: 0, z: -12}, false, 0, -0.5, 0)
-        this.loadGLTF(this.scene, './models/tron-moto/scene.gltf', 'tron-moto', 5, {x: 32, y: 0, z: -12}, false, 0, -0.55, 0)
+        this.loadGLTF(this.scene, './models/akira-bike/scene.gltf', 'akira-bike', 16, {x: 1, y: 37, z: -17}, false, 0, 1, 0)
+        this.loadGLTF(this.scene, './models/scifi-moto/scene.gltf', 'scifi-moto', .045, {x: -8, y: 8.1, z: -7}, false, 0, 1, 0)
+        this.loadGLTF(this.scene, './models/harley-davidson_police/scene.gltf', 'moto-bike', .015, {x: -30, y: 0, z: -7}, false, 0, -0.5, 0)
+        this.loadGLTF(this.scene, './models/tron-moto/scene.gltf', 'tron-moto', 5, {x: 32, y: 0, z: -7}, false, 0, -0.55, 0)
         // this.loadGLTF(this.scene, './models/akira-bike/scene.gltf', 'akira-bike', 14, {x: -5, y: 32, z: 6}, false, 0, -0.5, 0)
 
         // Parking lots
-        // this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-enter', 10, {x: 0, y: 0, z: -5}, false, 0, 1.5, 0)
-        // this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-left', 10, {x: -175, y: 0, z: -5}, false, 0, 1.5, 0)
-        // this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-right', 10, {x: 175, y: 0, z: -5}, false, 0, 1.5, 0)
+        this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-enter', 10, {x: 0, y: 0, z: -5}, false, 0, 1.5, 0)
+        this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-left', 10, {x: -175, y: 0, z: -5}, false, 0, 1.5, 0)
+        this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-right', 10, {x: 175, y: 0, z: -5}, false, 0, 1.5, 0)
+
+        // this.loadGLTF(this.scene, './models/phoenix/scene.gltf', 'phoenix', .15, {x: 16, y: 5, z: -150}, false, 0, -.5, 0)
 
         // add cubes
         let wilderLogoUri = "wilder-white-black-logo.jpeg"
-        this.addCube(wilderLogoUri, 20, 20, 20, [0,30,-50])
+        this.addCube("cube-1", wilderLogoUri, 15, 15, 15, [-45,30,-50], .6)
+        this.addCube("cube-2", wilderLogoUri, 15, 15, 15, [45,30,-50], -.6)
 
     }
 
@@ -80,12 +84,12 @@ export default class InventoryScene extends ParentScene {
     // pearl electron and metaverse header for now
     setMetaverseLogo() {
         // let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
-        let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
+        let optimerBoldUrl = 'https://threejs.org/examples/fonts/gentilis_bold.typeface.json'
         let metaverseHeader = ''
-        let headerScale = 5
-        let headerTranslation = [-18, 0, 42]
+        let headerScale = 4.5
+        let headerTranslation = [-23, 0, 42]
         if(window.innerWidth > 700) {
-            metaverseHeader = 'Wild Riders'
+            metaverseHeader = 'The WILD Riders'
         } else {    
             metaverseHeader = "Mobile coming soon"
             headerScale = 1
@@ -175,6 +179,9 @@ export default class InventoryScene extends ParentScene {
     animateScene(clockDelta) {
         // this.animateTorusGroup()
         this.rotateObject('death-star', [.0005, -.0004, 0])
-        this.rotateObject('wilder-logo-cube', [.0005, -.0004, 0])
+        this.rotateObject('cube-1', [.005, -.004, 0])
+        this.rotateObject('cube-2', [.005, -.004, 0])
+        
+        // this.updateMixers() - investigate to fix animations
     }
 }

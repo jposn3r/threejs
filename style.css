@@ -113,13 +113,13 @@ button {
 
 .menu-selected {
   /* background-color: #000000; */
-  /* color: #00ffdd; */
-  color: #00E605;
+  color: #00ffdd;
+  /* color: #00E605; */
 }
 
 li {
   float: left;
-  width: 33% !important;
+  width: 50% !important;
   text-align: center;
   color: #FFFFFF;
   background-color: #05051690;
