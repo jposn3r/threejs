@@ -105,7 +105,7 @@ let loadingSceneConfig = {
 }
 
 let mainScene = new MainScene(mainSceneConfig)
-// let metaScene = new MetaScene(metaSceneConfig)
+let metaScene = new MetaScene(metaSceneConfig)
 let inventoryScene = new InventoryScene(inventorySceneConfig)
 let loadingScene = new LoadingScene(loadingSceneConfig)
 
