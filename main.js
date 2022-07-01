@@ -107,9 +107,10 @@ let loadingSceneConfig = {
 let mainScene = new MainScene(mainSceneConfig)
 let metaScene = new MetaScene(metaSceneConfig)
 let inventoryScene = new InventoryScene(inventorySceneConfig)
-let loadingScene = new LoadingScene(loadingSceneConfig)
+// let loadingScene = new LoadingScene(loadingSceneConfig)
 
 let currentScene = mainScene
+currentScene.setSceneObjects()
 
 let scene = mainScene.scene
 
@@ -146,9 +147,6 @@ function buildBoxGeometry(scaleX = 1, scaleY = 1, scaleZ = 1, texture = new THRE
 	)
 }
 
-let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk/scene.gltf'
-let astronautResourceUrl = './models/astronaut/scene.gltf'
-
 // set positions - figure out why I need this :sweat-smile:
 currentScene.updateCameraPosition([0, 18, 90], 50, 1)
 
@@ -158,26 +156,6 @@ Array(2000).fill().forEach(addStar)
 let sceneStates = mainScene.sceneStates
 
 let sceneState = sceneStates.landing
-
-// Master Chief Walking
-// currentScene.loadGLTF(currentScene.scene, masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5)
-// load spaceman
-// currentScene.loadGLTF(currentScene.scene, astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, function(){}, 3)
-
-// load intitial layout into focus area
-function loadLanding() {
-	if(windowInnerWidth > 700) {
-		currentScene.loadGLTF(currentScene.scene, './models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
-		// currentScene.loadGLTF(currentScene.scene, './models/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
-		currentScene.loadGLTF(currentScene.scene, './models/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
-		// currentScene.loadGLTF(currentScene.scene, './models/rhetorician/scene.gltf', 'rhetorician', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
-		// currentScene.loadGLTF(currentScene.scene, masterChiefResourceUrl, 'master-chief', 7.5, {x: 50, y: -20, z: 0}, true, 0, .5)
-		
-	} else {
-		currentScene.loadGLTF(currentScene.scene, './models/portal-night-version/scene.gltf', 'portal', .003, {x: 0, y: 0, z: 30}, true, 0, 1.5)
-	}
-}
-loadLanding()
 
 function updateMixers(clockDelta) {
 	// huge help in fixing the animations being slow! - https://discourse.threejs.org/t/too-slow-animation/2379/6
@@ -249,7 +227,14 @@ function handleMenuEvent(itemSelected) {
 		currentScene = inventoryScene
 	}
 	resetCamera()
+	if(!currentScene.isLoaded) {
+		currentScene.setSceneObjects()
+	}
 	itemSelected.classList.add("menu-selected")
+}
+
+function log(text) {
+	console.log("\n" + text)
 }
 
 function keyDownHandler(event) {

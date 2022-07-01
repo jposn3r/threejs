@@ -4,9 +4,16 @@ import ParentScene from './ParentScene'
 export default class MetaScene extends ParentScene {
     constructor(config) {
         super(config)
+        this.isLoaded = false
         this.setSceneStates()
         this.setMetaverseLogo()
-        this.loadGLTF(this.scene, './models/oculus-quest-2/scene.gltf', 'quest-2', 50, {x: 0, y: 14, z: 20}, false, 0.1, 0, 0)
+    }
+
+    setSceneObjects() {
+        if(this.isLoaded == false) {
+            this.loadGLTF(this.scene, './models/oculus-quest-2/scene.gltf', 'quest-2', 50, {x: 0, y: 14, z: 20}, false, 0.1, 0, 0)
+            this.isLoaded = true
+        }
     }
  
     // comment here

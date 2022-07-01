@@ -7,6 +7,8 @@ export default class InventoryScene extends ParentScene {
         // read config values
         var torusGroup = config.torusGroup
         var focusTorus = config.focusTorus
+        let isLoaded = false
+        this.isLoaded = isLoaded
 
         if(torusGroup == true) {
             this.addTorusGroupToScene()
@@ -16,7 +18,7 @@ export default class InventoryScene extends ParentScene {
         }
         this.setSceneStates()
         this.setMetaverseLogo()
-        this.setInitialSceneObjects()
+        // this.setSceneObjects()
     }
  
     // comment here - are these values used at all?
@@ -43,32 +45,44 @@ export default class InventoryScene extends ParentScene {
     }
 
     // comment here
-    setInitialSceneObjects() {
-        // random
-        // this.loadGLTF(this.scene, './models/eddie-skyline-r34/scene.gltf', 'eddie-skyline', 10, {x: 5, y: 2, z: -5}, false, 0, 1, 0)
-        // this.loadGLTF(this.scene, './models/death-star/scene.gltf', 'death-star', 2, {x: 0, y: 40, z: -250}, false, 0, 1, -5)
-        // this.loadGLTF(this.scene, './models/crusader-knight/scene.gltf', 'crusader-knight-right', .12, {x: 50, y: 13, z: 5}, false, 0, -.7, 0)
-        // this.loadGLTF(this.scene, './models/crusader-knight/scene.gltf', 'crusader-knight-left', .12, {x: -50, y: 13, z: 5}, false, 0, .5, 0)
+    setSceneObjects() {
+        if(this.isLoaded == false) {
+            this.isLoaded = true
+
+            let masterChiefResourceUrl = './models/halo-infinite-master-chief-rigged-walk/scene.gltf'
+            let astronautResourceUrl = './models/astronaut/scene.gltf'
+
+            // Master Chief Walking
+            // this.loadGLTF(this.scene, masterChiefResourceUrl, 'master-chief', 6.5, {x: 40, y: 0, z: 0}, true, 0, 1.5, 0, 3)
+            // spaceman walking
+            // this.loadGLTF(this.scene, astronautResourceUrl, 'astronaut', 7, {x: 0, y: 0, z: 50}, true, 0, 0, 0, 3)
+            
+            // random
+            // this.loadGLTF(this.scene, './models/eddie-skyline-r34/scene.gltf', 'eddie-skyline', 10, {x: 5, y: 2, z: -5}, false, 0, 1, 0)
+            // this.loadGLTF(this.scene, './models/death-star/scene.gltf', 'death-star', 2, {x: 0, y: 40, z: -250}, false, 0, 1, -5)
+            // this.loadGLTF(this.scene, './models/crusader-knight/scene.gltf', 'crusader-knight-right', .12, {x: 50, y: 13, z: 5}, false, 0, -.7, 0)
+            // this.loadGLTF(this.scene, './models/crusader-knight/scene.gltf', 'crusader-knight-left', .12, {x: -50, y: 13, z: 5}, false, 0, .5, 0)
+            
+            // Bikes
+            this.loadGLTF(this.scene, './models/akira-bike/scene.gltf', 'akira-bike', 16, {x: 1, y: 37, z: -17}, false, 0, 1, 0)
+            this.loadGLTF(this.scene, './models/scifi-moto/scene.gltf', 'scifi-moto', .045, {x: -8, y: 8.1, z: -7}, false, 0, 1, 0)
+            this.loadGLTF(this.scene, './models/harley-davidson_police/scene.gltf', 'moto-bike', .015, {x: -30, y: 0, z: -7}, false, 0, -0.5, 0)
+            this.loadGLTF(this.scene, './models/tron-moto/scene.gltf', 'tron-moto', 5, {x: 32, y: 0, z: -7}, false, 0, -0.55, 0)
+            // this.loadGLTF(this.scene, './models/akira-bike/scene.gltf', 'akira-bike', 14, {x: -5, y: 32, z: 6}, false, 0, -0.5, 0)
+
+            // Parking lots
+            this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-enter', 10, {x: 0, y: 0, z: -5}, false, 0, 1.5, 0)
+            this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-left', 10, {x: -175, y: 0, z: -5}, false, 0, 1.5, 0)
+            this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-right', 10, {x: 175, y: 0, z: -5}, false, 0, 1.5, 0)
+
+            // this.loadGLTF(this.scene, './models/phoenix/scene.gltf', 'phoenix', .15, {x: 16, y: 5, z: -150}, false, 0, -.5, 0)
+
+            // add cubes
+            let wilderLogoUri = "wilder-white-black-logo.jpeg"
+            this.addCube("cube-1", wilderLogoUri, 15, 15, 15, [-45,30,-50], .6)
+            this.addCube("cube-2", wilderLogoUri, 15, 15, 15, [45,30,-50], -.6)
+        }
         
-        // Bikes
-        this.loadGLTF(this.scene, './models/akira-bike/scene.gltf', 'akira-bike', 16, {x: 1, y: 37, z: -17}, false, 0, 1, 0)
-        this.loadGLTF(this.scene, './models/scifi-moto/scene.gltf', 'scifi-moto', .045, {x: -8, y: 8.1, z: -7}, false, 0, 1, 0)
-        this.loadGLTF(this.scene, './models/harley-davidson_police/scene.gltf', 'moto-bike', .015, {x: -30, y: 0, z: -7}, false, 0, -0.5, 0)
-        this.loadGLTF(this.scene, './models/tron-moto/scene.gltf', 'tron-moto', 5, {x: 32, y: 0, z: -7}, false, 0, -0.55, 0)
-        // this.loadGLTF(this.scene, './models/akira-bike/scene.gltf', 'akira-bike', 14, {x: -5, y: 32, z: 6}, false, 0, -0.5, 0)
-
-        // Parking lots
-        this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-enter', 10, {x: 0, y: 0, z: -5}, false, 0, 1.5, 0)
-        this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-left', 10, {x: -175, y: 0, z: -5}, false, 0, 1.5, 0)
-        this.loadGLTF(this.scene, './models/parking-garage/scene.gltf', 'parking-garage-right', 10, {x: 175, y: 0, z: -5}, false, 0, 1.5, 0)
-
-        // this.loadGLTF(this.scene, './models/phoenix/scene.gltf', 'phoenix', .15, {x: 16, y: 5, z: -150}, false, 0, -.5, 0)
-
-        // add cubes
-        let wilderLogoUri = "wilder-white-black-logo.jpeg"
-        this.addCube("cube-1", wilderLogoUri, 15, 15, 15, [-45,30,-50], .6)
-        this.addCube("cube-2", wilderLogoUri, 15, 15, 15, [45,30,-50], -.6)
-
     }
 
     // comment here
@@ -182,6 +196,6 @@ export default class InventoryScene extends ParentScene {
         this.rotateObject('cube-1', [.005, -.004, 0])
         this.rotateObject('cube-2', [.005, -.004, 0])
         
-        // this.updateMixers() - investigate to fix animations
+        this.updateMixers(clockDelta)
     }
 }

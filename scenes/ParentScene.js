@@ -134,7 +134,7 @@ export default class ParentScene {
 
     // OBJECTS
 
-    loadGLTF(scene, resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, callback = function() {console.log("no callback")}, animationIndex = 0, timeScale = 1) {
+    loadGLTF(scene, resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, animationIndex = 0, timeScale = 1) {
         let mixer
         let loader = new GLTFLoader()
         let mixers = this.mixers
@@ -159,19 +159,10 @@ export default class ParentScene {
                 mixer = new THREE.AnimationMixer( gltf.scene )
 
                 if(animate) {
-                    console.log("\n" + name + " animations: \n")
-                    console.log(gltf.animations)
                     var action = mixer.clipAction(gltf.animations[animationIndex])
-                    console.log(timeScale)
                     action.timeScale = timeScale
                     action.play()
                 }
-
-                // console.log("\ndebug callback")
-                // console.log(gltf.scene)
-                // console.log(callback)
-                // gltf.scene.callback = callback
-                // console.log(gltf.scene.callback)
 
                 scene.add(gltf.scene)
                 mixers.push(mixer)
@@ -331,7 +322,6 @@ export default class ParentScene {
         // huge help in fixing the animations being slow! - https://discourse.threejs.org/t/too-slow-animation/2379/6
     
         // update mixers for animation
-        console.log(this.mixers)
         for (let i = 0, l = this.mixers.length; i < l; i ++) {
             this.mixers[i].update(clockDelta)
         }
