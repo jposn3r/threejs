@@ -7,9 +7,29 @@ import MetaScene from './scenes/MetaScene'
 import LoadingScene from './scenes/LoadingScene'
 import InventoryScene from './scenes/InventoryScene'
 import SandboxScene from './scenes/SandboxScene'
+import RequestManager from './helpers/RequestManager'
 
 let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
 var leftDetailPanel = document.getElementById("left-detail-panel")
+
+// Make a networking library to make requests ------------
+// let cocktailDbAPI = {
+// 	url: "https://the-cocktail-db.p.rapidapi.com/filter.php?i=Gin",
+// 	headers: {
+// 		'X-RapidAPI-Key': 'a993df2f98mshe5438db55516542p15a443jsn546b669c1e62',
+// 		'X-RapidAPI-Host': 'the-cocktail-db.p.rapidapi.com'
+// 	}
+// }
+
+// let requestConfig = {
+// 		url: cocktailDbAPI.url,
+// 		method: "GET",
+// 		headers: cocktailDbAPI.headers
+// }
+// let requestManager = new RequestManager()
+// requestManager.makeRequest(requestConfig)
+// console.log("\nwe did it")
+// console.log(requestManager)
 
 // document event listeners
 document.addEventListener('keydown', keyDownHandler, false)
@@ -293,7 +313,21 @@ function animateToScene(sceneName) {
 	let scenePosition = sceneStates[sceneName].cameraPosition
 	let controlsTargetVector = sceneStates[sceneName].controlsTargetVector
 
-	controls.target = new THREE.Vector3(controlsTargetVector[0], controlsTargetVector[1], controlsTargetVector[2])
+	// tween test area
+	var controlsPosition = { x : controls.target.x, y: controls.target.y, z: controls.target.z}
+	var controlsTarget = { x : controlsTargetVector[0], y: controlsTargetVector[1], z: controlsTargetVector[2]}
+	var controlsTween = new TWEEN.Tween(controlsPosition).to(controlsTarget, 1500)
+
+	controlsTween.onUpdate(function() {
+		controls.target.x = controlsPosition.x
+		controls.target.y = controlsPosition.y
+		controls.target.z = controlsPosition.z
+	})
+
+	controlsTween.start()
+	console.log("\n controls.target")
+	console.log(controls.target)
+	// controls.target = new THREE.Vector3(controlsTargetVector[0], controlsTargetVector[1], controlsTargetVector[2])
 
 	// tween test area
 	var position = { x : camera.position.x, y: camera.position.y, z: camera.position.z}
