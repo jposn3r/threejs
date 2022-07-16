@@ -18,7 +18,6 @@ export default class InventoryScene extends ParentScene {
         }
         this.setSceneStates()
         this.setMetaverseLogo()
-        // this.setSceneObjects()
     }
  
     // comment here - are these values used at all?
@@ -27,7 +26,7 @@ export default class InventoryScene extends ParentScene {
             inventoryLanding: {
               name: "inventory-landing",
               cameraPosition: [0, 20, 80],
-              controlsTargetVector: [0, 0, -20],
+              controlsTargetVector: [0, 0, 40],
             }
           }
         this.sceneStates = sceneStates

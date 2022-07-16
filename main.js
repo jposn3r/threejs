@@ -10,7 +10,6 @@ import SandboxScene from './scenes/SandboxScene'
 import RequestManager from './helpers/RequestManager'
 
 let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
-var leftDetailPanel = document.getElementById("left-detail-panel")
 
 // Make a networking library to make requests ------------
 // let cocktailDbAPI = {
@@ -55,27 +54,7 @@ window.addEventListener('resize', function() {
 	camera.aspect = windowInnerWidth / windowInnerHeight;
 	camera.updateProjectionMatrix();
 	updateScaleMultiplier()
-	updateDetailPanelVisibility(windowInnerWidth)
 })
-
-function updateDetailPanelVisibility(windowInnerWidth) {
-	if(windowInnerWidth < 700) {
-		hideDetailPanels()
-	} else {
-		showDetailPanels()
-	}
-}
-function hideDetailPanels() {
-	// leftDetailPanel.style.display = 'none'
-}
-
-function showDetailPanels() {
-	console.log("showDetailPanels")
-	console.log(sceneState)
-	if(sceneState.name == 'inventory') {
-		leftDetailPanel.style.display = 'block'
-	}
-}
 
 // On click events
 
