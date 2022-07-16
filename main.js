@@ -15,7 +15,7 @@ let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
 // let cocktailDbAPI = {
 // 	url: "https://the-cocktail-db.p.rapidapi.com/filter.php?i=Gin",
 // 	headers: {
-// 		'X-RapidAPI-Key': 'a993df2f98mshe5438db55516542p15a443jsn546b669c1e62',
+// 		'X-RapidAPI-Key': '',
 // 		'X-RapidAPI-Host': 'the-cocktail-db.p.rapidapi.com'
 // 	}
 // }
