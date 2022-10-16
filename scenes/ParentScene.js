@@ -326,7 +326,6 @@ export default class ParentScene {
     // ANIMATE
 
     animateScene(clockDelta) {
-        this.rotateObject('planet-earth', [.0005, .0004, 0])
         if(this.mixers) {
             this.updateMixers(clockDelta)
         }

@@ -70,10 +70,10 @@ export default class InventoryScene extends ParentScene {
         let optimerBoldUrl = 'https://threejs.org/examples/fonts/gentilis_bold.typeface.json'
         let metaverseHeader = ''
         let headerScale = 4.5
-        let headerTranslation = [-23, 0, 42]
+        let headerTranslation = [-18, 0, 42]
         if(window.innerWidth > 700) {
-            metaverseHeader = 'The WILD Riders'
-        } else {    
+            metaverseHeader = 'The Clubhouse'
+        } else {
             metaverseHeader = "Mobile coming soon"
             headerScale = 1
             headerTranslation = [-8, 0, 45]
