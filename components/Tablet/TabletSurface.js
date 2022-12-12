@@ -78,6 +78,7 @@ export default class TabletSurface {
         }
 
         let kaizen = this.buildRectangle(6, 3, 0xffffff, kaizenConfig.position, kaizenConfig.rotation)
+        kaizen.name = "kaizen"
 
         let metaConfig = {
             position: [this.tabletSurface.position.x-5, this.tabletSurface.position.y-2.25, this.tabletSurface.position.z-.15],
@@ -85,6 +86,7 @@ export default class TabletSurface {
         }
 
         let meta = this.buildRectangle(6, 3, 0xffffff, metaConfig.position, metaConfig.rotation)
+        meta.name = "meta"
 
         let clubhouseConfig = {
             position: [this.tabletSurface.position.x+1.15, this.tabletSurface.position.y+1.06, this.tabletSurface.position.z +.2],
@@ -92,6 +94,7 @@ export default class TabletSurface {
         }
 
         let clubhouse = this.buildRectangle(6, 3, 0xffffff, clubhouseConfig.position, clubhouseConfig.rotation)
+        clubhouse.name = "clubhouse"
 
         let sandboxConfig = {
             position: [this.tabletSurface.position.x+1.15, this.tabletSurface.position.y-2.19, this.tabletSurface.position.z+.4],
@@ -99,6 +102,7 @@ export default class TabletSurface {
         }
 
         let sandbox = this.buildRectangle(6, 3, 0xffffff, sandboxConfig.position, sandboxConfig.rotation)
+        sandbox.name = "sandbox"
 
         destinationGrid.add(kaizen)
         destinationGrid.add(meta)

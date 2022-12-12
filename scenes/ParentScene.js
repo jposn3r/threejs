@@ -25,7 +25,6 @@ import TWEEN from '@tweenjs/tween.js'
 // add shape to the screen
 
 export default class ParentScene {
-    // CONSTRUCTOR
 
     constructor(config) {
         var gridFloor = config.gridFloor
@@ -115,21 +114,26 @@ export default class ParentScene {
 
     setGui(gui) {
         // gui
+        console.log("gui yo")
+        console.log(gui)
+        var camera = this.camera
         if(gui) {
             let gui = new dat.GUI()
+            gui.add(camera.position, 'x')
+            gui.add(camera.position, 'y')
+            gui.add(camera.position, 'z')
+
+            gui.add(camera.rotation, 'x')
+            gui.add(camera.rotation, 'y')
+            gui.add(camera.rotation, 'z')
+
             this.gui = gui
 
             var camera = this.camera
 
             // add items to gui - why does this look weird?
 
-            this.addToGui(camera.position, 'x')
-            this.addToGui(camera.position, 'y')
-            this.addToGui(camera.position, 'z')
-
-            this.addToGui(camera.rotation, 'x')
-            this.addToGui(camera.rotation, 'y')
-            this.addToGui(camera.rotation, 'z')
+            
         }
     }
 

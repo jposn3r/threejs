@@ -9,7 +9,12 @@ import InventoryScene from './scenes/InventoryScene'
 import SandboxScene from './scenes/SandboxScene'
 import RequestManager from './helpers/RequestManager'
 
-let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
+// What should main do?
+// initiate scene controller
+// send input to world
+// show GUI
+
+let windowInnerHeight, windowInnerWidth = 0
 
 // Make a networking library to make requests ------------
 // let cocktailDbAPI = {
@@ -34,17 +39,6 @@ let windowInnerHeight, windowInnerWidth, scaleMultiplyer = 0
 document.addEventListener('keydown', keyDownHandler, false)
 document.addEventListener('mousedown', onDocumentMouseDown, false)
 
-// scaleMultiplier is used to change object size based on window width
-function updateScaleMultiplier() {
-	windowInnerWidth = window.innerWidth
-	if(windowInnerWidth < 700) {
-		scaleMultiplyer = .5
-	} else {
-		scaleMultiplyer = 1
-	}
-}
-updateScaleMultiplier()
-
 //if the user resizes the window you have to adjust the scene to fit within it
 window.addEventListener('resize', function() {
 	windowInnerHeight = window.innerHeight
@@ -53,26 +47,24 @@ window.addEventListener('resize', function() {
 	renderer.setSize(windowInnerWidth, windowInnerHeight);
 	camera.aspect = windowInnerWidth / windowInnerHeight;
 	camera.updateProjectionMatrix();
-	updateScaleMultiplier()
 })
 
 // On click events
 
 // main menu click events - move to it's own file and load the menu independently
 const items = document.querySelectorAll('ul > li')
-	items.forEach(item => {
-			item.addEventListener('click',(e)=>{
-			// console.log(e.target.textContent)
-			console.log(e.target)
-			handleMenuEvent(e.target)
-		}
-	)
+items.forEach(item => {
+	item.addEventListener('click',(e)=>{
+		// console.log(e.target.textContent)
+		console.log(e.target)
+		handleMenuEvent(e.target)
+	})
 })
 
 // main scene
 let mainSceneConfig = {
 	name: "main-scene",
-	gui: false, // TODO: fix bug with gui
+	gui: false,
 	gridFloor: false,
 	torusGroup: false,
 	focusTorus: false,
@@ -82,7 +74,7 @@ let mainSceneConfig = {
 // meta scene
 let metaSceneConfig = {
 	name: "meta-scene",
-	gui: false, // TODO: fix bug with gui
+	gui: false,
 	background: '',
 	gridFloor: true
 }
@@ -90,7 +82,7 @@ let metaSceneConfig = {
 // inventory scene
 let inventorySceneConfig = {
 	name: "inventory-scene",
-	gui: false, // TODO: fix bug with gui
+	gui: false,
 	background: '',
 	gridFloor: false,
 	// background: './assets/wiami-bg.jpeg'
@@ -99,7 +91,7 @@ let inventorySceneConfig = {
 // loading scene
 let loadingSceneConfig = {
 	name: "loading-scene",
-	gui: false, // TODO: fix bug with gui
+	gui: false,
 	background: '',
 	gridFloor: true
 }
@@ -107,7 +99,7 @@ let loadingSceneConfig = {
 // loading scene
 let sandboxSceneConfig = {
 	name: "sandbox-scene",
-	gui: false, // TODO: fix bug with gui
+	gui: false,
 	background: '',
 	gridFloor: true
 }
@@ -116,7 +108,7 @@ let mainScene = new MainScene(mainSceneConfig)
 let metaScene = new MetaScene(metaSceneConfig)
 let inventoryScene = new InventoryScene(inventorySceneConfig)
 // let loadingScene = new LoadingScene(loadingSceneConfig)
-let sandboxScene = new SandboxScene(loadingSceneConfig)
+let sandboxScene = new SandboxScene(sandboxSceneConfig)
 
 let currentScene = mainScene
 currentScene.setSceneObjects()
@@ -205,8 +197,9 @@ function onDocumentMouseDown(event) {
 	var intersects = raycaster.intersectObjects( scene.children )
 
 	if ( intersects.length > 0 ) {
-		// console.log(intersects)
+		console.log(intersects)
 		let object = intersects[0].object
+		console.log("new object: " + object.name)
 		console.log(object)
 	}
 }
