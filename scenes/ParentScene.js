@@ -270,6 +270,7 @@ export default class ParentScene {
         this.scene.add(cube);
     }
 
+
     // TEXT
 
      // load 3d text - this should be somewhere else to be used by every scene
@@ -347,6 +348,4 @@ export default class ParentScene {
             this.mixers[i].update(clockDelta)
         }
     }
-
-
 }

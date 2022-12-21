@@ -226,6 +226,8 @@ function log(text) {
 }
 
 function keyDownHandler(event) {
+	console.log("\nKeycode: ")
+	console.log(event.keyCode)
 	switch (event.keyCode) {
 	case 87: // w
 		break
@@ -255,20 +257,15 @@ function keyDownHandler(event) {
 }
 
 function enterKeyHandler() {
-	scene = new WilderWorldScene(mainSceneConfig)
-	if(sceneState.name == 'landing') {
-	}
-	// currentScene.toggleGridFloor()
+	console.log("enter key handler")
 }
 
 function rightKeyHandler() {
-	if(sceneState.name == 'landing') {
-	}
+	console.log("right key handler")
 }
 
 function leftKeyHandler() {
-	if(sceneState.name == 'landing') {
-	}
+	console.log("left key handler")
 }
 
 // move camera and controls to new scene location
