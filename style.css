@@ -141,3 +141,13 @@ li:hover {
     min-width: 150px; 
   }
 }
+
+/*  Start of ANIME JS experiment */
+
+.square {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  left: 0;
+
+}

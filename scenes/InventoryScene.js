@@ -38,7 +38,7 @@ export default class InventoryScene extends ParentScene {
             this.isLoaded = true
 
             // Parking lot
-            this.loadGLTF(this.scene, '/parking-garage/scene.gltf', 'parking-garage-center', 10, {x: 0, y: 0, z: -5}, false, 0, 1.5, 0)
+            // this.loadGLTF(this.scene, '/parking-garage/scene.gltf', 'parking-garage-center', 10, {x: 0, y: 0, z: -5}, false, 0, 1.5, 0)
 
             // Bikes
             this.loadGLTF(this.scene, '/akira-bike/scene.gltf', 'akira-bike', 16, {x: 1, y: 37, z: -17}, false, 0, 1, 0)
@@ -72,7 +72,7 @@ export default class InventoryScene extends ParentScene {
         let headerScale = 4.5
         let headerTranslation = [-18, 0, 42]
         if(window.innerWidth > 700) {
-            metaverseHeader = 'The Clubhouse'
+            // metaverseHeader = 'The Clubhouse'
         } else {
             metaverseHeader = "Mobile coming soon"
             headerScale = 1

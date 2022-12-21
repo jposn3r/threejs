@@ -84,7 +84,7 @@ let inventorySceneConfig = {
 	name: "inventory-scene",
 	gui: false,
 	background: '',
-	gridFloor: false,
+	gridFloor: true,
 	// background: './assets/wiami-bg.jpeg'
 }
 
@@ -140,13 +140,6 @@ var mouse = new THREE.Vector2()
 // animation mixers array - https://www.mixamo.com - for more animations and models
 
 let mixers = []
-
-function buildBoxGeometry(scaleX = 1, scaleY = 1, scaleZ = 1, texture = new THREE.MeshBasicMaterial()) {
-	return new THREE.Mesh(
-		new THREE.BoxGeometry(scaleX,scaleY,scaleX),
-		new THREE.MeshBasicMaterial({map: texture})
-	)
-}
 
 // set positions - figure out why I need this :sweat-smile:
 currentScene.updateCameraPosition([0, 18, 90], 50, 1)

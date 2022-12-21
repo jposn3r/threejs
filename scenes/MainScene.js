@@ -41,7 +41,6 @@ export default class MainScene extends ParentScene {
                 this.loadGLTF(this.scene, '/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
                 this.loadGLTF(this.scene, '/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
                 this.loadGLTF(this.scene, '/death-star/scene.gltf', 'death-star', .5, {x: 80, y: 20, z: -80}, false, 1, 0, 0)
-                this.loadGLTF(this.scene, '/ready-player-jake.glb', 'rp-jake', 6.5, {x: 2.5, y: -2.5, z: 30}, false, 0, 0, 0)
                 
             } else {
                 this.loadGLTF(this.scene, '/portal-night-version/scene.gltf', 'portal', .003, {x: 0, y: 0, z: 30}, true, 0, 1.5)
@@ -77,9 +76,10 @@ export default class MainScene extends ParentScene {
         let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json'
         let metaverseHeader = ''
         let headerScale = 2
-        let headerTranslation = [-16, 0, 45]
+        let headerTranslation = [-12, 0, 45]
+
         if(window.innerWidth > 700) {
-            metaverseHeader = 'Welcome to the Metaverse'
+            metaverseHeader = 'Explore the Metaverse'
         } else {    
             metaverseHeader = "Mobile coming soon"
             headerScale = 1.2
