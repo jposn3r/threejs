@@ -192,8 +192,16 @@ function onDocumentMouseDown(event) {
 	if ( intersects.length > 0 ) {
 		console.log(intersects)
 		let object = intersects[0].object
-		console.log("new object: " + object.name)
+		var name = object.name
+		console.log("new object: " + name)
 		console.log(object)
+		if(name === "tierra_02_-_Default_0") {
+			console.log("glow effect on object")
+		} else if(name.slice(0,9) === "DeathStar") {
+			console.log("move to death star")
+		} else if(name.slice(0,6) === "sakura") {
+			console.log("move to pink tree")
+		}
 	}
 }
 

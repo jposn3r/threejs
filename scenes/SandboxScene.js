@@ -55,7 +55,7 @@ export default class SandboxScene extends ParentScene {
 
     setItemState() {
         if(!this.isLoaded) {
-            this.loadGLTF(this.scene, '/ready-player-jake.glb', 'rp-jake', 2.25, {x: 0, y: 10, z: 72}, false, 0, 0, 0)
+            this.loadGLTF(this.scene, '/ready-player-jake.glb', 'rp-jake', 1.9, {x: 0, y: 10, z: 75}, false, 0, 0, 0)
         }
     }
 
