@@ -38,16 +38,18 @@ let windowInnerHeight, windowInnerWidth = 0
 // document event listeners
 document.addEventListener('keydown', keyDownHandler, false)
 document.addEventListener('mousedown', onDocumentMouseDown, false)
-// document.addEventListener('mousemove', onDocumentMouseMove, false)
+document.addEventListener('mousemove', onDocumentMouseMove, false)
 
 //if the user resizes the window you have to adjust the scene to fit within it
 window.addEventListener('resize', function() {
 	windowInnerHeight = window.innerHeight
 	windowInnerWidth = window.innerWidth
 	console.log("\nWidth: " + windowInnerWidth)
-	renderer.setSize(windowInnerWidth, windowInnerHeight);
-	camera.aspect = windowInnerWidth / windowInnerHeight;
-	camera.updateProjectionMatrix();
+	renderer.setSize(windowInnerWidth, windowInnerHeight)
+	if(typeof camera !== 'undefined') {
+		camera.aspect = windowInnerWidth / windowInnerHeight
+		camera.updateProjectionMatrix()
+	}
 })
 
 // On click events
@@ -144,9 +146,6 @@ var mouse = new THREE.Vector2()
 
 let mixers = []
 
-// set positions - figure out why I need this :sweat-smile:
-currentScene.updateCameraPosition([0, 18, 90], 50, 1)
-
 // Add stars
 Array(2000).fill().forEach(addStar)
 
@@ -202,6 +201,9 @@ function onDocumentMouseMove(event) {
 				console.log("hover death star")
 			} else if(name.slice(0,6) === "sakura") {
 				console.log("hover pink tree")
+			} else if(name === "test-sphere") {
+				var sphere = scene.getObjectByName("test-sphere")
+				sphere.material.color.set(Math.random() * 0xffffff)
 			}
 		}
 		mouseoverState = name
@@ -226,13 +228,7 @@ function onDocumentMouseDown(event) {
 		var name = object.name
 		console.log("new object: " + name)
 		console.log(object)
-		if(name === "tierra_02_-_Default_0") {
-			console.log("glow effect on object")
-		} else if(name.slice(0,9) === "DeathStar") {
-			console.log("move to death star")
-		} else if(name.slice(0,6) === "sakura") {
-			console.log("move to pink tree")
-		}
+		currentScene.handleClick(name)
 	}
 }
 

@@ -85,6 +85,7 @@ export default class ParentScene {
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
         this.camera.name = "camera-1"
         this.cameraFocus = "origin"
+        this.updateCameraPosition([0, 18, 90], 50, 1)
     }
 
     // update camera position
@@ -347,5 +348,9 @@ export default class ParentScene {
         for (let i = 0, l = this.mixers.length; i < l; i ++) {
             this.mixers[i].update(clockDelta)
         }
+    }
+
+    handleClick(name) {
+        console.log("received event: " + name)
     }
 }
