@@ -38,10 +38,9 @@ export default class MainScene extends ParentScene {
 
             // load intitial layout into focus area
             if(window.innerWidth > 700) {
-                this.loadGLTF(this.scene, '/planet-earth/scene.gltf', 'planet-earth', 5, {x: -60, y: -15, z: -100}, true, 0, 0)
+                this.loadGLTF(this.scene, '/planet-earth/scene.gltf', 'planet-earth', 2, {x: -60, y: 10, z: -100}, true, 0, 0)
                 this.loadGLTF(this.scene, '/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
                 this.loadGLTF(this.scene, '/death-star/scene.gltf', 'death-star', .5, {x: 80, y: 20, z: -80}, false, 1, 0, 0)
-                
             } else {
                 this.loadGLTF(this.scene, '/portal-night-version/scene.gltf', 'portal', .003, {x: 0, y: 0, z: 30}, true, 0, 1.5)
             }
