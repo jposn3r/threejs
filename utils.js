@@ -1,4 +1,4 @@
-export default function openWebsite(url = "", newTab = true) {
+export function openWebsite(url = "", newTab = true) {
 	console.log("url: " + url)
     // if(newTab) {
 	// 	window.open(url, '_blank')

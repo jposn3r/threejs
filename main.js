@@ -38,6 +38,7 @@ let windowInnerHeight, windowInnerWidth = 0
 // document event listeners
 document.addEventListener('keydown', keyDownHandler, false)
 document.addEventListener('mousedown', onDocumentMouseDown, false)
+// document.addEventListener('mousemove', onDocumentMouseMove, false)
 
 //if the user resizes the window you have to adjust the scene to fit within it
 window.addEventListener('resize', function() {
@@ -125,6 +126,8 @@ let cameraFocus = mainScene.cameraFocus
 // controls to move the scene
 let controls = mainScene.controls
 
+let mouseoverState = ""
+
 // What stays in this file? ------------------------------------------
 
 // clock used to track time deltas
@@ -175,6 +178,34 @@ function addStar() {
 	const [x, y, z] = Array(3).fill().map(()=> THREE.MathUtils.randFloatSpread(1000));
 	star.position.set(x,y,z);
 	scene.add(star);
+}
+function onDocumentMouseMove(event) {
+	// event.preventDefault();
+
+	mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1
+	mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1
+
+	raycaster.setFromCamera( mouse, camera )
+
+	var intersects = raycaster.intersectObjects( scene.children )
+	if ( intersects.length > 0 ) {
+		console.log(intersects)
+		
+		let object = intersects[0].object
+		var name = object.name
+		console.log("new object: " + name)
+		console.log(object)
+		if(mouseoverState !== name) {
+			if(name === "tierra_02_-_Default_0") {
+				console.log("glow effect on object")
+			} else if(name.slice(0,9) === "DeathStar") {
+				console.log("hover death star")
+			} else if(name.slice(0,6) === "sakura") {
+				console.log("hover pink tree")
+			}
+		}
+		mouseoverState = name
+	}
 }
 
 // handle mousedown events
