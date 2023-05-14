@@ -8,15 +8,6 @@ export default class MainScene extends ParentScene {
         super(config)
         // read config values
         this.isLoaded = false
-        var torusGroup = config.torusGroup
-        var focusTorus = config.focusTorus
-
-        if(torusGroup == true) {
-            this.addTorusGroupToScene()
-        }
-        if(focusTorus == true) {
-            this.addFocusTorus()
-        }
         this.setSceneStates()
         this.setMetaverseLogo()
         this.initTablet()
@@ -99,71 +90,6 @@ export default class MainScene extends ParentScene {
         sphere.position.set(position[0], position[1], position[2])
         sphere.name = name
         return sphere
-    }
-
-    // comment here
-    addTorusGroupToScene() {
-        // build and add torus rings
-        let torusGroup = new THREE.Group()
-
-        let geometry = new THREE.TorusGeometry(9, 0.5, 10, 100)
-        let blueMaterial = new THREE.MeshStandardMaterial({ color: 0x00dadf})
-
-        let torus = new THREE.Mesh(geometry, blueMaterial)
-        torus.name = "torus1"
-        let torus2 = new THREE.Mesh(geometry, blueMaterial)
-        torus2.name = "torus2"
-        let torus3 = new THREE.Mesh(geometry, blueMaterial)
-        torus3.name = "torus3"
-
-        this.torus = torus
-        this.torus2 = torus2
-        this.torus3 = torus3
-
-        torusGroup.add(this.torus)
-        torusGroup.add(this.torus2)
-        torusGroup.add(this.torus3)
-        torusGroup.name = "torus-group"
-
-        torusGroup.position.set(40, 22, -10)
-
-        this.torusGroup = torusGroup
-        this.scene.add(torusGroup)
-    }
-
-    // comment here
-    addFocusTorus() {
-        // focus torus
-        let focusTorusGeometry = new THREE.TorusGeometry(5, 0.25, 5)
-        let focusTorusMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff})
-        let focusTorus = new THREE.Mesh(focusTorusGeometry, focusTorusMaterial)
-
-        focusTorus.rotation.x = -1.575
-        focusTorus.rotation.y = 0
-        focusTorus.rotation.z = 0
-
-        focusTorus.position.set(0, 0, 41)
-
-        this.focusTorus = focusTorus
-
-        this.scene.add(focusTorus)
-    }
-
-    // animate torus group rotations
-    animateTorusGroup() {
-        if(this.getObjectByName("torus-group")) {
-            this.torus.rotation.x += 0.01
-            this.torus.rotation.y += 0.01
-            this.torus.rotation.z += 0.01
-            
-            this.torus2.rotation.x -= 0.02
-            this.torus2.rotation.y -= 0.02
-            this.torus2.rotation.z -= 0.02
-            
-            this.torus3.rotation.x -= 0.02
-            this.torus3.rotation.y += 0.02
-            this.torus3.rotation.z -= 0.02
-        }
     }
 
     // comment here

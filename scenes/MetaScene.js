@@ -1,18 +1,22 @@
 import * as THREE from 'three'
 import { DoubleSide } from 'three'
 import ParentScene from './ParentScene'
+import SceneController from '../helpers/SceneController'
 
 export default class MetaScene extends ParentScene {
     constructor(config) {
         super(config)
         this.isLoaded = false
         this.setSceneStates()
-        this.setMetaverseLogo()
+        let sceneController = new SceneController()
+        sceneController.testLogs()
+        sceneController.switchScene("test 1")
+        sceneController.loadScene("test 2")
     }
 
     setSceneObjects() {
         if(this.isLoaded == false) {
-            this.loadGLTF(this.scene, '/oculus-quest-2/scene.gltf', 'quest-2', 50, {x: 0, y: 14, z: 20}, false, 0.1, 0, 0)
+            // this.loadGLTF(this.scene, '/oculus-quest-2/scene.gltf', 'quest-2', 50, {x: 0, y: 14, z: 20}, false, 0.1, 0, 0)
             
             this.isLoaded = true
         }

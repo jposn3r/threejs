@@ -2,10 +2,12 @@ import './style.css'
 import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 import MainScene from './scenes/MainScene'
+import WilderWorldScene from './scenes/WilderWorldScene'
 import MetaScene from './scenes/MetaScene'
+import LoadingScene from './scenes/LoadingScene'
 import InventoryScene from './scenes/InventoryScene'
 import SandboxScene from './scenes/SandboxScene'
-import SceneController from './helpers/SceneController'
+import RequestManager from './helpers/RequestManager'
 
 // What should main do?
 // initiate scene controller
@@ -13,6 +15,30 @@ import SceneController from './helpers/SceneController'
 // show GUI
 
 let windowInnerHeight, windowInnerWidth = 0
+
+// Make a networking library to make requests ------------
+// let cocktailDbAPI = {
+// 	url: "https://the-cocktail-db.p.rapidapi.com/filter.php?i=Gin",
+// 	headers: {
+// 		'X-RapidAPI-Key': '',
+// 		'X-RapidAPI-Host': 'the-cocktail-db.p.rapidapi.com'
+// 	}
+// }
+
+// let requestConfig = {
+// 		url: cocktailDbAPI.url,
+// 		method: "GET",
+// 		headers: cocktailDbAPI.headers
+// }
+// let requestManager = new RequestManager()
+// requestManager.makeRequest(requestConfig)
+// console.log("\nwe did it")
+// console.log(requestManager)
+
+// document event listeners
+document.addEventListener('keydown', keyDownHandler, false)
+document.addEventListener('mousedown', onDocumentMouseDown, false)
+document.addEventListener('mousemove', onDocumentMouseMove, false)
 
 //if the user resizes the window you have to adjust the scene to fit within it
 window.addEventListener('resize', function() {
@@ -26,9 +52,17 @@ window.addEventListener('resize', function() {
 	}
 })
 
-// ===================================================================
-// ===================================================================
-// ===================================================================
+// On click events
+
+// main menu click events - move to it's own file and load the menu independently
+const items = document.querySelectorAll('ul > li')
+items.forEach(item => {
+	item.addEventListener('click',(e)=>{
+		// console.log(e.target.textContent)
+		console.log(e.target)
+		handleMenuEvent(e.target)
+	})
+})
 
 // main scene
 let mainSceneConfig = {
@@ -73,8 +107,8 @@ let sandboxSceneConfig = {
 	gridFloor: true
 }
 
-// let mainScene = new MainScene(mainSceneConfig)
-let mainScene = new MetaScene(metaSceneConfig)
+let mainScene = new MainScene(mainSceneConfig)
+let metaScene = new MetaScene(metaSceneConfig)
 let inventoryScene = new InventoryScene(inventorySceneConfig)
 // let loadingScene = new LoadingScene(loadingSceneConfig)
 let sandboxScene = new SandboxScene(sandboxSceneConfig)
@@ -83,10 +117,6 @@ let currentScene = mainScene
 currentScene.setSceneObjects()
 
 let scene = mainScene.scene
-
-// ===================================================================
-// ===================================================================
-// ===================================================================
 
 // renderer
 let renderer = mainScene.renderer
@@ -148,9 +178,129 @@ function addStar() {
 	star.position.set(x,y,z);
 	scene.add(star);
 }
+function onDocumentMouseMove(event) {
+	// event.preventDefault();
+
+	mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1
+	mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1
+
+	raycaster.setFromCamera( mouse, camera )
+
+	var intersects = raycaster.intersectObjects( scene.children )
+	if ( intersects.length > 0 ) {
+		console.log(intersects)
+		
+		let object = intersects[0].object
+		var name = object.name
+		console.log("new object: " + name)
+		console.log(object)
+		if(mouseoverState !== name) {
+			if(name === "tierra_02_-_Default_0") {
+				console.log("glow effect on object")
+			} else if(name.slice(0,9) === "DeathStar") {
+				console.log("hover death star")
+			} else if(name.slice(0,6) === "sakura") {
+				console.log("hover pink tree")
+			} else if(name === "test-sphere") {
+				var sphere = scene.getObjectByName("test-sphere")
+				sphere.material.color.set(Math.random() * 0xffffff)
+			}
+		}
+		mouseoverState = name
+	}
+}
+
+// handle mousedown events
+
+function onDocumentMouseDown(event) {
+	event.preventDefault();
+
+	mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1
+	mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1
+
+	raycaster.setFromCamera( mouse, camera )
+
+	var intersects = raycaster.intersectObjects( scene.children )
+
+	if ( intersects.length > 0 ) {
+		console.log(intersects)
+		let object = intersects[0].object
+		var name = object.name
+		console.log("new object: " + name)
+		console.log(object)
+		currentScene.handleClick(name)
+	}
+}
+
+// handleMenuEvent is for the main navbar
+function handleMenuEvent(itemSelected) {
+	let textContent = itemSelected.textContent
+	console.log(itemSelected)
+	var currentMenuItem = document.getElementsByClassName('menu-selected')
+	currentMenuItem[0].classList.remove("menu-selected")
+	if(textContent == "Meta") { // todo primary
+		currentScene = metaScene
+	} else if(textContent == "Kaizen") {
+		currentScene = mainScene
+	} else if(textContent == "Loading") {
+		currentScene = loadingScene
+	} else if(textContent == "Clubhouse") {
+		currentScene = inventoryScene
+	} else if(textContent == "Sandbox") {
+		currentScene = sandboxScene
+	}
+	resetCamera()
+	if(!currentScene.isLoaded) {
+		currentScene.setSceneObjects()
+	}
+	itemSelected.classList.add("menu-selected")
+}
 
 function log(text) {
 	console.log("\n" + text)
+}
+
+function keyDownHandler(event) {
+	console.log("\nKeycode: ")
+	console.log(event.keyCode)
+	switch (event.keyCode) {
+	case 87: // w
+		break
+	case 65: // a
+		break
+	case 83: // s
+		break
+	case 68: // d
+		break
+	case 38: // up
+		break
+	case 37: // left
+		leftKeyHandler()
+		break
+	case 40: // down
+		break
+	case 39: // right
+		rightKeyHandler()
+		break
+	case 13: // enter
+		enterKeyHandler()
+		break
+	case 27: // escape
+		resetCamera()
+		break
+	}
+}
+
+function enterKeyHandler() {
+	console.log("enter key handler")
+}
+
+function rightKeyHandler() {
+	console.log("right key handler")
+}
+
+function leftKeyHandler() {
+	console.log("left key handler")
 }
 
 // move camera and controls to new scene location
