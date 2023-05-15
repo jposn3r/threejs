@@ -1,16 +1,11 @@
 import './style.css'
 import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
-import MainScene from './scenes/MainScene'
 import MetaScene from './scenes/MetaScene'
-import InventoryScene from './scenes/InventoryScene'
-import SandboxScene from './scenes/SandboxScene'
 import SceneController from './helpers/SceneController'
 
 // What should main do?
 // initiate scene controller
-// send input to world
-// show GUI
 
 let windowInnerHeight, windowInnerWidth = 0
 
@@ -28,7 +23,9 @@ window.addEventListener('resize', function() {
 
 // ===================================================================
 // ===================================================================
-// ===================================================================
+// ===================================================================\
+
+let sceneController = new SceneController()
 
 // main scene
 let mainSceneConfig = {
@@ -75,9 +72,9 @@ let sandboxSceneConfig = {
 
 // let mainScene = new MainScene(mainSceneConfig)
 let mainScene = new MetaScene(metaSceneConfig)
-let inventoryScene = new InventoryScene(inventorySceneConfig)
+// let inventoryScene = new InventoryScene(inventorySceneConfig)
 // let loadingScene = new LoadingScene(loadingSceneConfig)
-let sandboxScene = new SandboxScene(sandboxSceneConfig)
+// let sandboxScene = new SandboxScene(sandboxSceneConfig)
 
 let currentScene = mainScene
 currentScene.setSceneObjects()
@@ -97,8 +94,6 @@ let cameraFocus = mainScene.cameraFocus
 
 // controls to move the scene
 let controls = mainScene.controls
-
-let mouseoverState = ""
 
 // What stays in this file? ------------------------------------------
 
@@ -149,16 +144,14 @@ function addStar() {
 	scene.add(star);
 }
 
-function log(text) {
-	console.log("\n" + text)
-}
+// move this to scene controller
 
 // move camera and controls to new scene location
 function animateToScene(sceneName) {
 	console.log("\nanimateToScene: " + sceneName)
 	console.log(sceneStates[sceneName])
 	let scenePosition = sceneStates[sceneName].cameraPosition
-	let controlsTargetVector = sceneStates[sceneName].controlsTargetVector
+	// let controlsTargetVector = sceneStates[sceneName].controlsTargetVector
 
 	// tween test area
 	var controlsPosition = { x : controls.target.x, y: controls.target.y, z: controls.target.z}
@@ -193,6 +186,8 @@ function animateToScene(sceneName) {
 	sceneState = sceneStates[sceneName]
 }
 
+// move this to scene controller
+
 function animate() {
 	requestAnimationFrame(animate)
 
@@ -209,3 +204,5 @@ function animate() {
 }
 
 animate()
+
+let test = sceneController.getCurrentScene()

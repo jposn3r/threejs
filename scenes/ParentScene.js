@@ -8,22 +8,6 @@ import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitCon
 import * as dat from 'dat.gui'
 import TWEEN from '@tweenjs/tween.js'
 
-// Notes
-
-// What functionality does this need?
-// create a scene, renderer, controls and camera
-
-// add objects to the scene
-// animate objects in the scene
-
-// move the camera
-// add multiple cameras
-// switch cameras
-
-// add text to the screen
-
-// add shape to the screen
-
 export default class ParentScene {
 
     constructor(config) {
