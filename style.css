@@ -203,17 +203,17 @@ li:hover {
 
 #left-box {
   /* styles for the left box... */
-  background-color: rgba(255, 0, 0, 0.5);
+  /* background-color: rgba(255, 0, 0, 0.5); */
 }
 
 #middle-box {
   /* styles for the middle box... */
-  background-color: rgba(0, 255, 0, 0.5);
+  /* background-color: rgba(0, 255, 0, 0.5); */
 }
 
 #right-box {
   /* styles for the right box... */
-  background-color: rgba(0, 0, 255, 0.5);
+  /* background-color: rgba(0, 0, 255, 0.5); */
 }
 
 #left-button, #right-button {
