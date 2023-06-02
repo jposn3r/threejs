@@ -160,19 +160,35 @@ li:hover {
   text-align: center;
   font-size: 2em; /* you may want to adjust the size based on your requirements */
   color: #fff;
-  text-shadow: 0 0 5px #00e600, 0 0 10px #00e600, 0 0 15px #00e600, 0 0 20px #00e600;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff, 0 0 20px #ffffff;
   font-family: 'Courier New', Courier, monospace; /* Cyberpunk-style monospace font */
-  border: 3px solid #fff;
+  border: 0px 3px solid #fff;
   padding: 10px;
   box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000;
-  animation: glow 4s linear infinite;
+  animation: glow 10s linear infinite;
+} 
+
+#established {
+  top: 95%;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 1.5em; /* you may want to adjust the size based on your requirements */
+  color: #fff;
+  text-shadow: 0 0 5px #00ffe1, 0 0 10px #00ffe1, 0 0 15px #00ffe1, 0 0 20px #00ffe1;
+  font-family: 'Courier New', Courier, monospace; /* Cyberpunk-style monospace font */
+  border: 0px 1px solid #fff;
+  padding: 10px;
+  box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000;
+  animation: glow 10s linear infinite;
 }
 
 @keyframes glow {
-  0% { box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000; }
-  33% { box-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00, 0 0 20px #00ff00; }
-  66% { box-shadow: 0 0 5px #0000ff, 0 0 10px #0000ff, 0 0 15px #0000ff, 0 0 20px #0000ff; }
-  100% { box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000; }
+  0% { box-shadow: 0 0 3px #ff0000, 0 0 5px #ff0000, 0 0 7px #ff0000, 0 0 10px #ff0000; }
+  33% { box-shadow: 0 0 3px #00ff00, 0 0 5px #00ff00, 0 0 7px #00ff00, 0 0 10px #00ff00; }
+  66% { box-shadow: 0 0 3px #0000ff, 0 0 5px #0000ff, 0 0 7px #0000ff, 0 0 10px #0000ff; }
+  100% { box-shadow: 0 0 3px #ff0000, 0 0 5px #ff0000, 0 0 7px #ff0000, 0 0 10px #ff0000; }
 }
 
 .container {
