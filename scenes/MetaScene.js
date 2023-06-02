@@ -17,7 +17,7 @@ export default class MetaScene extends ParentScene {
     setSceneObjects() {
         if(this.isLoaded == false) {
             // this.loadGLTF(this.scene, '/oculus-quest-2/scene.gltf', 'quest-2', 50, {x: 0, y: 14, z: 20}, false, 0.1, 0, 0)
-            
+            this.loadGLTF(this.scene, '/ready-player-jake.glb', 'rp-jake', 1, {x: 0, y: 0, z: 0}, false, 0, 0, 0)
             this.isLoaded = true
         }
     }
@@ -58,6 +58,6 @@ export default class MetaScene extends ParentScene {
 
     // comment here
     animateScene(clockDelta) {
-        this.rotateObject('quest-2', [0, .0025, 0])
+        this.rotateObject('rp-jake', [0, .0025, 0])
     }
 }

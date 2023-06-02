@@ -1,6 +1,5 @@
 import * as THREE from 'three'
 import ParentScene from './ParentScene'
-import TabletSurface from '../components/Tablet/TabletSurface'
 import TWEEN from '@tweenjs/tween.js'
 
 export default class MainScene extends ParentScene {
@@ -10,18 +9,6 @@ export default class MainScene extends ParentScene {
         this.isLoaded = false
         this.setSceneStates()
         this.setMetaverseLogo()
-        this.initTablet()
-    }
-
-    initTablet() {
-        let config = {
-            headerText: "Welcome to the Metaverse",
-            destinations: ["Kaizen", "Meta", "Clubhouse", "Sandbox"],
-            dataSources: ["Twitter", "Google"],
-            translation: [10, 5, 45]
-        }
-        const tabletSurface = new TabletSurface(config)
-        // this.scene.add(tabletSurface.tabletSurfaceGroup) // uncomment to continue testing, still need to make one tablet accessible to all scenes somehow
     }
 
     setSceneObjects() {

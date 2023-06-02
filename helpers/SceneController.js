@@ -2,8 +2,6 @@ import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 import MainScene from '../scenes/MainScene'
 import MetaScene from '../scenes/MetaScene'
-import InventoryScene from '../scenes/InventoryScene'
-import SandboxScene from '../scenes/SandboxScene'
 
 class SceneController {
     constructor() {

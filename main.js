@@ -7,7 +7,37 @@ import SceneController from './helpers/SceneController'
 // What should main do?
 // initiate scene controller
 
-let windowInnerHeight, windowInnerWidth = 0
+let windowInnerHeight = window.innerHeight
+let windowInnerWidth =  window.innerWidth
+
+if(windowInnerWidth < 600) {
+	console.log("mobile bro")
+	// Create new button elements
+	var leftButton = document.createElement("button")
+	var rightButton = document.createElement("button")
+
+	// Set their IDs
+	leftButton.setAttribute("id", "left-button")
+	rightButton.setAttribute("id", "right-button")
+
+	// Set their text
+	leftButton.innerText = "Open Left"
+	rightButton.innerText = "Open Right"
+
+	// Append the buttons to the container
+	var container = document.querySelector(".container")
+	container.appendChild(leftButton)
+	container.appendChild(rightButton)
+	document.getElementById('left-button').addEventListener('click', function() {
+		document.getElementById('left-box').style.transform = 'translateX(0)'
+		document.getElementById('right-box').style.transform = 'translateX(100%)'
+	})
+	  
+	document.getElementById('right-button').addEventListener('click', function() {
+		document.getElementById('right-box').style.transform = 'translateX(0)'
+		document.getElementById('left-box').style.transform = 'translateX(-100%)'
+	})
+}
 
 //if the user resizes the window you have to adjust the scene to fit within it
 window.addEventListener('resize', function() {
@@ -27,16 +57,6 @@ window.addEventListener('resize', function() {
 
 let sceneController = new SceneController()
 
-// main scene
-let mainSceneConfig = {
-	name: "main-scene",
-	gui: false,
-	gridFloor: false,
-	torusGroup: false,
-	focusTorus: false,
-	background: ''
-}
-
 // meta scene
 let metaSceneConfig = {
 	name: "meta-scene",
@@ -45,36 +65,7 @@ let metaSceneConfig = {
 	gridFloor: true
 }
 
-// inventory scene
-let inventorySceneConfig = {
-	name: "inventory-scene",
-	gui: false,
-	background: '',
-	gridFloor: true,
-	// background: './assets/wiami-bg.jpeg'
-}
-
-// loading scene
-let loadingSceneConfig = {
-	name: "loading-scene",
-	gui: false,
-	background: '',
-	gridFloor: true
-}
-
-// loading scene
-let sandboxSceneConfig = {
-	name: "sandbox-scene",
-	gui: false,
-	background: '',
-	gridFloor: true
-}
-
-// let mainScene = new MainScene(mainSceneConfig)
 let mainScene = new MetaScene(metaSceneConfig)
-// let inventoryScene = new InventoryScene(inventorySceneConfig)
-// let loadingScene = new LoadingScene(loadingSceneConfig)
-// let sandboxScene = new SandboxScene(sandboxSceneConfig)
 
 let currentScene = mainScene
 currentScene.setSceneObjects()
@@ -93,7 +84,7 @@ let camera = mainScene.camera
 let cameraFocus = mainScene.cameraFocus
 
 // controls to move the scene
-let controls = mainScene.controls
+// let controls = mainScene.controls
 
 // What stays in this file? ------------------------------------------
 
@@ -128,8 +119,8 @@ function updateMixers(clockDelta) {
 }
 
 function resetCamera() {
-	cameraFocus = "origin"
-	animateToScene("landing")
+	// cameraFocus = "origin"
+	// animateToScene("landing")
 }
 
 // TODO: Move to new file
@@ -154,19 +145,19 @@ function animateToScene(sceneName) {
 	// let controlsTargetVector = sceneStates[sceneName].controlsTargetVector
 
 	// tween test area
-	var controlsPosition = { x : controls.target.x, y: controls.target.y, z: controls.target.z}
-	var controlsTarget = { x : controlsTargetVector[0], y: controlsTargetVector[1], z: controlsTargetVector[2]}
-	var controlsTween = new TWEEN.Tween(controlsPosition).to(controlsTarget, 1500)
+	// var controlsPosition = { x : controls.target.x, y: controls.target.y, z: controls.target.z}
+	// var controlsTarget = { x : controlsTargetVector[0], y: controlsTargetVector[1], z: controlsTargetVector[2]}
+	// var controlsTween = new TWEEN.Tween(controlsPosition).to(controlsTarget, 1500)
 
-	controlsTween.onUpdate(function() {
-		controls.target.x = controlsPosition.x
-		controls.target.y = controlsPosition.y
-		controls.target.z = controlsPosition.z
-	})
+	// controlsTween.onUpdate(function() {
+	// 	controls.target.x = controlsPosition.x
+	// 	controls.target.y = controlsPosition.y
+	// 	controls.target.z = controlsPosition.z
+	// })
 
-	controlsTween.start()
-	console.log("\n controls.target")
-	console.log(controls.target)
+	// controlsTween.start()
+	// console.log("\n controls.target")
+	// console.log(controls.target)
 	// controls.target = new THREE.Vector3(controlsTargetVector[0], controlsTargetVector[1], controlsTargetVector[2])
 
 	// tween test area
@@ -198,7 +189,7 @@ function animate() {
 	currentScene.animateScene(clockDelta)
 
 	updateMixers(clockDelta)
-	controls.update()
+	// controls.update()
 
 	renderer.render(currentScene.scene, camera)
 }

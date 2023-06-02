@@ -29,7 +29,7 @@ export default class ParentScene {
         }
 
         if(background !== "") {
-            this.setBackground(config.background)
+            this.setBackground(background)
         }
     }
 
@@ -69,7 +69,7 @@ export default class ParentScene {
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
         this.camera.name = "camera-1"
         this.cameraFocus = "origin"
-        this.updateCameraPosition([0, 18, 90], 50, 1)
+        this.updateCameraPosition([0, 1, 2.9], 50, 1)
     }
 
     // update camera position
@@ -92,7 +92,7 @@ export default class ParentScene {
         // controls
         // let controls = new OrbitControls(camera, renderer.domElement)
         // let controls = new MapControls(camera, renderer.domElement)
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+        // this.controls = new OrbitControls(this.camera, this.renderer.domElement)
     }
 
     // GUI 
@@ -230,8 +230,7 @@ export default class ParentScene {
      // comment here
      addGridFloor() {
         // grid floor
-        let gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00dadf)
-        // let gridHelper = new THREE.GridHelper(2000, 100, 0xffffff, 0x00E605)
+        let gridHelper = new THREE.GridHelper(20, 11, 0xffffff, 0x00dadf)
         gridHelper.name = "light-grid"
         this.scene.add(gridHelper)
     }

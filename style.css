@@ -151,3 +151,73 @@ li:hover {
   left: 0;
 
 }
+
+#username {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 2em; /* you may want to adjust the size based on your requirements */
+  color: #fff;
+  text-shadow: 0 0 5px #00e600, 0 0 10px #00e600, 0 0 15px #00e600, 0 0 20px #00e600;
+  font-family: 'Courier New', Courier, monospace; /* Cyberpunk-style monospace font */
+  border: 3px solid #fff;
+  padding: 10px;
+  box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000;
+  animation: glow 4s linear infinite;
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000; }
+  33% { box-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00, 0 0 20px #00ff00; }
+  66% { box-shadow: 0 0 5px #0000ff, 0 0 10px #0000ff, 0 0 15px #0000ff, 0 0 20px #0000ff; }
+  100% { box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000; }
+}
+
+.container {
+  display: flex;
+}
+
+.box {
+  width: 33.33%;
+  height: 100vh; /* take full viewport height */
+  transition: transform 0.5s ease-out; /* Animation effect */
+}
+
+#left-box {
+  /* styles for the left box... */
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+#middle-box {
+  /* styles for the middle box... */
+  background-color: rgba(0, 255, 0, 0.5);
+}
+
+#right-box {
+  /* styles for the right box... */
+  background-color: rgba(0, 0, 255, 0.5);
+}
+
+#left-button, #right-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%); /* Vertically center the buttons */
+  width: 100px;
+}
+
+#left-button {
+  left: 0;
+}
+
+#right-button {
+  right: 0;
+}
+
+/* Mobile phone section */
+@media (max-width: 800px) {
+  #middle-box {
+    display: none;
+  }
+}
