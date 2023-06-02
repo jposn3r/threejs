@@ -10,34 +10,34 @@ import SceneController from './helpers/SceneController'
 let windowInnerHeight = window.innerHeight
 let windowInnerWidth =  window.innerWidth
 
-if(windowInnerWidth < 600) {
-	console.log("mobile bro")
-	// Create new button elements
-	var leftButton = document.createElement("button")
-	var rightButton = document.createElement("button")
+// if(windowInnerWidth < 600) {
+// 	console.log("mobile bro")
+// 	// Create new button elements
+// 	var leftButton = document.createElement("button")
+// 	var rightButton = document.createElement("button")
 
-	// Set their IDs
-	leftButton.setAttribute("id", "left-button")
-	rightButton.setAttribute("id", "right-button")
+// 	// Set their IDs
+// 	leftButton.setAttribute("id", "left-button")
+// 	rightButton.setAttribute("id", "right-button")
 
-	// Set their text
-	leftButton.innerText = "Open Left"
-	rightButton.innerText = "Open Right"
+// 	// Set their text
+// 	leftButton.innerText = "Open Left"
+// 	rightButton.innerText = "Open Right"
 
-	// Append the buttons to the container
-	var container = document.querySelector(".container")
-	container.appendChild(leftButton)
-	container.appendChild(rightButton)
-	document.getElementById('left-button').addEventListener('click', function() {
-		document.getElementById('left-box').style.transform = 'translateX(0)'
-		document.getElementById('right-box').style.transform = 'translateX(100%)'
-	})
+// 	// Append the buttons to the container
+// 	var container = document.querySelector(".container")
+// 	container.appendChild(leftButton)
+// 	container.appendChild(rightButton)
+// 	document.getElementById('left-button').addEventListener('click', function() {
+// 		document.getElementById('left-box').style.transform = 'translateX(0)'
+// 		document.getElementById('right-box').style.transform = 'translateX(100%)'
+// 	})
 	  
-	document.getElementById('right-button').addEventListener('click', function() {
-		document.getElementById('right-box').style.transform = 'translateX(0)'
-		document.getElementById('left-box').style.transform = 'translateX(-100%)'
-	})
-}
+// 	document.getElementById('right-button').addEventListener('click', function() {
+// 		document.getElementById('right-box').style.transform = 'translateX(0)'
+// 		document.getElementById('left-box').style.transform = 'translateX(-100%)'
+// 	})
+// }
 
 //if the user resizes the window you have to adjust the scene to fit within it
 window.addEventListener('resize', function() {
