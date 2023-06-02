@@ -158,7 +158,7 @@ li:hover {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  font-size: 2em; /* you may want to adjust the size based on your requirements */
+  font-size: 3em; /* you may want to adjust the size based on your requirements */
   color: #fff;
   text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff, 0 0 20px #ffffff;
   font-family: 'Courier New', Courier, monospace; /* Cyberpunk-style monospace font */
