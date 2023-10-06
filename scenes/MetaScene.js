@@ -59,5 +59,15 @@ export default class MetaScene extends ParentScene {
     // comment here
     animateScene(clockDelta) {
         this.rotateObject('rp-jake', [0, .0025, 0])
+        var stars = this.stars
+        var starCount = this.starCount
+        // Update star positions
+        const positions = stars.geometry.attributes.position.array
+         // i = 0 = x axis, i = 1 = y axis, i = 2 = z axis
+        for (let i = 2; i < starCount * 3; i += 3) {
+            positions[i] += 1; // Move raindrops down
+            if (positions[i] > 500) positions[i] = -500; // Reset position when it goes out of bounds
+        }
+        stars.geometry.attributes.position.needsUpdate = true
     }
 }

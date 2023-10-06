@@ -62,7 +62,7 @@ let metaSceneConfig = {
 	name: "meta-scene",
 	gui: false,
 	background: '',
-	gridFloor: true
+	gridFloor: false
 }
 
 let mainScene = new MetaScene(metaSceneConfig)
@@ -103,7 +103,7 @@ var mouse = new THREE.Vector2()
 let mixers = []
 
 // Add stars
-Array(2000).fill().forEach(addStar)
+// Array(2000).fill().forEach(addStar)
 
 let sceneStates = mainScene.sceneStates
 
@@ -125,15 +125,15 @@ function resetCamera() {
 
 // TODO: Move to new file
 // background star effect
-function addStar() {
-	const geometry = new THREE.SphereGeometry(.5, 24, 24);
-	const material = new THREE.MeshStandardMaterial({color:0xffffff});
-	const star = new THREE.Mesh(geometry, material);
+// function addStar() {
+// 	const geometry = new THREE.SphereGeometry(.5, 24, 24);
+// 	const material = new THREE.MeshStandardMaterial({color:0xffffff});
+// 	const star = new THREE.Mesh(geometry, material);
 
-	const [x, y, z] = Array(3).fill().map(()=> THREE.MathUtils.randFloatSpread(1000));
-	star.position.set(x,y,z);
-	scene.add(star);
-}
+// 	const [x, y, z] = Array(3).fill().map(()=> THREE.MathUtils.randFloatSpread(1000));
+// 	star.position.set(x,y,z);
+// 	scene.add(star);
+// }
 
 // move this to scene controller
 
