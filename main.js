@@ -51,28 +51,28 @@ window.addEventListener('resize', function() {
 	}
 })
 
+const usernameElement = document.getElementById('username');
+const profileCardElement = document.getElementById('profile-card');
+
 // Profile card toggle functionality
 document.addEventListener('DOMContentLoaded', () => {
-	const usernameElement = document.getElementById('username');
-	const profileCardElement = document.getElementById('profile-card');
 
 	usernameElement.addEventListener('click', () => {
 		profileCardElement.classList.toggle('hidden');
 	});
 
-	profileCardElement.addEventListener('click', () => {
-		profileCardElement.classList.toggle('flip');
-	});
-
 	document.addEventListener('click', (event) => {
-		if (!profileCardElement.classList.contains('hidden') &&
-			!profileCardElement.contains(event.target) &&
-			!usernameElement.contains(event.target)) {
-			profileCardElement.classList.add('hidden');
-			profileCardElement.classList.remove('flip'); // Reset the flip when hiding
-		}
+		toggleHidden(profileCardElement, usernameElement, event)
 	});
 });
+
+function toggleHidden(element1, element2, event) { 
+	if (!element.classList.contains('hidden') &&
+		!element.contains(event.target) &&
+		!element2.contains(event.target)) {
+		element1.classList.add('hidden');
+	}
+}
 
 
 // ===================================================================
@@ -200,6 +200,27 @@ function animateToScene(sceneName) {
 
 	sceneState = sceneStates[sceneName]
 }
+
+// Add event listener for mouse click
+window.addEventListener('click', (event) => {
+	// Update mouse coordinates
+	mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+	mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+	// Update the picking ray with the camera and mouse position
+	raycaster.setFromCamera(mouse, camera);
+
+	// Calculate objects intersecting the picking ray
+	const intersects = raycaster.intersectObjects(scene.children);
+	for (let i = 0; i < intersects.length; i++) {
+		console.log(intersects[0].object)
+		if (intersects[i].object.type === 'SkinnedMesh') {
+			const profileCardElement = document.getElementById('profile-card');
+			profileCardElement.classList.toggle('hidden');
+			break;
+		}
+	}
+});
 
 // move this to scene controller
 

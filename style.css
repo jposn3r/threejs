@@ -189,7 +189,8 @@ li:hover {
     animation: glow 10s linear infinite;
     background-color: rgba(0, 0, 0, 0.8); /* Opaque background */
     filter: brightness(0.8);
-    min-width: 60%;
+    min-width: 400px;
+    max-width: 500px;
 }
 
     #profile-card h6 {
