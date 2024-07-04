@@ -153,21 +153,62 @@ li:hover {
 
 }
 
+.hidden {
+    display: none;
+}
+
 #username {
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  font-size: 3em; /* you may want to adjust the size based on your requirements */
-  color: #fff;
-  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff, 0 0 20px #ffffff;
-  font-family: 'Courier New', Courier, monospace; /* Cyberpunk-style monospace font */
-  border: 0px 3px solid #fff;
-  padding: 10px;
-  box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000;
-  animation: glow 10s linear infinite;
-} 
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 3em; /* you may want to adjust the size based on your requirements */
+    color: #fff;
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff, 0 0 20px #ffffff;
+    font-family: "Audiowide", sans-serif; /* Cyberpunk-style monospace font */
+    border: 0px 3px solid #fff;
+    padding: 10px;
+    box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000;
+    animation: glow 10s linear infinite;
+    cursor: pointer;
+}
+
+#profile-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 3em; /* you may want to adjust the size based on your requirements */
+    color: #fff;
+    font-family: "Audiowide", sans-serif; /* Cyberpunk-style monospace font */
+    border: 0px 3px solid #fff;
+    padding: 10px;
+    box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000;
+    animation: glow 10s linear infinite;
+    background-color: rgba(0, 0, 0, 0.8); /* Opaque background */
+    filter: brightness(0.8);
+    min-width: 60%;
+}
+
+    #profile-card h6 {
+        margin-top: 0px;
+        padding-top: 0px;
+        font-size: 18px;
+        color: white;
+    }
+
+        #profile-card h6 a {
+            color: white; /* Keep link color white */
+            text-decoration: none; /* Remove underline */
+        }
+
+            #profile-card h6 a:hover {
+                color: #00ffe1; /* Optional: Change color on hover for a cyberpunk effect */
+                text-decoration: underline; /* Optional: Add underline on hover */
+            }
+
 
 #established {
   top: 95%;

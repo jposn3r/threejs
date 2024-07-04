@@ -51,6 +51,30 @@ window.addEventListener('resize', function() {
 	}
 })
 
+// Profile card toggle functionality
+document.addEventListener('DOMContentLoaded', () => {
+	const usernameElement = document.getElementById('username');
+	const profileCardElement = document.getElementById('profile-card');
+
+	usernameElement.addEventListener('click', () => {
+		profileCardElement.classList.toggle('hidden');
+	});
+
+	profileCardElement.addEventListener('click', () => {
+		profileCardElement.classList.toggle('flip');
+	});
+
+	document.addEventListener('click', (event) => {
+		if (!profileCardElement.classList.contains('hidden') &&
+			!profileCardElement.contains(event.target) &&
+			!usernameElement.contains(event.target)) {
+			profileCardElement.classList.add('hidden');
+			profileCardElement.classList.remove('flip'); // Reset the flip when hiding
+		}
+	});
+});
+
+
 // ===================================================================
 // ===================================================================
 // ===================================================================\
