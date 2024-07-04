@@ -16,7 +16,7 @@ export default class MetaScene extends ParentScene {
 
     setSceneObjects() {
         if(this.isLoaded == false) {
-            // this.loadGLTF(this.scene, '/ready-player-jake.glb', 'rp-jake', 1, {x: 0, y: 0, z: 0}, false, 0, 0, 0)
+            this.loadGLTF(this.scene, '/ready-player-jake.glb', 'rp-jake', 1, {x: 0, y: 0, z: 0}, false, 0, 0, 0)
             this.isLoaded = true
         }
     }
