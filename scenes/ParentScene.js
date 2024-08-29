@@ -23,7 +23,6 @@ export default class ParentScene {
         this.setGui(gui)
         this.setMixers()
         this.setLights()
-        this.addSpaceTravel()
     
         if(gridFloor == true) {
             this.addGridFloor()
@@ -34,31 +33,7 @@ export default class ParentScene {
         }
     }
 
-    // space
-    addSpaceTravel() {
-        // star geometry and material
-        const starCount = 10000
-        const geometry = new THREE.BufferGeometry()
-        const positions = new Float32Array(starCount * 3)
-        for (let i = 0; i < starCount * 3; i++) {
-            positions[i] = (Math.random() - 0.5) * 1000; // Random position within a 1000x1000x1000 cube
-        }
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
 
-        const material = new THREE.PointsMaterial({
-            color: 0x00aaff,
-            size: 0.5,
-            transparent: true,
-            alphaTest: 0.5, // This will discard fragments with alpha less than 0.5, making the points appear as circles
-            depthWrite: false // This can help with transparency issues
-        })
-
-
-        const stars = new THREE.Points(geometry, material)
-        this.starCount = starCount
-        this.stars = stars
-        this.scene.add(stars)
-    }
 
     // SCENE
 
