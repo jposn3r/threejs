@@ -103,11 +103,7 @@ export default class MetaScene extends ParentScene {
         tween.start();
     }
 
-    initAvatarPicker() {
-        // Create left and right arrows and add them to the screen
-        this.currentIndex = 0
-        this.avatarName = "Jakonius"
-
+    addArrowControls() {
         const leftArrow = document.createElement('div');
         leftArrow.id = 'left-arrow';
         leftArrow.className = 'arrow';
@@ -153,6 +149,14 @@ export default class MetaScene extends ParentScene {
                 this.moveAvatarGroupX(targetX);
             }
         });
+    }
+
+    initAvatarPicker() {
+        // Create left and right arrows and add them to the screen
+        this.currentIndex = 0
+        this.avatarName = "Jakonius"
+
+        this.addArrowControls()
     }
 
 

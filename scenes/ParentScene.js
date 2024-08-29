@@ -130,6 +130,7 @@ export default class ParentScene {
             let loader = new GLTFLoader()
             let mixers = this.mixers
             let modelUrl = "https://jakonius-assets.s3.us-east-2.amazonaws.com/models"
+            let animationsUrl = "https://jakonius-assets.s3.us-east-2.amazonaws.com/models/animations"
 
             loader.load(
                 // resource URL
