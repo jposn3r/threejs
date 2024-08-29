@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { DoubleSide } from 'three'
 import ParentScene from './ParentScene'
+import LoadingScene from './LoadingScene';
 import SceneController from '../helpers/SceneController'
 
 export default class MetaScene extends ParentScene {
@@ -21,17 +22,26 @@ export default class MetaScene extends ParentScene {
     }
 
     setSceneObjects() {
-        console.log("setSceneObjects: running 1")
-        if (this.isLoaded == false) {
-            console.log("setSceneObjects: running 2")
-            this.loadGLTF(this.scene, '/ready-player-jake.glb', 'rp-jake', 1, { x: 0, y: 0, z: 0 }, false, 0, 0, 0)
-                .then(() => {
-                    console.log("setSceneObjects: running 3")
-                    this.addSpaceTravel()
-                    this.initializeProfileCard()
-                    this.isLoaded = true
-                    this.onSceneLoaded()
-                })
+        console.log("setSceneObjects: running 1");
+
+        if (this.isLoaded === false) {
+            console.log("setSceneObjects: running 2");
+
+            // Load multiple GLTF models
+            const promises = [];
+
+            promises.push(this.loadGLTF(this.scene, '/ready-player-jake.glb', 'rp-jake', 1, { x: 0, y: 0, z: 0 }, false, 0, 0, 0));
+            promises.push(this.loadGLTF(this.scene, '/avatars/halo-infinite-master-chief-rigged-walk./scene.gltf', 'master-chief', .5, { x: 1.4, y: 0, z: 0 }, false, 0, 0, 0));
+            promises.push(this.loadGLTF(this.scene, '/avatars/goku-rigged-animated/scene.gltf', 'goku', .6, { x: -1.4, y: 0, z: 0 }, false, 0, 0, 0));
+
+            // Wait for all models to load
+            Promise.all(promises).then(() => {
+                console.log("setSceneObjects: running 3")
+                this.addSpaceTravel()
+                this.initializeProfileCard()
+                this.isLoaded = true
+                this.onSceneLoaded()
+            });
         }
     }
 

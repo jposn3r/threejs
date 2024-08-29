@@ -23,6 +23,7 @@ class LoadingScene {
         loadingText.style.left = '50%';
         loadingText.style.transform = 'translate(-50%, -50%)';
         loadingText.style.color = 'white';
+        loadingText.style.fontSize = '40px'
         loadingText.innerHTML = 'Loading...';
         loadingText.id = 'loadingText'
         document.body.appendChild(loadingText);
