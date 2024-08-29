@@ -23,3 +23,8 @@ Interaction and movement
 Advanced Interaction
 - Main Menu to switch which models are visible
 - Hide and show with visibility without loading and removing objects constantly
+
+## Todo List
+
+1. Z-index system for specific layers, 2D menus, Dialogs, World Scene, etc
+2. Environment controller to manage dynamic effects

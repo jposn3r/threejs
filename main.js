@@ -38,8 +38,8 @@ let scene = currentScene.scene;
 let renderer = currentScene.renderer;
 let camera = currentScene.camera;
 
-let clock = new THREE.Clock()
-let clockDelta
+let clock = new THREE.Clock();
+let clockDelta;
 
 function animate() {
     requestAnimationFrame(animate);
@@ -55,19 +55,12 @@ animate();
 metaScene.setOnLoadedCallback(() => {
     currentScene = metaScene; // Switch to the meta scene
     scene = currentScene.scene;
-    camera = currentScene.camera
+    camera = currentScene.camera;
 
     // Remove the loading screen from the DOM and clean up
-    let loadingScreen = document.getElementById("loadingText")
-    console.log(loadingScreen)
+    let loadingScreen = document.getElementById("loadingText");
+    console.log(loadingScreen);
     if (loadingScreen) {
-        loadingScreen.remove() // Remove the element from the DOM
+        loadingScreen.remove(); // Remove the element from the DOM
     }
-
-    // Optionally, remove any event listeners or references related to the loading screen
-    // For example, if you had any event listeners attached to the loading screen:
-    // loadingScreen.removeEventListener('someEvent', someEventHandler);
-
-    // Nullify the reference for garbage collection
-    // loadingScreen = null
 });
