@@ -39,7 +39,6 @@ class SceneController {
     loadScene(scene) {
         // Load the specified scene
         console.log("load scene " + scene)
-
     }
 
     getCurrentScene() {
@@ -54,9 +53,9 @@ class SceneController {
         //   this.currentScene = scene
         console.log("switch scene to " + scene)
     }
-
+    
     testLogs() {
-        console.log("testing connection is live")
+        console.log("testing scene controller is live")
     }
 
     // move camera and controls to new scene location
@@ -99,20 +98,6 @@ class SceneController {
         sceneState = sceneStates[sceneName]
     }
 
-    animate() {
-        requestAnimationFrame(animate)
-
-        clockDelta = clock.getDelta()
-
-        TWEEN.update()
-
-        currentScene.animateScene(clockDelta)
-
-        updateMixers(clockDelta)
-        controls.update()
-
-        renderer.render(currentScene.scene, camera)
-    }
 }
   
 export default SceneController

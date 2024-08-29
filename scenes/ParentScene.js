@@ -9,7 +9,6 @@ import * as dat from 'dat.gui'
 import TWEEN from '@tweenjs/tween.js'
 
 export default class ParentScene {
-
     constructor(config) {
         var gridFloor = config.gridFloor
         var gui = config.gui
@@ -32,8 +31,6 @@ export default class ParentScene {
             this.setBackground(background)
         }
     }
-
-
 
     // SCENE
 
@@ -119,7 +116,6 @@ export default class ParentScene {
             var camera = this.camera
 
             // add items to gui - why does this look weird?
-
             
         }
     }
@@ -127,52 +123,59 @@ export default class ParentScene {
     // OBJECTS
 
     loadGLTF(scene, resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, animationIndex = 0, timeScale = 1) {
-        let mixer
-        let loader = new GLTFLoader()
-        let mixers = this.mixers
-        let modelUrl = "https://jakonius-assets.s3.us-east-2.amazonaws.com/models"
+        console.log("loadGLTF: running 1")
+        return new Promise((resolve) => {
+            console.log("loadGLTF: running 2")
+            let mixer
+            let loader = new GLTFLoader()
+            let mixers = this.mixers
+            let modelUrl = "https://jakonius-assets.s3.us-east-2.amazonaws.com/models"
 
-        loader.load(
-            // resource URL
-            modelUrl + resourceUrl,
-            // called when the resource is loaded
-            function ( gltf ) {
-                gltf.scene.scale.set(scale,scale,scale)
+            loader.load(
+                // resource URL
+                modelUrl + resourceUrl,
+                // called when the resource is loaded
+                function (gltf) {
+                    gltf.scene.scale.set(scale, scale, scale)
 
-                gltf.scene.name = name
+                    gltf.scene.name = name
 
-                gltf.scene.position.x = position.x
-                gltf.scene.position.y = position.y
-                gltf.scene.position.z = position.z
+                    gltf.scene.position.x = position.x
+                    gltf.scene.position.y = position.y
+                    gltf.scene.position.z = position.z
 
-                gltf.scene.rotation.x = xRotation
-                gltf.scene.rotation.y = yRotation
-                gltf.scene.rotation.z = zRotation
+                    gltf.scene.rotation.x = xRotation
+                    gltf.scene.rotation.y = yRotation
+                    gltf.scene.rotation.z = zRotation
 
-                mixer = new THREE.AnimationMixer( gltf.scene )
+                    mixer = new THREE.AnimationMixer(gltf.scene)
 
-                if(animate) {
-                    var action = mixer.clipAction(gltf.animations[animationIndex])
-                    action.timeScale = timeScale
-                    action.play()
+                    if (animate) {
+                        var action = mixer.clipAction(gltf.animations[animationIndex])
+                        action.timeScale = timeScale
+                        action.play()
+                    }
+
+                    scene.add(gltf.scene)
+                    mixers.push(mixer)
+
+                    // Resolve the promise after the model is added to the scene
+                    resolve(gltf)
+
+                },
+                // called while loading is progressing
+                function (xhr) {
+                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+                    if (xhr.loaded / xhr.total == 1) {
+                        console.log("\nloading finished, proceed with operation")
+                    }
+                },
+                // called when loading has errors
+                function (error) {
+                    console.log('An error happened loading GLTF model ' + name)
                 }
-
-                scene.add(gltf.scene)
-                mixers.push(mixer)
-                return gltf
-            },
-            // called while loading is progressing
-            function ( xhr ) {
-                // console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
-                if(xhr.loaded / xhr.total == 1) {
-                    // console.log("\nloading finished, proceed with operation")
-                }
-            },
-            // called when loading has errors
-            function ( error ) {
-                console.log( 'An error happened loading GLTF model ' + name )
-            }
-        )
+            )
+        })
     }
 
 
@@ -253,7 +256,7 @@ export default class ParentScene {
         cube.position.set(translation[0], translation[1], translation[2])
         cube.rotation.set(rotation[0], rotation[1], rotation[2])
         cube.name = name
-        this.scene.add(cube);
+        this.scene.add(cube)
     }
 
 

@@ -7,18 +7,96 @@ export default class MetaScene extends ParentScene {
     constructor(config) {
         super(config)
         this.isLoaded = false
+        this.initScene()
+    }
+
+    initScene() {
+        console.log("initScene running")
         this.setSceneStates()
         let sceneController = new SceneController()
         sceneController.testLogs()
-        sceneController.switchScene("test 1")
-        sceneController.loadScene("test 2")
-        this.addSpaceTravel()
+        //sceneController.switchScene("test 1")
+        //sceneController.loadScene("test 2")
+        this.setSceneObjects()
     }
 
     setSceneObjects() {
-        if(this.isLoaded == false) {
-            this.loadGLTF(this.scene, '/ready-player-jake.glb', 'rp-jake', 1, {x: 0, y: 0, z: 0}, false, 0, 0, 0)
-            this.isLoaded = true
+        console.log("setSceneObjects: running 1")
+        if (this.isLoaded == false) {
+            console.log("setSceneObjects: running 2")
+            this.loadGLTF(this.scene, '/ready-player-jake.glb', 'rp-jake', 1, { x: 0, y: 0, z: 0 }, false, 0, 0, 0)
+                .then(() => {
+                    console.log("setSceneObjects: running 3")
+                    this.addSpaceTravel()
+                    this.initializeProfileCard()
+                    this.isLoaded = true
+                    this.onSceneLoaded()
+                })
+        }
+    }
+
+    onSceneLoaded() {
+        if (this.onLoadedCallback) {
+            this.onLoadedCallback(); // Notify the main.js or scene controller
+        }
+    }
+
+    setOnLoadedCallback(callback) {
+        this.onLoadedCallback = callback;
+    }
+
+    initializeProfileCard() {
+        this.createProfileCardUI()
+        this.addProfileCardListeners()
+    }
+
+    createProfileCardUI() {
+        const usernameDiv = document.createElement('div')
+        usernameDiv.id = 'username'
+        usernameDiv.className = 'z-top'
+        usernameDiv.textContent = 'Jakonius'
+
+        const yearDiv = document.createElement('div')
+        yearDiv.id = 'established'
+        yearDiv.className = 'z-top'
+        yearDiv.textContent = 'Est. 1991'
+
+        const profileCardDiv = document.createElement('div')
+        profileCardDiv.id = 'profile-card'
+        profileCardDiv.className = 'z-top hidden'
+        profileCardDiv.innerHTML = `
+            <h5>Metaverse ID</h5>
+            <h6>
+                <a target="_blank" href="https://www.linkedin.com/in/jake-posner">LinkedIn</a> 
+                <a target="_blank" href="https://www.jakeposner.com">Portfolio</a> 
+                <a target="_blank" href="https://www.x.com/jakeposner_">X - Twitter</a>  
+            </h6>
+            <h6><a target="_blank" href="https://visionquest.beehiiv.com/">Vision Quest Newsletter</a></h6>
+        `
+
+        document.body.appendChild(usernameDiv)
+        document.body.appendChild(profileCardDiv)
+        document.body.appendChild(yearDiv)
+
+        this.usernameElement = usernameDiv
+        this.profileCardElement = profileCardDiv
+    }
+
+    addProfileCardListeners() {
+        this.usernameElement.addEventListener('click', () => {
+            this.profileCardElement.classList.toggle('hidden')
+        })
+
+        document.addEventListener('click', (event) => {
+            this.toggleHidden(this.profileCardElement, this.usernameElement, event)
+        })
+    }
+
+    toggleHidden(element1, element2, event) {
+        if (!element1.classList.contains('hidden') &&
+            !element1.contains(event.target) &&
+            !element2.contains(event.target)) {
+            element1.classList.add('hidden')
         }
     }
  

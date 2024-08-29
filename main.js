@@ -1,203 +1,73 @@
-import './style.css'
-import * as THREE from 'three'
-import TWEEN from '@tweenjs/tween.js'
-import MetaScene from './scenes/MetaScene'
-import SceneController from './helpers/SceneController'
+import './style.css';
+import * as THREE from 'three';
+import TWEEN from '@tweenjs/tween.js';
+import MetaScene from './scenes/MetaScene';
+import LoadingScene from './scenes/LoadingScene';
+import SceneController from './helpers/SceneController';
 
-// What should main do?
-// initiate scene controller
+let windowInnerHeight = window.innerHeight;
+let windowInnerWidth = window.innerWidth;
+let loadingComplete = false;
 
-let windowInnerHeight = window.innerHeight
-let windowInnerWidth =  window.innerWidth
-
-//if the user resizes the window you have to adjust the scene to fit within it
-window.addEventListener('resize', function() {
-	windowInnerHeight = window.innerHeight
-	windowInnerWidth = window.innerWidth
-	console.log("\nWidth: " + windowInnerWidth)
-	renderer.setSize(windowInnerWidth, windowInnerHeight)
-	if(typeof camera !== 'undefined') {
-		camera.aspect = windowInnerWidth / windowInnerHeight
-		camera.updateProjectionMatrix()
-	}
-})
-
-const usernameElement = document.getElementById('username');
-const profileCardElement = document.getElementById('profile-card');
-
-// Profile card toggle functionality
-document.addEventListener('DOMContentLoaded', () => {
-
-	usernameElement.addEventListener('click', () => {
-		profileCardElement.classList.toggle('hidden');
-	});
-
-	document.addEventListener('click', (event) => {
-		toggleHidden(profileCardElement, usernameElement, event)
-	});
+window.addEventListener('resize', function () {
+    windowInnerHeight = window.innerHeight;
+    windowInnerWidth = window.innerWidth;
+    renderer.setSize(windowInnerWidth, windowInnerHeight);
+    if (typeof camera !== 'undefined') {
+        camera.aspect = windowInnerWidth / windowInnerHeight;
+        camera.updateProjectionMatrix();
+    }
 });
 
-function toggleHidden(element1, element2, event) { 
-	if (!element.classList.contains('hidden') &&
-		!element.contains(event.target) &&
-		!element2.contains(event.target)) {
-		element1.classList.add('hidden');
-	}
-}
+let loadingScene = new LoadingScene({
+    name: "loading-scene",
+    gui: false,
+    background: '',
+    gridFloor: false
+});
 
+let metaScene = new MetaScene({
+    name: "meta-scene",
+    gui: false,
+    background: '',
+    gridFloor: true
+});
 
-// ===================================================================
-// ===================================================================
-// ===================================================================\
-
-let sceneController = new SceneController()
-
-// meta scene
-let metaSceneConfig = {
-	name: "meta-scene",
-	gui: false,
-	background: '',
-	gridFloor: false
-}
-
-let mainScene = new MetaScene(metaSceneConfig)
-
-let currentScene = mainScene
-currentScene.setSceneObjects()
-
-let scene = mainScene.scene
-
-// ===================================================================
-// ===================================================================
-// ===================================================================
-
-// renderer
-let renderer = mainScene.renderer
-
-// camera 
-let camera = mainScene.camera
-let cameraFocus = mainScene.cameraFocus
-
-// controls to move the scene
-// let controls = mainScene.controls
-
-// What stays in this file? ------------------------------------------
-
-// clock used to track time deltas
+let currentScene = loadingScene;
+let scene = currentScene.scene;
+let renderer = currentScene.renderer;
+let camera = currentScene.camera;
 
 let clock = new THREE.Clock()
 let clockDelta
 
-// help track mouse movement events
-
-var raycaster = new THREE.Raycaster()
-var mouse = new THREE.Vector2()
-
-// animation mixers array - https://www.mixamo.com - for more animations and models
-
-let mixers = []
-
-// Add stars
-// Array(2000).fill().forEach(addStar)
-
-let sceneStates = mainScene.sceneStates
-
-let sceneState = sceneStates.landing
-
-function updateMixers(clockDelta) {
-	// huge help in fixing the animations being slow! - https://discourse.threejs.org/t/too-slow-animation/2379/6
-
-	// update mixers for animation
-	for (let i = 0, l = mixers.length; i < l; i ++) {
-		mixers[i].update(clockDelta);
-	}
-}
-
-function resetCamera() {
-	// cameraFocus = "origin"
-	// animateToScene("landing")
-}
-
-// move this to scene controller
-
-// move camera and controls to new scene location
-function animateToScene(sceneName) {
-	console.log("\nanimateToScene: " + sceneName)
-	console.log(sceneStates[sceneName])
-	let scenePosition = sceneStates[sceneName].cameraPosition
-	// let controlsTargetVector = sceneStates[sceneName].controlsTargetVector
-
-	// tween test area
-	// var controlsPosition = { x : controls.target.x, y: controls.target.y, z: controls.target.z}
-	// var controlsTarget = { x : controlsTargetVector[0], y: controlsTargetVector[1], z: controlsTargetVector[2]}
-	// var controlsTween = new TWEEN.Tween(controlsPosition).to(controlsTarget, 1500)
-
-	// controlsTween.onUpdate(function() {
-	// 	controls.target.x = controlsPosition.x
-	// 	controls.target.y = controlsPosition.y
-	// 	controls.target.z = controlsPosition.z
-	// })
-
-	// controlsTween.start()
-	// console.log("\n controls.target")
-	// console.log(controls.target)
-	// controls.target = new THREE.Vector3(controlsTargetVector[0], controlsTargetVector[1], controlsTargetVector[2])
-
-	// tween test area
-	var position = { x : camera.position.x, y: camera.position.y, z: camera.position.z}
-	var target = { x : scenePosition[0], y: scenePosition[1], z: scenePosition[2]}
-	var tween3 = new TWEEN.Tween(position).to(target, 1500)
-
-	tween3.onUpdate(function() {
-		camera.position.x = position.x
-		camera.position.y = position.y
-		camera.position.z = position.z
-	})
-
-	tween3.start()
-	tween3.onComplete(sceneStates[sceneName].callback)
-
-	sceneState = sceneStates[sceneName]
-}
-
-// Add event listener for mouse click
-window.addEventListener('click', (event) => {
-	// Update mouse coordinates
-	mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-	mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-	// Update the picking ray with the camera and mouse position
-	raycaster.setFromCamera(mouse, camera);
-
-	// Calculate objects intersecting the picking ray
-	const intersects = raycaster.intersectObjects(scene.children);
-	for (let i = 0; i < intersects.length; i++) {
-		console.log(intersects[0].object)
-		if (intersects[i].object.type === 'SkinnedMesh') {
-			const profileCardElement = document.getElementById('profile-card');
-			profileCardElement.classList.toggle('hidden');
-			break;
-		}
-	}
-});
-
-// move this to scene controller
-
 function animate() {
-	requestAnimationFrame(animate)
-
-	clockDelta = clock.getDelta()
-
-	TWEEN.update()
-
-	currentScene.animateScene(clockDelta)
-
-	updateMixers(clockDelta)
-	// controls.update()
-
-	renderer.render(currentScene.scene, camera)
+    requestAnimationFrame(animate);
+    let clockDelta = clock.getDelta();
+    TWEEN.update();
+    currentScene.animateScene(clockDelta);
+    renderer.render(currentScene.scene, camera);
 }
 
-animate()
+animate();
 
-let test = sceneController.getCurrentScene()
+// Set a callback for when the meta scene is ready
+metaScene.setOnLoadedCallback(() => {
+    currentScene = metaScene; // Switch to the meta scene
+    scene = currentScene.scene;
+    camera = currentScene.camera
+
+    // Remove the loading screen from the DOM and clean up
+    let loadingScreen = document.getElementById("loadingText")
+    console.log(loadingScreen)
+    if (loadingScreen) {
+        loadingScreen.remove() // Remove the element from the DOM
+    }
+
+    // Optionally, remove any event listeners or references related to the loading screen
+    // For example, if you had any event listeners attached to the loading screen:
+    // loadingScreen.removeEventListener('someEvent', someEventHandler);
+
+    // Nullify the reference for garbage collection
+    // loadingScreen = null
+});
