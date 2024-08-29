@@ -233,6 +233,10 @@ export default class MetaScene extends ParentScene {
             <h6>Active Construction Zone</h6>
         `
 
+        dialog.addEventListener('click', () => {
+            console.log("right arrow click")
+            dialog.classList.toggle('hidden')
+        });
         document.body.appendChild(dialog)
         this.dialogElement = dialog
     }
@@ -243,8 +247,12 @@ export default class MetaScene extends ParentScene {
             this.profileCardElement.classList.toggle('hidden');
         });
 
+
+        this.profileCardElement.addEventListener('click', () => {
+            this.profileCardElement.classList.toggle('hidden')
+        })
+
         this.launchButtonElement.addEventListener('click', () => {
-            console.log("launch button click")
             this.dialogElement.classList.toggle('hidden')
         })
 
