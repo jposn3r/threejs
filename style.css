@@ -316,4 +316,16 @@ li:hover {
   #middle-box {
     display: none;
   }
+
+  #right-arrow, #left-arrow {
+      top: 90%;
+  }
+
+  #right-arrow {
+      right: 50px !important;
+  }
+
+    #left-arrow {
+        left: 50px !important;
+    }
 }

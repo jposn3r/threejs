@@ -113,8 +113,8 @@ export default class MetaScene extends ParentScene {
         leftArrow.className = 'arrow';
         leftArrow.innerHTML = '&lt;';
         leftArrow.style.position = 'absolute';
-        leftArrow.style.bottom = '20px';  // Keep the arrows near the bottom of the screen
-        leftArrow.style.left = '25%';  // Position closer to the center horizontally
+        leftArrow.style.bottom = '30%';  // Keep the arrows near the bottom of the screen
+        leftArrow.style.left = '30%';  // Position closer to the center horizontally
         leftArrow.style.fontSize = '7em'; // Make the arrow larger
         leftArrow.style.color = 'white';
         leftArrow.style.cursor = 'pointer';
@@ -125,8 +125,8 @@ export default class MetaScene extends ParentScene {
         rightArrow.className = 'arrow';
         rightArrow.innerHTML = '&gt;';
         rightArrow.style.position = 'absolute';
-        rightArrow.style.bottom = '20px';  // Keep the arrows near the bottom of the screen
-        rightArrow.style.right = '25%'; // Position closer to the center horizontally
+        rightArrow.style.bottom = '30%';  // Keep the arrows near the bottom of the screen
+        rightArrow.style.right = '30%'; // Position closer to the center horizontally
         rightArrow.style.fontSize = '7em'; // Make the arrow larger
         rightArrow.style.color = 'white';
         rightArrow.style.cursor = 'pointer';
