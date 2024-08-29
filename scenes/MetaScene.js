@@ -29,28 +29,40 @@ export default class MetaScene extends ParentScene {
             // Create a group to hold all avatars
             this.avatarGroup = new THREE.Group();
 
-            // Load multiple GLTF models
-            const promises = [];
+            // Load "Jake" first
+            this.loadGLTF(this.avatarGroup, '/ready-player-jake.glb', 'Jakonius', 1, { x: 0, y: 0, z: 0 }, false, 0, 0, 0)
+                .then(() => {
+                    // Load "Spidey" after "Jake"
+                    return this.loadGLTF(this.avatarGroup, '/avatars/rigged_spider-man_3d_model/scene.gltf', 'Spidey', 1, { x: 1.4, y: 0, z: 0 }, false, 0, 0, 0);
+                })
+                .then(() => {
+                    // keep it going
+                    return this.loadGLTF(this.avatarGroup, '/avatars/shrek (1)/scene.gltf', 'Shrek', .9, { x: 2.8, y: 0, z: 0 }, false, 0, 0, 0);
+                })
+                .then(() => {
+                    // Load em all, this isn't scalable lol
+                    return this.loadGLTF(this.avatarGroup, '/avatars/cyberpunk/keanu_cyberpunk_2077_obj/scene.gltf', 'Keanu', .025, { x: 4.2, y: 0, z: 0 }, false, 0, 0, 0);
+                })
+                .then(() => {
+                    // If you have more avatars, you can chain them similarly
+                    console.log("setSceneObjects: running 3");
 
-            promises.push(this.loadGLTF(this.avatarGroup, '/ready-player-jake.glb', 'rp-jake', 1, { x: 0, y: 0, z: 0 }, false, 0, 0, 0));
-            promises.push(this.loadGLTF(this.avatarGroup, '/avatars/rigged_spider-man_3d_model/scene.gltf', 'mando', 1, { x: 1.4, y: 0, z: 0 }, false, 0, 0, 0));
-            //promises.push(this.loadGLTF(this.avatarGroup, '/avatars/goku-rigged-animated/scene.gltf', 'goku', .6, { x: -1.4, y: 0, z: 0 }, false, 0, 0, 0));
+                    // Add the group to the scene
+                    this.scene.add(this.avatarGroup);
+                    console.log("avatarGroup: ", this.avatarGroup.children[0].name); // Verify the order
 
-            // Wait for all models to load
-            Promise.all(promises).then(() => {
-                console.log("setSceneObjects: running 3");
-
-                // Add the group to the scene
-                this.scene.add(this.avatarGroup);
-
-                this.addSpaceTravel();
-                this.initializeProfileCard();
-                this.isLoaded = true;
-                this.onSceneLoaded();
-                this.initAvatarPicker(); // Set up the picker after everything is loaded
-            });
+                    this.addSpaceTravel();
+                    this.initializeProfileCard();
+                    this.isLoaded = true;
+                    this.onSceneLoaded();
+                    this.initAvatarPicker(); // Set up the picker after everything is loaded
+                })
+                .catch((error) => {
+                    console.error("Error loading GLTF models:", error);
+                });
         }
     }
+
 
     moveAvatarGroupX(targetX) {
         console.log("moveAvatarGroup")
@@ -149,9 +161,9 @@ export default class MetaScene extends ParentScene {
     updateUIForAvatar(index) {
         // Example: Update a text element with the name of the centered avatar
         const avatarName = this.avatarGroup.children[index].name;
-        const avatarNameElement = document.getElementById('avatar-name');
+        const avatarNameElement = document.getElementById('username');
         if (avatarNameElement) {
-            avatarNameElement.textContent = `Selected Avatar: ${avatarName}`;
+            avatarNameElement.textContent = `${avatarName}`;
         }
 
         // Additional graphics or UI updates can be done here based on the centered avatar
@@ -177,12 +189,13 @@ export default class MetaScene extends ParentScene {
         const usernameDiv = document.createElement('div');
         usernameDiv.id = 'username';
         usernameDiv.className = 'z-top';
-        usernameDiv.textContent = 'Jakonius';
+        usernameDiv.textContent = "Jakonius";
+        console.log(this.avatarGroup.children[0])
 
-        const yearDiv = document.createElement('div');
-        yearDiv.id = 'established';
-        yearDiv.className = 'z-top';
-        yearDiv.textContent = 'Est. 1991';
+        const launchButton = document.createElement('div');
+        launchButton.id = 'launch-button';
+        launchButton.className = 'z-top';
+        launchButton.textContent = 'Launch';
 
         const profileCardDiv = document.createElement('div');
         profileCardDiv.id = 'profile-card';
@@ -199,20 +212,41 @@ export default class MetaScene extends ParentScene {
 
         document.body.appendChild(usernameDiv);
         document.body.appendChild(profileCardDiv);
-        document.body.appendChild(yearDiv);
+        document.body.appendChild(launchButton);
 
         this.usernameElement = usernameDiv;
         this.profileCardElement = profileCardDiv;
+        this.launchButtonElement = launchButton
+    }
+
+    createDialog(text, id) {
+        const dialog = document.createElement('div')
+        dialog.id = id
+        dialog.className = 'z-top hidden'
+        dialog.innerHTML = `
+            <h5>${text}</h5>
+            <h6>Active Construction Zone</h6>
+        `
+
+        document.body.appendChild(dialog)
+        this.dialogElement = dialog
     }
 
     addProfileCardListeners() {
+        this.createDialog("Coming soon!", "coming-soon-dialog")
         this.usernameElement.addEventListener('click', () => {
             this.profileCardElement.classList.toggle('hidden');
         });
 
+        this.launchButtonElement.addEventListener('click', () => {
+            console.log("launch button click")
+            this.dialogElement.classList.toggle('hidden')
+        })
+
         document.addEventListener('click', (event) => {
             this.toggleHidden(this.profileCardElement, this.usernameElement, event);
         });
+
     }
 
     toggleHidden(element1, element2, event) {
