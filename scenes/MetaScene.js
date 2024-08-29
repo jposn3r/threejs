@@ -44,6 +44,10 @@ export default class MetaScene extends ParentScene {
                     return this.loadGLTF(this.avatarGroup, '/avatars/cyberpunk/keanu_cyberpunk_2077_obj/scene.gltf', 'Keanu', .025, { x: 4.2, y: 0, z: 0 }, false, 0, 0, 0);
                 })
                 .then(() => {
+                    // Load em all, this isn't scalable lol
+                    return this.loadGLTF(this.avatarGroup, '/avatars/goku-rigged-animated/scene.gltf', 'Goku', .6, { x: 5.6, y: .05, z: 0 }, false, 0, 0, 0);
+                })
+                .then(() => {
                     // If you have more avatars, you can chain them similarly
                     console.log("setSceneObjects: running 3");
 
@@ -102,6 +106,7 @@ export default class MetaScene extends ParentScene {
     initAvatarPicker() {
         // Create left and right arrows and add them to the screen
         this.currentIndex = 0
+        this.avatarName = "Jakonius"
 
         const leftArrow = document.createElement('div');
         leftArrow.id = 'left-arrow';
@@ -166,9 +171,9 @@ export default class MetaScene extends ParentScene {
             avatarNameElement.textContent = `${avatarName}`;
         }
 
+        this.avatarName = avatarName
         // Additional graphics or UI updates can be done here based on the centered avatar
     }
-
 
     onSceneLoaded() {
         if (this.onLoadedCallback) {
@@ -330,7 +335,7 @@ export default class MetaScene extends ParentScene {
     }
 
     animateScene(clockDelta) {
-        this.rotateObject('rp-jake', [0, .0025, 0])
+        this.rotateObject(this.avatarName, [0, .005, 0])
         this.animateStars()
     }
 }
