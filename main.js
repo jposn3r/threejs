@@ -3,11 +3,9 @@ import * as THREE from 'three';
 import TWEEN from '@tweenjs/tween.js';
 import MetaScene from './scenes/MetaScene';
 import LoadingScene from './scenes/LoadingScene';
-import SceneController from './helpers/SceneController';
 
 let windowInnerHeight = window.innerHeight;
 let windowInnerWidth = window.innerWidth;
-let loadingComplete = false;
 
 window.addEventListener('resize', function () {
     windowInnerHeight = window.innerHeight;
@@ -39,7 +37,6 @@ let renderer = currentScene.renderer;
 let camera = currentScene.camera;
 
 let clock = new THREE.Clock();
-let clockDelta;
 
 function animate() {
     requestAnimationFrame(animate);
