@@ -9,24 +9,11 @@ export default class MainScene extends ParentScene {
         this.isLoaded = false
         this.setSceneStates()
         this.setMetaverseLogo()
+        console.log("Main Scene incoming")
     }
 
     setSceneObjects() {
-        if(this.isLoaded == false) {
-            this.isLoaded = true
 
-            // load intitial layout into focus area
-            if(window.innerWidth > 700) {
-                var testSphere = this.getSphereGeometry("test-sphere", 1, 32, 16, 0xff0000, [3, 4, 0])
-                this.testSphere = testSphere
-                this.scene.add(testSphere)
-                this.loadGLTF(this.scene, '/planet-earth/scene.gltf', 'planet-earth', 2, {x: -60, y: 10, z: -100}, true, 0, 0)
-                this.loadGLTF(this.scene, '/portal-night-version/scene.gltf', 'portal', .005, {x: 0, y: 0, z: 30}, true, 0, 1.5)
-                this.loadGLTF(this.scene, '/death-star/scene.gltf', 'death-star', .5, {x: 80, y: 20, z: -80}, false, 1, 0, 0)
-            } else {
-                this.loadGLTF(this.scene, '/portal-night-version/scene.gltf', 'portal', .003, {x: 0, y: 0, z: 30}, true, 0, 1.5)
-            }
-        }
     }
  
     // comment here
@@ -70,33 +57,12 @@ export default class MainScene extends ParentScene {
         this.loadText(optimerBoldUrl, 'metaverse-header', metaverseHeader, headerScale,  .2, headerTranslation, true, 0, 0, 0)
     }
 
-    getSphereGeometry(name, radius, widthSegments, heightSegments, color, position) {
-        const geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
-        const material = new THREE.MeshBasicMaterial({color: color});
-        const sphere = new THREE.Mesh(geometry, material);
-        sphere.position.set(position[0], position[1], position[2])
-        sphere.name = name
-        return sphere
-    }
-
     // comment here
     animateScene(clockDelta) {
-        // make the death star orbit the earth - https://en.threejs-university.com/2021/08/04/satellite-placing-a-3d-object-into-orbit-around-a-target/
-        this.rotateObject('planet-earth', [.0005, .0004, 0])
-        this.rotateObject('death-star', [-.0005, -.0004, 0])
-        this.animateTorusGroup()
         this.updateMixers(clockDelta)
     }
 
     handleClick(name) {
-        if(name === "test-sphere") {
-            console.log("moving to explore view")
-        } else if(name === "tierra_02_-_Default_0") {
-			console.log("glow effect on object")
-		} else if(name.slice(0,9) === "DeathStar") {
-			console.log("move to death star")
-		} else if(name.slice(0,6) === "sakura") {
-			console.log("move to pink tree")
-		}
+
     }
 }

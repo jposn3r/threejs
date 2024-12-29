@@ -19,18 +19,22 @@ window.addEventListener('resize', function () {
     }
 });
 
+const sceneController = new SceneController();
+
 let loadingScene = new LoadingScene({
-    name: "loading-scene",
+    name: "loading-scene", 
     gui: false,
     background: '',
-    gridFloor: false
+    gridFloor: false,
+    sceneController: sceneController
 });
 
 let metaScene = new MetaScene({
     name: "meta-scene",
     gui: false,
     background: '',
-    gridFloor: true
+    gridFloor: true,
+    sceneController: sceneController
 });
 
 let currentScene = loadingScene;
@@ -39,7 +43,6 @@ let renderer = currentScene.renderer;
 let camera = currentScene.camera;
 
 let clock = new THREE.Clock();
-let clockDelta;
 
 function animate() {
     requestAnimationFrame(animate);

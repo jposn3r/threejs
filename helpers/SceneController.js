@@ -1,14 +1,12 @@
 import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
-import MainScene from '../scenes/MainScene'
-import MetaScene from '../scenes/MetaScene'
+import MainScene from '../scenes/MainScene';
 
 class SceneController {
     constructor() {
         this.currentScene = null;
         this.sceneConfigs = this.getSceneConfigs()
         this.currentScene = this.getSceneConfigs().metaSceneConfig
-        console.log(this.sceneConfigs)
     }
 
     getSceneConfigs() {
@@ -19,8 +17,8 @@ class SceneController {
                 background: '',
                 gridFloor: true
             },
-            inventorySceneConfig: {
-                name: "inventory-scene",
+            mainSceneConfig: {
+                name: "main-scene",
                 gui: false,
                 background: '',
                 gridFloor: true,
@@ -47,11 +45,24 @@ class SceneController {
         return this.currentScene
     }
 
-    switchScene(scene) {
+    switchScene(scene, data) {
         // Perform a transition between the current scene and the specified scene
         // ...
         //   this.currentScene = scene
-        console.log("switch scene to " + scene)
+        console.log("switch scene to " + scene + " with " + data)
+        console.log("current scene to leave: " + this.currentScene.name)
+        let currentScene = this.currentScene
+        let nextScene = new MainScene({
+            name: "main-scene",
+            gui: false,
+            background: '',
+            gridFloor: true,
+            sceneController: currentScene.sceneController
+        })
+
+        this.previousScene = currentScene
+        this.currentScene = nextScene
+
     }
     
     testLogs() {

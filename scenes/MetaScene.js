@@ -9,14 +9,15 @@ export default class MetaScene extends ParentScene {
     constructor(config) {
         super(config);
         this.isLoaded = false;
-        this.initScene();
+        this.initScene(config);
     }
 
-    initScene() {
+    initScene(config) {
         console.log("initScene running");
         this.setSceneStates();
-        let sceneController = new SceneController();
-        sceneController.testLogs();
+        this.sceneController = config.sceneController;
+        /*let sceneController = new SceneController();*/
+        this.sceneController.testLogs();
         this.setSceneObjects();
     }
 
@@ -257,7 +258,8 @@ export default class MetaScene extends ParentScene {
         })
 
         this.launchButtonElement.addEventListener('click', () => {
-            this.dialogElement.classList.toggle('hidden')
+            /*this.dialogElement.classList.toggle('hidden')*/
+            this.transitionToNewScene(this.avatarName)
         })
 
         document.addEventListener('click', (event) => {
@@ -344,6 +346,12 @@ export default class MetaScene extends ParentScene {
             if (positions[i] > 500) positions[i] = -500; // Reset position when it goes out of bounds
         }
         stars.geometry.attributes.position.needsUpdate = true;
+    }
+
+    transitionToNewScene(selectedAvatar) {
+        console.log("Transitioning to new scene with avatar: ", selectedAvatar);
+
+        this.sceneController.switchScene('main-scene', selectedAvatar);
     }
 
     animateScene(clockDelta) {
