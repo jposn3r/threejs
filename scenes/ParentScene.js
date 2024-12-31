@@ -236,7 +236,7 @@ export default class ParentScene {
      // comment here
      addGridFloor() {
         // grid floor
-        let gridHelper = new THREE.GridHelper(20, 11, 0xffffff, 0x00dadf)
+        let gridHelper = new THREE.GridHelper(100, 40, 0xffffff, 0x00dadf)
         gridHelper.name = "light-grid"
         this.scene.add(gridHelper)
     }

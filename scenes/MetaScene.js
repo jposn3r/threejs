@@ -48,6 +48,10 @@ export default class MetaScene extends ParentScene {
                     return this.loadGLTF(this.avatarGroup, '/avatars/goku-rigged-animated/scene.gltf', 'Goku', .6, { x: 5.6, y: .05, z: 0 }, false, 0, 0, 0);
                 })
                 .then(() => {
+                    // Load em all, this isn't scalable lol
+                    return this.loadGLTF(this.avatarGroup, '/avatars/astronaut/scene.gltf', 'Astronaut', .5, { x: 7, y: .05, z: 0 }, false, 0, 0, 0)
+                })
+                .then(() => {
                     // If you have more avatars, you can chain them similarly
                     console.log("setSceneObjects: running 3");
 
@@ -201,10 +205,16 @@ export default class MetaScene extends ParentScene {
         usernameDiv.textContent = "Jakonius";
         console.log(this.avatarGroup.children[0])
 
+        const launchButtonGroup = document.createElement('div');
+        launchButtonGroup.id = 'launch-button-group';
+
         const launchButton = document.createElement('div');
         launchButton.id = 'launch-button';
-        launchButton.className = 'z-top';
-        launchButton.textContent = 'Launch';
+        launchButton.textContent = 'Avatars';
+
+        const vehicleButton = document.createElement('div');
+        vehicleButton.id = 'vehicle-button';
+        vehicleButton.textContent = 'Vehicles';
 
         const profileCardDiv = document.createElement('div');
         profileCardDiv.id = 'profile-card';
@@ -221,7 +231,10 @@ export default class MetaScene extends ParentScene {
 
         document.body.appendChild(usernameDiv);
         document.body.appendChild(profileCardDiv);
-        document.body.appendChild(launchButton);
+        launchButtonGroup.appendChild(launchButton);
+        launchButtonGroup.appendChild(vehicleButton);
+        document.body.appendChild(launchButtonGroup);
+        // document.body.appendChild(launchButton);
 
         this.usernameElement = usernameDiv;
         this.profileCardElement = profileCardDiv;
