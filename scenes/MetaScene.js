@@ -72,6 +72,26 @@ export default class MetaScene extends ParentScene {
     }
 
 
+    // TODO: Get this to work, add ability to switch between Avatars and Vehicles
+    // Need button in menu to work first then call this function
+    showVehicleGroup() {
+        // check if vehicle group exists
+        if (!this.vehicleGroup) {
+            console.error("Vehicle group not defined.")
+            return
+        }
+
+        // decide how you will hide and show these elements
+        // options:
+        // 1. Vertical scroll
+        // 2. Animate to new position in the Metaverse
+        //    This is what I've already done with previous demos, need to know my 
+        //    environment layout if I'm going to do this. I think it's the right choice though.
+        // 3. Not sure
+
+        
+    }
+
     moveAvatarGroupX(targetX) {
         console.log("moveAvatarGroup")
         // Ensure the avatar group exists
@@ -234,7 +254,6 @@ export default class MetaScene extends ParentScene {
         launchButtonGroup.appendChild(launchButton);
         launchButtonGroup.appendChild(vehicleButton);
         document.body.appendChild(launchButtonGroup);
-        // document.body.appendChild(launchButton);
 
         this.usernameElement = usernameDiv;
         this.profileCardElement = profileCardDiv;
