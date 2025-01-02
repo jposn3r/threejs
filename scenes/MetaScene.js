@@ -51,6 +51,27 @@ export default class MetaScene extends ParentScene {
                     // Load em all, this isn't scalable lol
                     return this.loadGLTF(this.avatarGroup, '/avatars/astronaut/scene.gltf', 'Astronaut', .5, { x: 7, y: .05, z: 0 }, false, 0, 0, 0)
                 })
+                // vehicles from here to test for vehicle group - TODO: Split into new group that loads when clicking vehicles button
+                .then(() => {
+                    // Load em all, this isn't scalable lol
+                    return this.loadGLTF(this.avatarGroup, '/vehicles/back_to_the_future_2_delorean_from_gta_5_mod/scene.gltf', 'Delorean', .5, { x: 8.4, y: .5, z: 0 }, false, 0, 0, 0)
+                })
+                .then(() => {
+                    // Load em all, this isn't scalable lol
+                    return this.loadGLTF(this.avatarGroup, '/vehicles/Ferrari-1995-red/scene.gltf', 'Ferrari 1995', 50, { x: 9.8, y: .25, z: 0 }, false, 0, 0, 0)
+                })
+                .then(() => {
+                    // Load em all, this isn't scalable lol
+                    return this.loadGLTF(this.avatarGroup, '/vehicles/ford_mustang_1965/scene.gltf', 'Mustang 1965', 1.1, { x: 11.2, y: .25, z: 0 }, false, 0, 0, 0)
+                })
+                .then(() => {
+                    // Load em all, this isn't scalable lol
+                    return this.loadGLTF(this.avatarGroup, '/vehicles/alfa-romeo-stradale-1967/scene.gltf', 'Alfa Romeo', 6.5, { x: 12.6, y: .25, z: 0 }, false, 0, 0, 0)
+                })
+                .then(() => {
+                    // Load em all, this isn't scalable lol
+                    return this.loadGLTF(this.avatarGroup, '/vehicles/porsche/scene.gltf', 'Porsche', 0.15, { x: 14, y: .5, z: 0 }, false, 0, 0, 0)
+                })
                 .then(() => {
                     // If you have more avatars, you can chain them similarly
                     console.log("setSceneObjects: running 3");
@@ -88,8 +109,6 @@ export default class MetaScene extends ParentScene {
         //    This is what I've already done with previous demos, need to know my 
         //    environment layout if I'm going to do this. I think it's the right choice though.
         // 3. Not sure
-
-        
     }
 
     moveAvatarGroupX(targetX) {
