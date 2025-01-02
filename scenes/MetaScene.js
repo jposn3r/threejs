@@ -70,7 +70,7 @@ export default class MetaScene extends ParentScene {
                 })
                 .then(() => {
                     // Load em all, this isn't scalable lol
-                    return this.loadGLTF(this.avatarGroup, '/vehicles/porsche/scene.gltf', 'Porsche', 0.15, { x: 14, y: .5, z: 0 }, false, 0, 0, 0)
+                    return this.loadGLTF(this.avatarGroup, '/vehicles/ford_gt40_2005/scene.gltf', 'Ford GT', 0.05, { x: 14, y: .25, z: 0 }, false, 0, 0, 0)
                 })
                 .then(() => {
                     // If you have more avatars, you can chain them similarly
