@@ -1,14 +1,13 @@
 import * as THREE from 'three'
-import { DoubleSide } from 'three'
 import ParentScene from './ParentScene'
-import LoadingScene from './LoadingScene'
 import SceneController from '../helpers/SceneController'
 import TWEEN from '@tweenjs/tween.js'
 
 export default class MetaScene extends ParentScene {
     constructor(config) {
         super(config);
-        this.isLoaded = false;
+        this.initLoaded = false;
+        this.vehiclesLoaded = false;
         this.initScene();
     }
 
@@ -23,7 +22,7 @@ export default class MetaScene extends ParentScene {
     setSceneObjects() {
         console.log("setSceneObjects: running 1");
 
-        if (this.isLoaded === false) {
+        if (this.initLoaded === false) {
             console.log("setSceneObjects: running 2");
 
             // Create a group to hold all avatars
@@ -51,27 +50,6 @@ export default class MetaScene extends ParentScene {
                     // Load em all, this isn't scalable lol
                     return this.loadGLTF(this.avatarGroup, '/avatars/astronaut/scene.gltf', 'Astronaut', .5, { x: 7, y: .05, z: 0 }, false, 0, 0, 0)
                 })
-                // vehicles from here to test for vehicle group - TODO: Split into new group that loads when clicking vehicles button
-                .then(() => {
-                    // Load em all, this isn't scalable lol
-                    return this.loadGLTF(this.avatarGroup, '/vehicles/back_to_the_future_2_delorean_from_gta_5_mod/scene.gltf', 'Delorean', .5, { x: 8.4, y: .5, z: 0 }, false, 0, 0, 0)
-                })
-                .then(() => {
-                    // Load em all, this isn't scalable lol
-                    return this.loadGLTF(this.avatarGroup, '/vehicles/Ferrari-1995-red/scene.gltf', 'Ferrari 1995', 50, { x: 9.8, y: .25, z: 0 }, false, 0, 0, 0)
-                })
-                .then(() => {
-                    // Load em all, this isn't scalable lol
-                    return this.loadGLTF(this.avatarGroup, '/vehicles/ford_mustang_1965/scene.gltf', 'Mustang 1965', 1.1, { x: 11.2, y: .25, z: 0 }, false, 0, 0, 0)
-                })
-                .then(() => {
-                    // Load em all, this isn't scalable lol
-                    return this.loadGLTF(this.avatarGroup, '/vehicles/alfa-romeo-stradale-1967/scene.gltf', 'Alfa Romeo', 6.5, { x: 12.6, y: .25, z: 0 }, false, 0, 0, 0)
-                })
-                .then(() => {
-                    // Load em all, this isn't scalable lol
-                    return this.loadGLTF(this.avatarGroup, '/vehicles/ford_gt40_2005/scene.gltf', 'Ford GT', 0.05, { x: 14, y: .25, z: 0 }, false, 0, 0, 0)
-                })
                 .then(() => {
                     // If you have more avatars, you can chain them similarly
                     console.log("setSceneObjects: running 3");
@@ -82,7 +60,7 @@ export default class MetaScene extends ParentScene {
 
                     this.addSpaceTravel();
                     this.initializeProfileCard();
-                    this.isLoaded = true;
+                    this.initLoaded = true;
                     this.onSceneLoaded();
                     this.initAvatarPicker(); // Set up the picker after everything is loaded
                 })
@@ -92,6 +70,46 @@ export default class MetaScene extends ParentScene {
         }
     }
 
+    loadVehicles() {
+        // Create a group to hold all vehicles
+        this.vehicleGroup = new THREE.Group();
+
+        console.log("loading vehicles")
+
+        // load vehicles
+        this.loadGLTF(this.avatarGroup, '/vehicles/back_to_the_future_2_delorean_from_gta_5_mod/scene.gltf', 'Delorean', .5, { x: 8.4, y: .5, z: 0 }, false, 0, 0, 0)
+            .then(() => {
+                // Load em all, this isn't scalable lol
+                return this.loadGLTF(this.avatarGroup, '/vehicles/Ferrari-1995-red/scene.gltf', 'Ferrari 1995', 50, { x: 9.8, y: .25, z: 0 }, false, 0, 0, 0)
+            })
+            .then(() => {
+                // Load em all, this isn't scalable lol
+                return this.loadGLTF(this.avatarGroup, '/vehicles/ford_mustang_1965/scene.gltf', 'Mustang 1965', 1.1, { x: 11.2, y: .25, z: 0 }, false, 0, 0, 0)
+            })
+            .then(() => {
+                // Load em all, this isn't scalable lol
+                return this.loadGLTF(this.avatarGroup, '/vehicles/alfa-romeo-stradale-1967/scene.gltf', 'Alfa Romeo', 6.5, { x: 12.6, y: .25, z: 0 }, false, 0, 0, 0)
+            })
+            .then(() => {
+                // Load em all, this isn't scalable lol
+                return this.loadGLTF(this.avatarGroup, '/vehicles/ford_gt40_2005/scene.gltf', 'Ford GT', 0.05, { x: 14, y: .25, z: 0 }, false, 0, 0, 0)
+            })
+            .then(() => {
+                // If you have more avatars, you can chain them similarly
+                console.log("setSceneObjects: running 3");
+
+                // Add the group to the scene
+                this.scene.add(this.avatarGroup);
+                console.log("vehicleGroup: ", this.vehicleGroup.children[0].name); // Verify the order
+
+                this.vehiclesLoaded = true;
+                // this.initVehiclePicker(); // Set up the picker after everything is loaded
+            })
+            .catch((error) => {
+                console.error("Error loading GLTF models:", error);
+            });
+    }
+     
 
     // TODO: Get this to work, add ability to switch between Avatars and Vehicles
     // Need button in menu to work first then call this function
@@ -201,8 +219,6 @@ export default class MetaScene extends ParentScene {
 
         this.addArrowControls()
     }
-
-
 
     // Utility function to determine which avatar is centered
     getCenteredAvatarIndex() {
@@ -325,7 +341,6 @@ export default class MetaScene extends ParentScene {
         }
     }
 
-    // comment here
     setSceneStates() {
         let sceneStates = {
             landing: {
