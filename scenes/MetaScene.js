@@ -88,7 +88,7 @@ export default class MetaScene extends ParentScene {
             })
             .then(() => {
                 // Load em all, this isn't scalable lol
-                return this.loadGLTF(this.avatarGroup, '/vehicles/alfa-romeo-stradale-1967/scene.gltf', 'Alfa Romeo', 6.5, { x: 12.6, y: .25, z: 0 }, false, 0, 0, 0)
+                return this.loadGLTF(this.avatarGroup, '/vehicles/1999_nissan_skyline_gtr_r34_c-west__2f2f (1)/scene.gltf', 'Skyline', 1, { x: 12.6, y: .25, z: 0 }, false, 0, 0, 0)
             })
             .then(() => {
                 // Load em all, this isn't scalable lol
