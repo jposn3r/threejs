@@ -130,7 +130,9 @@ canvas {
     border-radius: 10px;
 }
 
-#vehicle-button, #launch-button {
+/* TODO: these buttons need an active/selected state */
+
+#vehicle-button, #avatar-button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -145,7 +147,7 @@ canvas {
     cursor: pointer;
 }
 
-    #vehicle-button:hover, #launch-button:hover {
+    #vehicle-button:hover, #avatar-button:hover {
         background-color: rgba(255, 0, 0, 0.2);
     }
 

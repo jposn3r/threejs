@@ -263,9 +263,9 @@ export default class MetaScene extends ParentScene {
         const launchButtonGroup = document.createElement('div');
         launchButtonGroup.id = 'launch-button-group';
 
-        const launchButton = document.createElement('div');
-        launchButton.id = 'launch-button';
-        launchButton.textContent = 'Avatars';
+        const avatarButton = document.createElement('div');
+        avatarButton.id = 'avatar-button';
+        avatarButton.textContent = 'Avatars';
 
         const vehicleButton = document.createElement('div');
         vehicleButton.id = 'vehicle-button';
@@ -286,13 +286,14 @@ export default class MetaScene extends ParentScene {
 
         document.body.appendChild(usernameDiv);
         document.body.appendChild(profileCardDiv);
-        launchButtonGroup.appendChild(launchButton);
+        launchButtonGroup.appendChild(avatarButton);
         launchButtonGroup.appendChild(vehicleButton);
         document.body.appendChild(launchButtonGroup);
 
         this.usernameElement = usernameDiv;
         this.profileCardElement = profileCardDiv;
-        this.launchButtonElement = launchButton
+        this.avatarButtonElement = avatarButton
+        this.vehicleButtonElement = vehicleButton
     }
 
     createDialog(text, id) {
@@ -323,7 +324,7 @@ export default class MetaScene extends ParentScene {
             this.profileCardElement.classList.toggle('hidden')
         })
 
-        this.launchButtonElement.addEventListener('click', () => {
+        this.vehicleButtonElement.addEventListener('click', () => {
             this.dialogElement.classList.toggle('hidden')
         })
 
