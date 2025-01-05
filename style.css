@@ -10,140 +10,11 @@ canvas {
   left: 0;
 }
 
-h2 {
-  margin: 0px 10px 10px 25px;
-}
-
-p {
-  font-size: 30px;
-}
-
-main {
-  position: absolute;
-}
-
-button {
-  position: absolute;
-  display: block;
-  z-index: 99;
-  right: 5%;
-  top: 5%;
-}
-
 .z-top { 
   z-index: 99;
   position: absolute;
   display: block;
 }
-
-#inventory-details-view {
-  height: 24%;
-  background-color: #a9fff410;
-  margin: 0px;
-  padding: 20px;
-}
-
-#inventory-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 20% 20% 20%;
-  overflow: hidden;
-  overflow-y: scroll;
-}
-
-.inventory-item {
-  height: 100px;
-  border-color: #ffffff;
-  border: 4px;
-}
-
-.item-card {
-  height: 100%;
-  width: 100%;
-  /* background-color: #ff0000; */
-}
-
-.left-detail-panel h1 {
-  margin: 25px 25px 10px 25px;
-  text-align: left;
-  font-family: 'Yanone Kaffeesatz', sans-serif;
-}
-
-#item-1 {
-  width: 1fr;
-  height: 1fr;
-}
-
-.loading-screen {
-  height: 100%;
-  width: 100%;
-  text-align: center;
-  display: block;
-  position: absolute;
-  background-color: #000b22;
-  opacity: 0;
-}
-
-#spotify-widget {
-  border-radius:12px; 
-  min-width: 250px; 
-  right: 20px; 
-  bottom: 20px; 
-}
-
-.main-menu-container {
-  width: 100%;
-  height: .1vh;
-  bottom: 10%;
-  font-family: 'Yanone Kaffeesatz', sans-serif;
-}
-
-.main-menu-hint {
-  color: #ffffff90;
-  /* margin-left: 100px; */
-}
-
-.menu-selected {
-  /* background-color: #000000; */
-  color: #00ffdd;
-  /* color: #00E605; */
-}
-
-li {
-  float: left;
-  width: 25% !important;
-  text-align: center;
-  color: #FFFFFF;
-  background-color: #05051690;
-}
-
-ul {
-  width: 50%;
-  margin: 0;
-  padding: 0;
-  display: block;
-  line-height: 80px;
-  text-decoration: none;
-  font-size: 40px;
-  color: #371C1C;
-  list-style-type: none;
-}
-
-li:hover {
-  cursor: crosshair;
-}
-
-@media only screen and (max-width: 600px) {
-  ul {
-    font-size: 30px;
-  }
-  
-  #spotify-widget {
-    min-width: 150px; 
-  }
-}
-
-/*  Start of ANIME JS experiment */
 
 .square {
   width: 100px;
@@ -163,10 +34,10 @@ li:hover {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    font-size: 3em; /* you may want to adjust the size based on your requirements */
+    font-size: 3em;
     color: #fff;
     text-shadow: 0 0 5px #00ffe1, 0 0 10px #00ffe1, 0 0 15px #00ffe1, 0 0 20px #00ffe1;
-    font-family: 'Courier New', Courier, monospace; /* Cyberpunk-style monospace font */
+    font-family: 'Courier New', Courier, monospace;
     border: 0px 3px solid #fff;
     padding: 15px;
     box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000;
@@ -180,14 +51,14 @@ li:hover {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    font-size: 3em; /* you may want to adjust the size based on your requirements */
+    font-size: 3em;
     color: #fff;
-    font-family: 'Courier New', Courier, monospace; /* Cyberpunk-style monospace font */
+    font-family: 'Courier New', Courier, monospace;
     border: 0px 3px solid #fff;
     padding: 10px;
     box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000;
     animation: glow 10s linear infinite;
-    background-color: rgba(0, 0, 0, 0.8); /* Opaque background */
+    background-color: rgba(0, 0, 0, 0.8);
     filter: brightness(0.8);
     min-width: 400px;
     max-width: 500px;
@@ -201,13 +72,13 @@ li:hover {
     }
 
         #coming-soon-dialog h6 a {
-            color: white; /* Keep link color white */
-            text-decoration: none; /* Remove underline */
+            color: white;
+            text-decoration: none;
         }
 
             #coming-soon-dialog h6 a:hover {
-                color: #00ffe1; /* Optional: Change color on hover for a cyberpunk effect */
-                text-decoration: underline; /* Optional: Add underline on hover */
+                color: #00ffe1; 
+                text-decoration: underline; 
             }
 
 #profile-card {
@@ -216,14 +87,14 @@ li:hover {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    font-size: 3em; /* you may want to adjust the size based on your requirements */
+    font-size: 3em;
     color: #fff;
-    font-family: 'Courier New', Courier, monospace; /* Cyberpunk-style monospace font */
+    font-family: 'Courier New', Courier, monospace;
     border: 0px 3px solid #fff;
     padding: 10px;
     box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000;
     animation: glow 10s linear infinite;
-    background-color: rgba(0, 0, 0, 0.8); /* Opaque background */
+    background-color: rgba(0, 0, 0, 0.8);
     filter: brightness(0.8);
     min-width: 400px;
     max-width: 500px;
@@ -237,24 +108,24 @@ li:hover {
     }
 
         #profile-card h6 a {
-            color: white; /* Keep link color white */
-            text-decoration: none; /* Remove underline */
+            color: white;
+            text-decoration: none;
         }
 
             #profile-card h6 a:hover {
-                color: #00ffe1; /* Optional: Change color on hover for a cyberpunk effect */
-                text-decoration: underline; /* Optional: Add underline on hover */
+                color: #00ffe1;
+                text-decoration: underline; 
             }
 
 #launch-button-group {
-    position: fixed; /* Ensure proper positioning relative to the viewport */
-    bottom: 5%; /* Adjust to position near the bottom */
+    position: fixed;
+    bottom: 5%;
     left: 50%;
-    transform: translateX(-50%); /* Center the group horizontally */
+    transform: translateX(-50%);
     display: flex;
-    justify-content: center; /* Align children horizontally */
-    align-items: center; /* Align children vertically */
-    gap: 20px; /* Space between the child divs */
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
     padding: 20px;
     border-radius: 10px;
 }
@@ -263,10 +134,10 @@ li:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.5em; /* Adjusted for better readability */
+    font-size: 1.5em;
     color: #fff;
     text-shadow: 0 0 5px #00ffe1, 0 0 10px #00ffe1, 0 0 15px #00ffe1, 0 0 20px #00ffe1;
-    font-family: 'Courier New', Courier, monospace; /* Cyberpunk-style monospace font */
+    font-family: 'Courier New', Courier, monospace;
     border: 1px solid #fff;
     padding: 10px 30px;
     box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000, 0 0 20px #ff0000;
@@ -275,7 +146,7 @@ li:hover {
 }
 
     #vehicle-button:hover, #launch-button:hover {
-        background-color: rgba(255, 0, 0, 0.2); /* Optional hover effect */
+        background-color: rgba(255, 0, 0, 0.2);
     }
 
 @keyframes glow {
@@ -291,29 +162,14 @@ li:hover {
 
 .box {
   width: 33.33%;
-  height: 100vh; /* take full viewport height */
-  transition: transform 0.5s ease-out; /* Animation effect */
-}
-
-#left-box {
-  /* styles for the left box... */
-  /* background-color: rgba(255, 0, 0, 0.5); */
-}
-
-#middle-box {
-  /* styles for the middle box... */
-  /* background-color: rgba(0, 255, 0, 0.5); */
-}
-
-#right-box {
-  /* styles for the right box... */
-  /* background-color: rgba(0, 0, 255, 0.5); */
+  height: 100vh;
+  transition: transform 0.5s ease-out;
 }
 
 #left-button, #right-button {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%); /* Vertically center the buttons */
+  transform: translateY(-50%);
   width: 100px;
 }
 
@@ -324,8 +180,10 @@ li:hover {
 #right-button {
   right: 0;
 }
-
+/* ========================================================================================================= */
 /* Mobile phone section */
+/* ========================================================================================================= */
+
 @media (max-width: 800px) {
   #middle-box {
     display: none;
