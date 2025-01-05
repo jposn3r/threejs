@@ -36,15 +36,31 @@ let metaScene = new MetaScene({
 });
 
 // 3. Set the current scene as Loading scene
+
 let currentScene = loadingScene;
 let scene = currentScene.scene;
 
 // 4. Set renderer and camera and clock
+
 let renderer = currentScene.renderer;
 let camera = currentScene.camera;
 let clock = new THREE.Clock();
 
-// 5. animate function to run the scene
+// 5. Set a callback for when the meta scene is ready
+
+metaScene.setOnLoadedCallback(() => {
+    currentScene = metaScene;
+    scene = currentScene.scene;
+    camera = currentScene.camera;
+
+    let loadingScreen = document.getElementById("loadingText");
+    if (loadingScreen) {
+        loadingScreen.remove();
+    }
+});
+
+// 6. Animate function to run the scene
+
 function animate() {
     requestAnimationFrame(animate);
     let clockDelta = clock.getDelta();
@@ -54,17 +70,3 @@ function animate() {
 }
 
 animate();
-
-// Set a callback for when the meta scene is ready
-metaScene.setOnLoadedCallback(() => {
-    currentScene = metaScene; // Switch to the meta scene
-    scene = currentScene.scene;
-    camera = currentScene.camera;
-
-    // Remove the loading screen from the DOM and clean up
-    let loadingScreen = document.getElementById("loadingText");
-    console.log(loadingScreen);
-    if (loadingScreen) {
-        loadingScreen.remove(); // Remove the element from the DOM
-    }
-});

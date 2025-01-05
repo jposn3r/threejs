@@ -1,29 +1,26 @@
 import * as THREE from 'three'
 import ParentScene from './ParentScene'
-import SceneController from '../helpers/SceneController'
 import TWEEN from '@tweenjs/tween.js'
 
 export default class MetaScene extends ParentScene {
     constructor(config) {
         super(config);
+        console.log("MetaScene: constructor");
         this.initLoaded = false;
         this.vehiclesLoaded = false;
         this.initScene();
     }
 
     initScene() {
-        console.log("initScene running");
+        console.log("MetaScene: initScene");
         this.setSceneStates();
-        let sceneController = new SceneController();
-        sceneController.testLogs();
         this.setSceneObjects();
     }
 
     setSceneObjects() {
-        console.log("setSceneObjects: running 1");
+        console.log("MetaScene: setSceneObjects");
 
         if (this.initLoaded === false) {
-            console.log("setSceneObjects: running 2");
 
             // Create a group to hold all avatars
             this.avatarGroup = new THREE.Group();
@@ -55,12 +52,9 @@ export default class MetaScene extends ParentScene {
                     return this.loadGLTF(this.avatarGroup, '/vehicles/2022_porsche_911_gt3_992/scene.gltf', 'Porsche', 60, { x: 8.4, y: .2, z: 0 }, false, 0, 0, 0)
                 })
                 .then(() => {
-                    // If you have more avatars, you can chain them similarly
-                    console.log("setSceneObjects: running 3");
 
                     // Add the group to the scene
                     this.scene.add(this.avatarGroup);
-                    console.log("avatarGroup: ", this.avatarGroup.children[0].name); // Verify the order
 
                     this.addSpaceTravel();
                     this.initializeProfileCard();
@@ -78,7 +72,7 @@ export default class MetaScene extends ParentScene {
         // Create a group to hold all vehicles
         this.vehicleGroup = new THREE.Group();
 
-        console.log("loading vehicles")
+        console.log("MetaScene: loadVehicles")
 
         // load vehicles
         this.loadGLTF(this.avatarGroup, '/vehicles/back_to_the_future_2_delorean_from_gta_5_mod/scene.gltf', 'Delorean', .5, { x: 8.4, y: .5, z: 0 }, false, 0, 0, 0)
@@ -100,11 +94,9 @@ export default class MetaScene extends ParentScene {
             })
             .then(() => {
                 // If you have more avatars, you can chain them similarly
-                console.log("setSceneObjects: running 3");
 
                 // Add the group to the scene
                 this.scene.add(this.avatarGroup);
-                console.log("vehicleGroup: ", this.vehicleGroup.children[0].name); // Verify the order
 
                 this.vehiclesLoaded = true;
                 // this.initVehiclePicker(); // Set up the picker after everything is loaded
@@ -118,6 +110,7 @@ export default class MetaScene extends ParentScene {
     // TODO: Get this to work, add ability to switch between Avatars and Vehicles
     // Need button in menu to work first then call this function
     showVehicleGroup() {
+        console.log("MetaScene: showVehicleGroup")
         // check if vehicle group exists
         if (!this.vehicleGroup) {
             console.error("Vehicle group not defined.")
@@ -134,7 +127,7 @@ export default class MetaScene extends ParentScene {
     }
 
     moveAvatarGroupX(targetX) {
-        console.log("moveAvatarGroup")
+        console.log("MetaScene: moveAvatarGroupX")
         // Ensure the avatar group exists
         if (!this.avatarGroup) {
             console.error("Avatar group is not initialized.");
@@ -169,6 +162,7 @@ export default class MetaScene extends ParentScene {
     }
 
     addArrowControls() {
+        console.log("MetaScene: addArrowControls")
         const leftArrow = document.createElement('div');
         leftArrow.id = 'left-arrow';
         leftArrow.className = 'arrow';
@@ -210,6 +204,7 @@ export default class MetaScene extends ParentScene {
     }
 
     initAvatarPicker() {
+        console.log("MetaScene: initAvatarPicker")
         // Create left and right arrows and add them to the screen
         this.currentIndex = 0
         this.avatarName = "Jakonius"
@@ -219,11 +214,13 @@ export default class MetaScene extends ParentScene {
 
     // Utility function to determine which avatar is centered
     getCenteredAvatarIndex() {
+        console.log("MetaScene: getCenteredAvatarIndex");
         return this.currentIndex;
     }
 
     // Update UI elements based on the centered avatar
     updateUIForAvatar(index) {
+        console.log("MetaScene: updateUIForAvatar");
         // Example: Update a text element with the name of the centered avatar
         const avatarName = this.avatarGroup.children[index].name;
         const avatarNameElement = document.getElementById('username');
@@ -236,26 +233,29 @@ export default class MetaScene extends ParentScene {
     }
 
     onSceneLoaded() {
+        console.log("MetaScene: onSceneLoaded");
         if (this.onLoadedCallback) {
             this.onLoadedCallback(); // Notify the main.js or scene controller
         }
     }
 
     setOnLoadedCallback(callback) {
+        console.log("MetaScene: setOnLoadedCallback");
         this.onLoadedCallback = callback;
     }
 
     initializeProfileCard() {
+        console.log("MetaScene: initializeProfileCard");
         this.createProfileCardUI();
         this.addProfileCardListeners();
     }
 
     createProfileCardUI() {
+        console.log("MetaScene: createProfileCardUI");
         const usernameDiv = document.createElement('div');
         usernameDiv.id = 'username';
         usernameDiv.className = 'z-top';
         usernameDiv.textContent = "Jakonius";
-        console.log(this.avatarGroup.children[0])
 
         const launchButtonGroup = document.createElement('div');
         launchButtonGroup.id = 'launch-button-group';
@@ -293,7 +293,9 @@ export default class MetaScene extends ParentScene {
         this.vehicleButtonElement = vehicleButton
     }
 
+    // TODO: This should probably go to the ParentScene
     createDialog(text, id) {
+        console.log("MetaScene: createDialog");
         const dialog = document.createElement('div')
         dialog.id = id
         dialog.className = 'z-top hidden'
@@ -303,7 +305,6 @@ export default class MetaScene extends ParentScene {
         `
 
         dialog.addEventListener('click', () => {
-            console.log("right arrow click")
             dialog.classList.toggle('hidden')
         });
         document.body.appendChild(dialog)
@@ -311,6 +312,7 @@ export default class MetaScene extends ParentScene {
     }
 
     addProfileCardListeners() {
+        console.log("MetaScene: addProfileCardListeners");
         this.createDialog("Coming soon!", "coming-soon-dialog")
         this.usernameElement.addEventListener('click', () => {
             this.profileCardElement.classList.toggle('hidden');
@@ -332,6 +334,7 @@ export default class MetaScene extends ParentScene {
     }
 
     toggleHidden(element1, element2, event) {
+        console.log("MetaScene: toggleHidden");
         if (!element1.classList.contains('hidden') &&
             !element1.contains(event.target) &&
             !element2.contains(event.target)) {
@@ -340,6 +343,7 @@ export default class MetaScene extends ParentScene {
     }
 
     setSceneStates() {
+        console.log("MetaScene: setSceneStates");
         let sceneStates = {
             landing: {
                 name: "reality-labs",
@@ -357,6 +361,7 @@ export default class MetaScene extends ParentScene {
 
     // pearl electron and metaverse header for now
     setMetaverseLogo() {
+        console.log("MetaScene: setMetaverseLogo");
         let optimerBoldUrl = 'https://threejs.org/examples/fonts/optimer_bold.typeface.json';
         let metaverseHeader = '';
         let headerScale = 1.5;
@@ -374,6 +379,7 @@ export default class MetaScene extends ParentScene {
 
     // space
     addSpaceTravel() {
+        console.log("MetaScene: addSpaceTravel");
         // star geometry and material
         const starCount = 10000;
         const geometry = new THREE.BufferGeometry();
@@ -398,13 +404,14 @@ export default class MetaScene extends ParentScene {
     }
 
     animateStars() {
+        //console.log("animateStars: running");
         var stars = this.stars;
         var starCount = this.starCount;
         // Update star positions
         const positions = stars.geometry.attributes.position.array;
         // i = 0 = x axis, i = 1 = y axis, i = 2 = z axis
         for (let i = 2; i < starCount * 3; i += 3) {
-            positions[i] += 1; // Move raindrops down
+            positions[i] += 1;
             if (positions[i] > 500) positions[i] = -500; // Reset position when it goes out of bounds
         }
         stars.geometry.attributes.position.needsUpdate = true;

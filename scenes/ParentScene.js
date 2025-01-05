@@ -4,9 +4,7 @@ import { AnimationObjectGroup, MeshPhongMaterial, Vector3 } from 'three'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
-import { MapControls, OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as dat from 'dat.gui'
-import TWEEN from '@tweenjs/tween.js'
 
 export default class ParentScene {
     constructor(config) {
@@ -36,7 +34,7 @@ export default class ParentScene {
 
     setScene() {
         // main scene
-        console.log("\nparent scene set scene")
+        console.log("\nParentScene: setScene")
         var scene = new THREE.Scene()
         scene.name = "main"
         this.scene = scene
@@ -50,7 +48,7 @@ export default class ParentScene {
     // RENDERER
 
     setRenderer() {
-        console.log("setRenderer()")
+        console.log("ParentScene: setRenderer")
         let renderer = new THREE.WebGLRenderer({
             canvas: document.querySelector('#world'),
         })
@@ -65,6 +63,7 @@ export default class ParentScene {
 
     setCamera(){
         // camera
+        console.log("ParentScene: setCamera")
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
         this.camera.name = "camera-1"
         this.cameraFocus = "origin"
@@ -73,8 +72,7 @@ export default class ParentScene {
 
     // update camera position
     updateCameraPosition(position = [0, 20, 75], fov = 50, zoom = 1) {
-        console.log("\nupdateCameraPosition")
-        console.log("position: " + position)
+        console.log("\nParentScene: updateCameraPosition")
         var camera = this.camera
         camera.position.set(position[0], position[1], position[2])
         camera.fov = fov
@@ -98,8 +96,7 @@ export default class ParentScene {
 
     setGui(gui) {
         // gui
-        console.log("gui yo")
-        console.log(gui)
+        console.log("ParentScene: setGui")
         var camera = this.camera
         if(gui) {
             let gui = new dat.GUI()
@@ -123,9 +120,8 @@ export default class ParentScene {
     // OBJECTS
 
     loadGLTF(scene, resourceUrl, name, scale, position, animate, xRotation = 0, yRotation = 0, zRotation = 0, animationIndex = 0, timeScale = 1) {
-        console.log("loadGLTF: running 1")
+        console.log("\nParentScene: loadGLTF: ", name)
         return new Promise((resolve) => {
-            console.log("loadGLTF: running 2")
             let mixer
             let loader = new GLTFLoader()
             let mixers = this.mixers
@@ -168,7 +164,7 @@ export default class ParentScene {
                 function (xhr) {
                     console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
                     if (xhr.loaded / xhr.total == 1) {
-                        console.log("\nloading finished, proceed with operation")
+                        console.log("loading finished, proceed with operation")
                     }
                 },
                 // called when loading has errors
@@ -182,33 +178,34 @@ export default class ParentScene {
 
     // FBX Loader function
     loadFBX(resourceUrl, scale, position, animate, animationUrl) {
-	let loader = new FBXLoader()
-	loader.load(resourceUrl, model => {
-		model.scale.set(scale, scale, scale)
-		model.position.set(position.x, position.y, position.z)
+        console.log("ParentScene: loadFBX")
+        let loader = new FBXLoader()
+	    loader.load(resourceUrl, model => {
+		    model.scale.set(scale, scale, scale)
+		    model.position.set(position.x, position.y, position.z)
 
-		let mixer = new THREE.AnimationMixer(model)
+		    let mixer = new THREE.AnimationMixer(model)
 
-		if(animate) {
-			let anim = new FBXLoader()
-			anim.setPath('./models/')
-			anim.load(animationUrl, (anim) => {
-			let action = mixer.clipAction(anim.animations[0])
-				action.play()
-			})
-		}
+		    if(animate) {
+			    let anim = new FBXLoader()
+			    anim.setPath('./models/')
+			    anim.load(animationUrl, (anim) => {
+			    let action = mixer.clipAction(anim.animations[0])
+				    action.play()
+			    })
+		    }
 
-		scene.add(model)
-		this.mixers.push(mixer)
-	})
-}
-
-    moveObject(name, currentPosition, targetPosition, tweenDuration) {
-
+		    scene.add(model)
+		    this.mixers.push(mixer)
+	    })
     }
 
-    // comment here
+    moveObject(name, currentPosition, targetPosition, tweenDuration) {
+        console.log("ParentScene: moveObject")
+    }
+
     rotateObject(name, rotation = [0, 0, 0]) {
+        //console.log("ParentScene: rotateObject", name)
         let object = this.getObjectByName(name)
         if(object !== undefined) {
             object.rotation.x += rotation[0]
@@ -217,39 +214,38 @@ export default class ParentScene {
         }
     }
 
-    // comment here
     getObjectByName(name) {
+        // console.log("ParentScene: getObjectByName", name)
         return this.scene.getObjectByName(name)
     }
 
-    // comment here
     removeObjectByName(name) {
+        console.log("ParentScene: removeObjectByName", name)
         return this.scene.remove(this.getObjectByName(name))
     }
 
-    // comment here
     setBackground(asset) {
+        console.log("ParentScene: setBackground", asset)
         let texture = new THREE.TextureLoader().load(asset)
         this.scene.background = texture
     }
 
-     // comment here
      addGridFloor() {
-        // grid floor
+        console.log("ParentScene: addGridFloor")
         let gridHelper = new THREE.GridHelper(100, 40, 0xffffff, 0x00dadf)
         gridHelper.name = "light-grid"
         this.scene.add(gridHelper)
     }
 
-    // comment here
     toggleGridFloor() {
-        console.log("\nthis happens yo")
+        console.log("\nParentScene: toggleGridFloor")
         var lightGrid = this.scene.getObjectByName('light-grid')
         lightGrid.visible = !lightGrid.visible
     }
 
     // load box geometry
     addCube(name, textureUri, height, width, depth, translation, rotation) {
+        console.log("ParentScene: addCube", name)
         const geometry = new THREE.BoxGeometry( height, width, depth);
         const texture = new THREE.TextureLoader().load('./assets/' + textureUri)
         const material = new THREE.MeshBasicMaterial( {color: 0x00ffdd, map: texture} );
@@ -265,6 +261,7 @@ export default class ParentScene {
 
      // load 3d text - this should be somewhere else to be used by every scene
      loadText(fontUrl, name, text, size, height, position, shadow, xRotation = 0, yRotation = 0, zRotation = 0, visible = true) {
+        console.log("ParentScene: loadText", name)
         let loader = new FontLoader()
         let scene = this.scene
         
@@ -290,9 +287,8 @@ export default class ParentScene {
 
     // LIGHTS
 
-    // comment here
     setLights() {
-        // lights
+        console.log("ParentScene: setLights")
         this.lights = []
         this.addLightToScene("ambient", "ambient-light")
         this.addLightToScene("point", "point-light-1", 0xffffff, [0, 15, 30], 2, 0)
@@ -301,6 +297,7 @@ export default class ParentScene {
 
     // comment here
     addLightToScene(type, name, color = 0xffffff, position = [0, 0, 0], intensity = 1, distance = 100, decay = 0) {
+        console.log("ParentScene: addLightToScene", name)
         var lightObj = {}
         lightObj.name = name
         lightObj.type = type
@@ -321,13 +318,14 @@ export default class ParentScene {
     // ANIMATE
 
     animateScene(clockDelta) {
-        console.log("this is running bro")
+        console.log("ParentScene: animateScene")
         if(this.mixers) {
             this.updateMixers(clockDelta)
         }
     }
 
     setMixers() {
+        console.log("ParentScene: setMixers")
         this.mixers = []
     }
 
@@ -341,6 +339,6 @@ export default class ParentScene {
     }
 
     handleClick(name) {
-        console.log("received event: " + name)
+        console.log("ParentScene: handleClick: " + name)
     }
 }

@@ -157,10 +157,6 @@ canvas {
         right: 38%;
     }
 
-    #left-arrow {
-        left: 38%;
-    }
-
 
 #vehicle-button, #avatar-button {
     display: flex;
