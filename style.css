@@ -220,6 +220,7 @@ canvas {
 /* Mobile phone section */
 /* ========================================================================================================= */
 
+/* TODO: Fix arrows on mobile */
 @media (max-width: 800px) {
   #middle-box {
     display: none;
@@ -229,9 +230,9 @@ canvas {
       top: 70%;
   }
 
-  #right-arrow {
-      right: 50px !important;
-  }
+    #right-arrow {
+        right: 50px !important;
+    }
 
     #left-arrow {
         left: 50px !important;
