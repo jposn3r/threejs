@@ -51,6 +51,10 @@ export default class MetaScene extends ParentScene {
                     return this.loadGLTF(this.avatarGroup, '/avatars/astronaut/scene.gltf', 'Astronaut', .5, { x: 7, y: .05, z: 0 }, false, 0, 0, 0)
                 })
                 .then(() => {
+                    // Load em all, this isn't scalable lol
+                    return this.loadGLTF(this.avatarGroup, '/vehicles/2022_porsche_911_gt3_992/scene.gltf', 'Porsche', 60, { x: 8.4, y: .2, z: 0 }, false, 0, 0, 0)
+                })
+                .then(() => {
                     // If you have more avatars, you can chain them similarly
                     console.log("setSceneObjects: running 3");
 
@@ -169,10 +173,7 @@ export default class MetaScene extends ParentScene {
         leftArrow.id = 'left-arrow';
         leftArrow.className = 'arrow';
         leftArrow.innerHTML = '&lt;';
-        leftArrow.style.position = 'absolute';
-        leftArrow.style.bottom = '30%';  // Keep the arrows near the bottom of the screen
-        leftArrow.style.left = '30%';  // Position closer to the center horizontally
-        leftArrow.style.fontSize = '7em'; // Make the arrow larger
+        leftArrow.style.left = '38%';  // Position closer to the center horizontally
         leftArrow.style.color = 'white';
         leftArrow.style.cursor = 'pointer';
         leftArrow.style.zIndex = '1000'; // Ensure it's above other elements
@@ -181,10 +182,6 @@ export default class MetaScene extends ParentScene {
         rightArrow.id = 'right-arrow';
         rightArrow.className = 'arrow';
         rightArrow.innerHTML = '&gt;';
-        rightArrow.style.position = 'absolute';
-        rightArrow.style.bottom = '30%';  // Keep the arrows near the bottom of the screen
-        rightArrow.style.right = '30%'; // Position closer to the center horizontally
-        rightArrow.style.fontSize = '7em'; // Make the arrow larger
         rightArrow.style.color = 'white';
         rightArrow.style.cursor = 'pointer';
         rightArrow.style.zIndex = '1000'; // Ensure it's above other elements
