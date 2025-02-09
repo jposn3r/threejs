@@ -49,7 +49,7 @@ export default class MetaScene extends ParentScene {
                 })
                 .then(() => {
                     // Load em all, this isn't scalable lol
-                    return this.loadGLTF(this.avatarGroup, '/vehicles/2022_porsche_911_gt3_992/scene.gltf', 'Porsche', 60, { x: 8.4, y: .2, z: 0 }, false, 0, 0, 0)
+                    return this.loadGLTF(this.avatarGroup, '/vehicles/hoonicorn_ken_block/scene.gltf', 'Ken Block', .20, { x: 8.2, y: .2, z: -.2 }, false, 0, 0, 0)
                 })
                 .then(() => {
 
