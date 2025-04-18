@@ -223,7 +223,8 @@ canvas {
   }
 
   #right-arrow, #left-arrow {
-      top: 70%;
+      top: 69%;
+      bottom: 27%;
   }
 
     #right-arrow {
