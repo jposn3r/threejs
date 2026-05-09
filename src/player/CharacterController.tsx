@@ -9,15 +9,9 @@ import { useFrame } from '@react-three/fiber'
 import { useMemo, useRef, type RefObject } from 'react'
 import { Vector3 } from 'three'
 import { inputState } from '@/input/InputState'
+import { computeMovement, MAX_DT } from './movement'
 
-// Movement tuning — adjust by feel, not by spec.
-const WALK_SPEED = 4 // m/s
-const RUN_SPEED = 7 // m/s
-const JUMP_VELOCITY = 6 // m/s upward impulse
-const GRAVITY = -25 // m/s² (slightly stronger than real for "game feel")
-const MAX_DT = 0.1 // cap delta to avoid tunneling on big frame drops
-
-// Respawn safety — if the player falls below this y, teleport them back to spawn.
+// Respawn safety — if the player falls below this y, teleport back to spawn.
 const SPAWN = { x: 0, y: 3, z: 5 }
 const KILL_PLANE_Y = -10
 
@@ -28,21 +22,25 @@ const KILL_PLANE_Y = -10
 // bug in the upstream controller. Future scenes with stairs/holes will
 // replace this with proper per-scene collision geometry.
 const FLOOR_CLAMP_Y = 0.9
+const GROUNDED_EPSILON = 0.01
 
 /**
  * Kinematic character controller.
  *
- * Owns a kinematic-position-based RigidBody with a capsule collider, plus a
- * Rapier `KinematicCharacterController` helper that handles slide-along-walls,
- * auto-step over small ledges, and snap-to-ground.
+ * Owns a kinematic-position-based RigidBody + capsule collider + Rapier
+ * `KinematicCharacterController` helper for collision resolution.
  *
- * Movement model:
- *  - Read intent from `inputState.move` (XZ plane, world-relative for now)
- *  - Apply gravity manually (kinematic bodies aren't subject to physics gravity)
- *  - Ask the controller to compute valid movement given collisions
- *  - setNextKinematicTranslation to the new position
+ * Movement logic is delegated to `computeMovement` (pure function, tested in
+ * movement.test.ts). This component is the wiring layer: it reads inputState,
+ * calls computeMovement, runs the result through Rapier's collision solver,
+ * and applies the floor clamp.
  *
- * Camera-relative movement comes when MouseProducer + camera yaw land in M4.
+ * Grounded detection is position-based (y at or near FLOOR_CLAMP_Y) rather
+ * than relying on `controller.computedGrounded()`. The Rapier flag was
+ * unreliable without a constant downward bias in our movement, and the bias
+ * itself caused tunneling on speed transitions. For the flat sandbox floor,
+ * position check is bulletproof. Real scenes with varied geometry will need
+ * the controller-based check (re-introduced when we have terrain to test it).
  */
 export function CharacterController({
   bodyRef,
@@ -57,11 +55,6 @@ export function CharacterController({
     c.setUp({ x: 0, y: 1, z: 0 })
     c.setApplyImpulsesToDynamicBodies(true)
     c.setMaxSlopeClimbAngle((45 * Math.PI) / 180)
-    // Auto-step + snap-to-ground intentionally disabled. Both are designed
-    // for stairs/uneven terrain; on flat ground they introduce edge cases
-    // where the character can be pushed into the collider on speed
-    // transitions. We re-enable them per-scene later when the geometry
-    // actually warrants it.
     return c
   }, [world])
 
@@ -72,42 +65,38 @@ export function CharacterController({
     if (!bodyRef.current || !colliderRef.current) return
 
     // Respawn if we've fallen off / through the world
-    const pos = bodyRef.current.translation()
-    if (pos.y < KILL_PLANE_Y) {
+    const t = bodyRef.current.translation()
+    if (t.y < KILL_PLANE_Y) {
       bodyRef.current.setNextKinematicTranslation(SPAWN)
       verticalVelocity.current = 0
       return
     }
 
     const dt = Math.min(delta, MAX_DT)
-    const speed = inputState.run ? RUN_SPEED : WALK_SPEED
+    const grounded = t.y <= FLOOR_CLAMP_Y + GROUNDED_EPSILON
 
-    // Horizontal movement (world-relative; camera-relative comes later)
-    movement.current.set(
-      inputState.move.x * speed * dt,
-      0,
-      inputState.move.y * speed * dt,
+    // Pure logic — see movement.ts
+    const result = computeMovement(
+      {
+        moveX: inputState.move.x,
+        moveY: inputState.move.y,
+        jump: inputState.jump,
+        run: inputState.run,
+      },
+      { verticalVelocity: verticalVelocity.current },
+      grounded,
+      dt,
     )
 
-    // Vertical: gravity + jump
-    if (controller.computedGrounded()) {
-      // No downward bias — let collisions hold us up. Bias was causing
-      // sub-frame penetration in some controller-state transitions.
-      verticalVelocity.current = 0
-      if (inputState.jump) {
-        verticalVelocity.current = JUMP_VELOCITY
-        inputState.jump = false // consume edge trigger
-      }
-    } else {
-      verticalVelocity.current += GRAVITY * dt
-    }
-    movement.current.y += verticalVelocity.current * dt
+    if (result.jumpConsumed) inputState.jump = false
+    verticalVelocity.current = result.verticalVelocity
+
+    movement.current.set(result.dx, result.dy, result.dz)
 
     // Resolve against world colliders
     controller.computeColliderMovement(colliderRef.current, movement.current)
     const computed = controller.computedMovement()
 
-    const t = bodyRef.current.translation()
     bodyRef.current.setNextKinematicTranslation({
       x: t.x + computed.x,
       y: Math.max(t.y + computed.y, FLOOR_CLAMP_Y),
