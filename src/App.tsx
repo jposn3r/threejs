@@ -43,6 +43,19 @@ export default function App() {
         </div>
       )}
 
+      {/* Reticle — center of screen, only when locked. Indicates where the
+          camera is looking; later doubles as the interact target. */}
+      {locked && (
+        <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+          <div className="relative h-5 w-5">
+            {/* Outer ring */}
+            <div className="absolute inset-0 rounded-full border border-accent-400/40" />
+            {/* Center dot */}
+            <div className="absolute left-1/2 top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-400 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
+          </div>
+        </div>
+      )}
+
       {/* 3D canvas */}
       <Canvas
         shadows

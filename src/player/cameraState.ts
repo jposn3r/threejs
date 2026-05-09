@@ -24,8 +24,7 @@ export const cameraState: CameraState = {
   pitch: 0,
 }
 
-// Pitch clamps — per SPEC §2 row 7 / agreed in chat.
-// Range: 30° down to 60° up (gameplay-friendly, can't see your own feet,
-// can't look straight up).
-export const PITCH_MIN = -Math.PI / 6 // -30°
-export const PITCH_MAX = Math.PI / 3 //  +60°
+// Pitch clamps. Symmetric ±30° — keeps the camera grounded; previous +60°
+// felt too steep when looking up.
+export const PITCH_MIN = -Math.PI / 6 // -30° (look down)
+export const PITCH_MAX = Math.PI / 6 //  +30° (look up)
