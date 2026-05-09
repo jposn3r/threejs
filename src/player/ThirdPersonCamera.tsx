@@ -2,20 +2,28 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useRef, type RefObject } from 'react'
 import { Vector3 } from 'three'
 import type { RapierRigidBody } from '@react-three/rapier'
+import { cameraState } from './cameraState'
 
-// Camera placement relative to the target. World-space for now (no yaw).
-// Mouse-look in M4 will rotate this offset around the target.
-const OFFSET = new Vector3(0, 4, 7)
-const LOOK_HEIGHT = 1.2 // look at upper body, not feet
-const FOLLOW_RESPONSIVENESS = 5 // higher = snappier; lower = laggier
+const FOLLOW_DISTANCE = 7
+const CAMERA_HEIGHT = 2.7 // above player base
+const LOOK_HEIGHT = 1.2 // chest height target
+const FOLLOW_RESPONSIVENESS = 8 // higher = snappier; lower = laggier
 
 /**
- * Fortnite-style lazy-follow camera.
+ * Fortnite-style lazy-follow camera with mouse-look.
  *
- * Each frame, dampens position toward `target + OFFSET` and looks at the
- * target's upper body. Frame-rate-independent damping via `1 - exp(-k·dt)`.
+ * Position: orbits the player at fixed distance + height. Horizontal angle
+ * comes from cameraState.yaw — when the player drags the mouse, this rotates
+ * which side of the player the camera sits on.
  *
- * Pure spectator now — manual mouse drag override comes with MouseProducer.
+ * Look-at: aimed at the player's chest, with vertical offset from
+ * cameraState.pitch so mouse-up makes the view tilt up. We use tan(pitch)
+ * scaled by FOLLOW_DISTANCE so pitch corresponds (approximately) to the
+ * actual camera tilt angle.
+ *
+ * Damping: frame-rate-independent exponential lerp on position.
+ * Look-at snaps directly because lagged look-at causes nauseating
+ * camera-feel mismatch when paired with mouse-look.
  */
 export function ThirdPersonCamera({
   targetRef,
@@ -29,11 +37,22 @@ export function ThirdPersonCamera({
     if (!targetRef.current) return
 
     const t = targetRef.current.translation()
-    ideal.current.set(t.x + OFFSET.x, t.y + OFFSET.y, t.z + OFFSET.z)
+    const yaw = cameraState.yaw
+    const pitch = cameraState.pitch
+
+    // Camera orbit position around player
+    ideal.current.set(
+      t.x + Math.sin(yaw) * FOLLOW_DISTANCE,
+      t.y + CAMERA_HEIGHT,
+      t.z + Math.cos(yaw) * FOLLOW_DISTANCE,
+    )
 
     const k = 1 - Math.exp(-FOLLOW_RESPONSIVENESS * delta)
     camera.position.lerp(ideal.current, k)
-    camera.lookAt(t.x, t.y + LOOK_HEIGHT, t.z)
+
+    // Look target — vertical offset from pitch
+    const lookY = t.y + LOOK_HEIGHT + Math.tan(pitch) * FOLLOW_DISTANCE
+    camera.lookAt(t.x, lookY, t.z)
   })
 
   return null

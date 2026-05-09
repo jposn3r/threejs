@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
+  cameraRelativeMovement,
   computeMovement,
   WALK_SPEED,
   RUN_SPEED,
@@ -7,12 +8,90 @@ import {
   GRAVITY,
 } from './movement'
 
-const dt = 1 / 60 // 60fps frame
+const dt = 1 / 60
 
-const noIntent = { moveX: 0, moveY: 0, jump: false, run: false }
+const noIntent = {
+  moveX: 0,
+  moveY: 0,
+  jump: false,
+  run: false,
+  cameraYaw: 0,
+}
 const zeroState = { verticalVelocity: 0 }
 
-describe('computeMovement — horizontal', () => {
+// ─── cameraRelativeMovement ─────────────────────────────────────────────
+
+describe('cameraRelativeMovement — yaw=0 (default camera behind player)', () => {
+  it('W (moveY=-1) goes to world -Z', () => {
+    const r = cameraRelativeMovement(0, -1, 0)
+    expect(r.x).toBeCloseTo(0)
+    expect(r.z).toBeCloseTo(-1)
+  })
+
+  it('S (moveY=+1) goes to world +Z', () => {
+    const r = cameraRelativeMovement(0, 1, 0)
+    expect(r.x).toBeCloseTo(0)
+    expect(r.z).toBeCloseTo(1)
+  })
+
+  it('D (moveX=+1) goes to world +X', () => {
+    const r = cameraRelativeMovement(1, 0, 0)
+    expect(r.x).toBeCloseTo(1)
+    expect(r.z).toBeCloseTo(0)
+  })
+
+  it('A (moveX=-1) goes to world -X', () => {
+    const r = cameraRelativeMovement(-1, 0, 0)
+    expect(r.x).toBeCloseTo(-1)
+    expect(r.z).toBeCloseTo(0)
+  })
+})
+
+describe('cameraRelativeMovement — yaw=-π/2 (camera orbited so view points +X)', () => {
+  // Mouse-right makes yaw decrease; -π/2 means user is looking toward +X.
+  const yaw = -Math.PI / 2
+
+  it('W now sends the player toward world +X', () => {
+    const r = cameraRelativeMovement(0, -1, yaw)
+    expect(r.x).toBeCloseTo(1)
+    expect(r.z).toBeCloseTo(0)
+  })
+
+  it('D now sends the player toward world +Z', () => {
+    const r = cameraRelativeMovement(1, 0, yaw)
+    expect(r.x).toBeCloseTo(0)
+    expect(r.z).toBeCloseTo(1)
+  })
+})
+
+describe('cameraRelativeMovement — yaw=π (looking the opposite direction)', () => {
+  it('W now sends the player toward world +Z', () => {
+    const r = cameraRelativeMovement(0, -1, Math.PI)
+    expect(r.x).toBeCloseTo(0)
+    expect(r.z).toBeCloseTo(1)
+  })
+})
+
+describe('cameraRelativeMovement — magnitude invariance', () => {
+  it('rotation does not change vector magnitude', () => {
+    for (const yaw of [0, 0.5, 1, -1, Math.PI / 2, Math.PI, -Math.PI]) {
+      const r = cameraRelativeMovement(1, 0, yaw)
+      const mag = Math.sqrt(r.x * r.x + r.z * r.z)
+      expect(mag).toBeCloseTo(1)
+    }
+  })
+
+  it('pre-normalized diagonal stays unit length under rotation', () => {
+    const v = 1 / Math.sqrt(2)
+    const r = cameraRelativeMovement(v, -v, Math.PI / 4)
+    const mag = Math.sqrt(r.x * r.x + r.z * r.z)
+    expect(mag).toBeCloseTo(1)
+  })
+})
+
+// ─── computeMovement — horizontal ────────────────────────────────────────
+
+describe('computeMovement — horizontal (yaw=0)', () => {
   it('produces no movement when no input and grounded', () => {
     const r = computeMovement(noIntent, zeroState, true, dt)
     expect(r.dx).toBe(0)
@@ -21,25 +100,15 @@ describe('computeMovement — horizontal', () => {
   })
 
   it('walks forward at WALK_SPEED when moveY is -1 (W)', () => {
-    const r = computeMovement(
-      { ...noIntent, moveY: -1 },
-      zeroState,
-      true,
-      dt,
-    )
+    const r = computeMovement({ ...noIntent, moveY: -1 }, zeroState, true, dt)
     expect(r.dz).toBeCloseTo(-WALK_SPEED * dt)
-    expect(r.dx).toBe(0)
+    expect(r.dx).toBeCloseTo(0)
   })
 
   it('walks right at WALK_SPEED when moveX is 1 (D)', () => {
-    const r = computeMovement(
-      { ...noIntent, moveX: 1 },
-      zeroState,
-      true,
-      dt,
-    )
+    const r = computeMovement({ ...noIntent, moveX: 1 }, zeroState, true, dt)
     expect(r.dx).toBeCloseTo(WALK_SPEED * dt)
-    expect(r.dz).toBe(0)
+    expect(r.dz).toBeCloseTo(0)
   })
 
   it('sprints at RUN_SPEED when run is held', () => {
@@ -53,8 +122,6 @@ describe('computeMovement — horizontal', () => {
   })
 
   it('respects pre-normalized diagonal input (no √2 boost)', () => {
-    // Caller is responsible for normalizing; we should NOT re-normalize.
-    // Pre-normalized diagonal: (1/√2, 1/√2) → magnitude 1
     const v = 1 / Math.sqrt(2)
     const r = computeMovement(
       { ...noIntent, moveX: v, moveY: v },
@@ -66,6 +133,34 @@ describe('computeMovement — horizontal', () => {
     expect(speed).toBeCloseTo(WALK_SPEED * dt)
   })
 })
+
+describe('computeMovement — horizontal (camera-relative)', () => {
+  it('W with yaw=-π/2 sends the player to +X at WALK_SPEED', () => {
+    const r = computeMovement(
+      { ...noIntent, moveY: -1, cameraYaw: -Math.PI / 2 },
+      zeroState,
+      true,
+      dt,
+    )
+    expect(r.dx).toBeCloseTo(WALK_SPEED * dt)
+    expect(r.dz).toBeCloseTo(0)
+  })
+
+  it('rotating yaw does not change movement magnitude', () => {
+    for (const yaw of [0, 0.5, 1, Math.PI / 2, -Math.PI]) {
+      const r = computeMovement(
+        { ...noIntent, moveY: -1, cameraYaw: yaw },
+        zeroState,
+        true,
+        dt,
+      )
+      const speed = Math.sqrt(r.dx ** 2 + r.dz ** 2)
+      expect(speed).toBeCloseTo(WALK_SPEED * dt)
+    }
+  })
+})
+
+// ─── computeMovement — jump ──────────────────────────────────────────────
 
 describe('computeMovement — jump', () => {
   it('triggers jump when grounded and jump intent is set', () => {
@@ -88,19 +183,18 @@ describe('computeMovement — jump', () => {
       dt,
     )
     expect(r.jumpConsumed).toBe(false)
-    // Still subject to gravity
     expect(r.verticalVelocity).toBeCloseTo(5 + GRAVITY * dt)
   })
 
   it('jumps the same height regardless of horizontal speed', () => {
     const slow = computeMovement(
-      { moveX: 0, moveY: -1, jump: true, run: false },
+      { ...noIntent, moveY: -1, jump: true, run: false },
       zeroState,
       true,
       dt,
     )
     const fast = computeMovement(
-      { moveX: 0, moveY: -1, jump: true, run: true },
+      { ...noIntent, moveY: -1, jump: true, run: true },
       zeroState,
       true,
       dt,
@@ -110,25 +204,24 @@ describe('computeMovement — jump', () => {
   })
 
   it('horizontal sprint then walk transition does not affect vertical', () => {
-    // Mid-sprint while grounded
     const sprint = computeMovement(
-      { moveX: 0, moveY: -1, jump: false, run: true },
+      { ...noIntent, moveY: -1, run: true },
       zeroState,
       true,
       dt,
     )
-    // Same frame, intent flips to walk (shift released)
     const walk = computeMovement(
-      { moveX: 0, moveY: -1, jump: false, run: false },
+      { ...noIntent, moveY: -1, run: false },
       { verticalVelocity: sprint.verticalVelocity },
       true,
       dt,
     )
-    // Vertical velocity must remain 0 — the regression we're guarding against
     expect(walk.verticalVelocity).toBe(0)
     expect(walk.dy).toBe(0)
   })
 })
+
+// ─── computeMovement — gravity ───────────────────────────────────────────
 
 describe('computeMovement — gravity', () => {
   it('accumulates downward velocity over time when ungrounded', () => {
@@ -141,7 +234,7 @@ describe('computeMovement — gravity', () => {
   })
 
   it('resets vertical velocity to 0 the moment we touch ground', () => {
-    const falling = { verticalVelocity: -50 } // already falling fast
+    const falling = { verticalVelocity: -50 }
     const r = computeMovement(noIntent, falling, true, dt)
     expect(r.verticalVelocity).toBe(0)
     expect(r.dy).toBe(0)
@@ -149,13 +242,12 @@ describe('computeMovement — gravity', () => {
 
   it('full jump arc: jump → ascend → peak → descend → land', () => {
     let state = { verticalVelocity: 0 }
-    let y = 0.9 // resting height
+    let y = 0.9
     let frames = 0
     let peakY = y
     let peakedAt = -1
     let landed = false
 
-    // Frame 0: jump
     const initial = computeMovement(
       { ...noIntent, jump: true },
       state,
@@ -166,9 +258,8 @@ describe('computeMovement — gravity', () => {
     y += initial.dy
     expect(initial.jumpConsumed).toBe(true)
 
-    // Subsequent frames: ungrounded until y returns to ~0.9
     while (frames < 1000 && !landed) {
-      const grounded = y <= 0.9 // floor-clamp emulation
+      const grounded = y <= 0.9
       const r = computeMovement(noIntent, state, grounded, dt)
       state = { verticalVelocity: r.verticalVelocity }
       y += r.dy
@@ -181,8 +272,8 @@ describe('computeMovement — gravity', () => {
     }
 
     expect(landed).toBe(true)
-    expect(peakY).toBeGreaterThan(1.5) // jumped meaningfully
+    expect(peakY).toBeGreaterThan(1.5)
     expect(peakedAt).toBeGreaterThan(0)
-    expect(peakedAt).toBeLessThan(frames) // peak before landing
+    expect(peakedAt).toBeLessThan(frames)
   })
 })

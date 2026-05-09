@@ -8,8 +8,8 @@
  * The character controller component handles wiring this to:
  *  - the kinematic RigidBody's translation (apply movement)
  *  - the keyboard producer's inputState (intent)
- *  - the floor clamp on next translation (the controller does this AFTER
- *    asking us — we just compute the intent here)
+ *  - the mouse producer's cameraState (yaw)
+ *  - the floor clamp on next translation
  *
  * Tuning constants live in this file so the tests can import them too.
  */
@@ -21,13 +21,16 @@ export const GRAVITY = -25 // m/s² (slightly stronger than real for "game feel"
 export const MAX_DT = 0.1 // cap delta to avoid tunneling on big frame drops
 
 export interface MovementIntent {
-  /** Horizontal intent on camera-relative XZ. -1..1 each axis, magnitude ≤ 1. */
+  /** Horizontal intent. moveY = -1 is forward (W). magnitude ≤ 1. */
   moveX: number
   moveY: number
   /** Edge-triggered: true if jump was requested this frame. Consumed if applied. */
   jump: boolean
   /** Held: true if sprint key is down. */
   run: boolean
+  /** Camera horizontal angle in radians. Movement is rotated by this so W
+   * always means "where the camera is looking." See cameraState.ts. */
+  cameraYaw: number
 }
 
 export interface MovementState {
@@ -47,9 +50,40 @@ export interface MovementResult {
 }
 
 /**
+ * Rotate input intent (which is camera-relative: moveY=-1 means "forward in
+ * the view," moveX=+1 means "right of the view") into world-space XZ.
+ *
+ * Math derivation lives in chat history; condensed:
+ *   forward = (-sin(yaw), -cos(yaw))     ← world dir for moveY = -1 (W)
+ *   right   = ( cos(yaw), -sin(yaw))     ← world dir for moveX = +1 (D)
+ *
+ * Returns world-space horizontal displacement direction with the same
+ * magnitude as the input intent vector (no speed applied yet).
+ */
+export function cameraRelativeMovement(
+  moveX: number,
+  moveY: number,
+  yaw: number,
+): { x: number; z: number } {
+  const sinY = Math.sin(yaw)
+  const cosY = Math.cos(yaw)
+
+  const forwardX = -sinY
+  const forwardZ = -cosY
+  const rightX = cosY
+  const rightZ = -sinY
+
+  // moveY=-1 (W) → +1 forward; moveX=+1 (D) → +1 right
+  const x = moveX * rightX + -moveY * forwardX
+  const z = moveX * rightZ + -moveY * forwardZ
+
+  return { x, z }
+}
+
+/**
  * Compute one frame of character movement.
  *
- * @param intent  current input
+ * @param intent  current input (includes camera yaw for relative movement)
  * @param state   carried state (vertical velocity)
  * @param grounded  whether the character is currently on the ground
  * @param dt  frame delta in seconds (already capped by caller if desired)
@@ -62,9 +96,10 @@ export function computeMovement(
 ): MovementResult {
   const speed = intent.run ? RUN_SPEED : WALK_SPEED
 
-  // Horizontal — world-relative for now (camera-relative comes with mouse-look in M4)
-  const dx = intent.moveX * speed * dt
-  const dz = intent.moveY * speed * dt
+  // Horizontal — rotate input by camera yaw before applying speed
+  const cam = cameraRelativeMovement(intent.moveX, intent.moveY, intent.cameraYaw)
+  const dx = cam.x * speed * dt
+  const dz = cam.z * speed * dt
 
   // Vertical — gravity + jump
   let vy = state.verticalVelocity

@@ -9,6 +9,7 @@ import { useFrame } from '@react-three/fiber'
 import { useMemo, useRef, type RefObject } from 'react'
 import { Vector3 } from 'three'
 import { inputState } from '@/input/InputState'
+import { cameraState } from './cameraState'
 import { computeMovement, MAX_DT } from './movement'
 
 // Respawn safety — if the player falls below this y, teleport back to spawn.
@@ -82,6 +83,7 @@ export function CharacterController({
         moveY: inputState.move.y,
         jump: inputState.jump,
         run: inputState.run,
+        cameraYaw: cameraState.yaw,
       },
       { verticalVelocity: verticalVelocity.current },
       grounded,
