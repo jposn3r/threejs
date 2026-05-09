@@ -11,6 +11,12 @@ import { Player } from '@/player/Player'
 export function SandboxScene() {
   return (
     <>
+      {/* Background + atmospheric fog. Fog blends distant geometry into
+          the background color so the floor edge doesn't cut off as a hard
+          slab on the horizon when looking up. */}
+      <color attach="background" args={['#050505']} />
+      <fog attach="fog" args={['#050505', 25, 70]} />
+
       {/* Lighting */}
       <ambientLight intensity={0.35} />
       <directionalLight
@@ -42,17 +48,16 @@ export function SandboxScene() {
         infiniteGrid
       />
 
-      {/* Floor — fixed rigid body. Top of collider sits at y=0 so the player
-          capsule rests on the visible surface.
+      {/* Floor — fixed rigid body. Top sits at y=0.
 
-          Explicit CuboidCollider (half-extents) instead of `colliders="cuboid"`
-          auto-detect — the auto-version has been flaky here. Floor is also
-          made thicker (4 units) than visually needed to defeat any chance of
-          tunneling on big frame drops. */}
+          Made very wide (200×200) so the edge is well past the fog's full-
+          opacity distance — you can't see it terminate. Collider matches.
+          Explicit CuboidCollider (half-extents) instead of `colliders=
+          "cuboid"` auto-detect — the auto-version has been flaky. */}
       <RigidBody type="fixed" position={[0, -2, 0]}>
-        <CuboidCollider args={[20, 2, 20]} />
+        <CuboidCollider args={[100, 2, 100]} />
         <mesh receiveShadow>
-          <boxGeometry args={[40, 4, 40]} />
+          <boxGeometry args={[200, 4, 200]} />
           <meshStandardMaterial color="#0a0a0a" roughness={0.9} />
         </mesh>
       </RigidBody>

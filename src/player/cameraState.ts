@@ -24,7 +24,8 @@ export const cameraState: CameraState = {
   pitch: 0,
 }
 
-// Pitch clamps. Symmetric ±30° — keeps the camera grounded; previous +60°
-// felt too steep when looking up.
-export const PITCH_MIN = -Math.PI / 6 // -30° (look down)
-export const PITCH_MAX = Math.PI / 6 //  +30° (look up)
+// Pitch clamps. Asymmetric: more room to look down than up, because looking
+// up pushes the player toward (and off) the bottom of the screen. ~18° up
+// keeps the player chest comfortably in view at the default FOV/distance.
+export const PITCH_MIN = -Math.PI / 6 //  -30° (look down)
+export const PITCH_MAX = Math.PI / 10 //  +18° (look up — character stays in view)
