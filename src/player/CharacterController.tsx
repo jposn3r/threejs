@@ -18,9 +18,16 @@ const GRAVITY = -25 // m/s² (slightly stronger than real for "game feel")
 const MAX_DT = 0.1 // cap delta to avoid tunneling on big frame drops
 
 // Respawn safety — if the player falls below this y, teleport them back to spawn.
-// Cheap insurance against any tunneling / collider gap edge cases.
 const SPAWN = { x: 0, y: 3, z: 5 }
 const KILL_PLANE_Y = -10
+
+// Hard absolute floor for the sandbox — the capsule's resting center y is
+// 0.9 (half-height 0.5 + radius 0.4 above floor top at y=0). Clamping the
+// next translation against this is a belt-and-suspenders guarantee that the
+// kinematic body cannot end up inside the floor collider, regardless of any
+// bug in the upstream controller. Future scenes with stairs/holes will
+// replace this with proper per-scene collision geometry.
+const FLOOR_CLAMP_Y = 0.9
 
 /**
  * Kinematic character controller.
@@ -50,8 +57,11 @@ export function CharacterController({
     c.setUp({ x: 0, y: 1, z: 0 })
     c.setApplyImpulsesToDynamicBodies(true)
     c.setMaxSlopeClimbAngle((45 * Math.PI) / 180)
-    c.enableAutostep(0.5, 0.2, true)
-    c.enableSnapToGround(0.5)
+    // Auto-step + snap-to-ground intentionally disabled. Both are designed
+    // for stairs/uneven terrain; on flat ground they introduce edge cases
+    // where the character can be pushed into the collider on speed
+    // transitions. We re-enable them per-scene later when the geometry
+    // actually warrants it.
     return c
   }, [world])
 
@@ -81,8 +91,9 @@ export function CharacterController({
 
     // Vertical: gravity + jump
     if (controller.computedGrounded()) {
-      // Small downward bias keeps the controller snapping to slopes/ground
-      verticalVelocity.current = -1
+      // No downward bias — let collisions hold us up. Bias was causing
+      // sub-frame penetration in some controller-state transitions.
+      verticalVelocity.current = 0
       if (inputState.jump) {
         verticalVelocity.current = JUMP_VELOCITY
         inputState.jump = false // consume edge trigger
@@ -99,7 +110,7 @@ export function CharacterController({
     const t = bodyRef.current.translation()
     bodyRef.current.setNextKinematicTranslation({
       x: t.x + computed.x,
-      y: t.y + computed.y,
+      y: Math.max(t.y + computed.y, FLOOR_CLAMP_Y),
       z: t.z + computed.z,
     })
   })
