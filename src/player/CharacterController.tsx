@@ -17,6 +17,11 @@ const JUMP_VELOCITY = 6 // m/s upward impulse
 const GRAVITY = -25 // m/s² (slightly stronger than real for "game feel")
 const MAX_DT = 0.1 // cap delta to avoid tunneling on big frame drops
 
+// Respawn safety — if the player falls below this y, teleport them back to spawn.
+// Cheap insurance against any tunneling / collider gap edge cases.
+const SPAWN = { x: 0, y: 3, z: 5 }
+const KILL_PLANE_Y = -10
+
 /**
  * Kinematic character controller.
  *
@@ -55,6 +60,14 @@ export function CharacterController({
 
   useFrame((_, delta) => {
     if (!bodyRef.current || !colliderRef.current) return
+
+    // Respawn if we've fallen off / through the world
+    const pos = bodyRef.current.translation()
+    if (pos.y < KILL_PLANE_Y) {
+      bodyRef.current.setNextKinematicTranslation(SPAWN)
+      verticalVelocity.current = 0
+      return
+    }
 
     const dt = Math.min(delta, MAX_DT)
     const speed = inputState.run ? RUN_SPEED : WALK_SPEED
@@ -96,7 +109,7 @@ export function CharacterController({
       ref={bodyRef}
       type="kinematicPosition"
       colliders={false}
-      position={[0, 3, 5]}
+      position={[SPAWN.x, SPAWN.y, SPAWN.z]}
     >
       {/* Capsule: half-height 0.5, radius 0.4 → total height ~1.8m */}
       <CapsuleCollider ref={colliderRef} args={[0.5, 0.4]} />

@@ -1,5 +1,5 @@
 import { Grid } from '@react-three/drei'
-import { RigidBody } from '@react-three/rapier'
+import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import { Player } from '@/player/Player'
 
 /**
@@ -42,11 +42,17 @@ export function SandboxScene() {
         infiniteGrid
       />
 
-      {/* Floor — fixed rigid body so the player capsule has something to land on.
-          40x1x40 box positioned so its top sits at y=0. */}
-      <RigidBody type="fixed" position={[0, -0.5, 0]} colliders="cuboid">
+      {/* Floor — fixed rigid body. Top of collider sits at y=0 so the player
+          capsule rests on the visible surface.
+
+          Explicit CuboidCollider (half-extents) instead of `colliders="cuboid"`
+          auto-detect — the auto-version has been flaky here. Floor is also
+          made thicker (4 units) than visually needed to defeat any chance of
+          tunneling on big frame drops. */}
+      <RigidBody type="fixed" position={[0, -2, 0]}>
+        <CuboidCollider args={[20, 2, 20]} />
         <mesh receiveShadow>
-          <boxGeometry args={[40, 1, 40]} />
+          <boxGeometry args={[40, 4, 40]} />
           <meshStandardMaterial color="#0a0a0a" roughness={0.9} />
         </mesh>
       </RigidBody>
