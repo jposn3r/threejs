@@ -56,6 +56,38 @@ export default function App() {
         </div>
       )}
 
+      {/* Asset attribution — required by CC-BY-4.0. Will be replaced by a
+          proper Credits panel in settings once we have multiple assets. */}
+      <div className="pointer-events-auto absolute bottom-2 right-2 z-10 select-text text-[10px] text-white/30">
+        env:{' '}
+        <a
+          href="https://sketchfab.com/3d-models/matrix-dojo-replica-b311ef14fc7c4c5ab28ba74176c4ffa6"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-white/60"
+        >
+          Matrix Dojo Replica
+        </a>{' '}
+        by{' '}
+        <a
+          href="https://sketchfab.com/imanboer"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-white/60"
+        >
+          imanboer
+        </a>{' '}
+        ·{' '}
+        <a
+          href="http://creativecommons.org/licenses/by/4.0/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-white/60"
+        >
+          CC-BY-4.0
+        </a>
+      </div>
+
       {/* 3D canvas */}
       <Canvas
         shadows

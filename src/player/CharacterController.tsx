@@ -12,18 +12,12 @@ import { inputState } from '@/input/InputState'
 import { cameraState } from './cameraState'
 import { computeMovement, MAX_DT } from './movement'
 
-// Respawn safety — if the player falls below this y, teleport back to spawn.
-const SPAWN = { x: 0, y: 3, z: 5 }
-const KILL_PLANE_Y = -10
-
-// Hard absolute floor for the sandbox — the capsule's resting center y is
-// 0.9 (half-height 0.5 + radius 0.4 above floor top at y=0). Clamping the
-// next translation against this is a belt-and-suspenders guarantee that the
-// kinematic body cannot end up inside the floor collider, regardless of any
-// bug in the upstream controller. Future scenes with stairs/holes will
-// replace this with proper per-scene collision geometry.
-const FLOOR_CLAMP_Y = 0.9
-const GROUNDED_EPSILON = 0.01
+// Spawn above the dojo's interior floor. Bbox min y=-6 is the exterior/
+// foundation bottom; the interior walking floor is around y=0 in world
+// coords (the model's natural ground level). Spawning at y=2 lets us
+// drop ~2m onto it.
+const SPAWN = { x: 0, y: 2, z: 0 }
+const KILL_PLANE_Y = -30
 
 /**
  * Kinematic character controller.
@@ -56,6 +50,11 @@ export function CharacterController({
     c.setUp({ x: 0, y: 1, z: 0 })
     c.setApplyImpulsesToDynamicBodies(true)
     c.setMaxSlopeClimbAngle((45 * Math.PI) / 180)
+    // Re-enabled for environments with real geometry. Trimesh floors have
+    // tiny seams that snap-to-ground papers over; auto-step lets us climb
+    // small lips/thresholds (doors, raised platforms).
+    c.enableSnapToGround(0.5)
+    c.enableAutostep(0.5, 0.2, true)
     return c
   }, [world])
 
@@ -74,7 +73,9 @@ export function CharacterController({
     }
 
     const dt = Math.min(delta, MAX_DT)
-    const grounded = t.y <= FLOOR_CLAMP_Y + GROUNDED_EPSILON
+    // Use Rapier's grounded flag now that we have real geometry — the
+    // position-based check from the flat sandbox doesn't generalize.
+    const grounded = controller.computedGrounded()
 
     // Pure logic — see movement.ts
     const result = computeMovement(
@@ -101,7 +102,7 @@ export function CharacterController({
 
     bodyRef.current.setNextKinematicTranslation({
       x: t.x + computed.x,
-      y: Math.max(t.y + computed.y, FLOOR_CLAMP_Y),
+      y: t.y + computed.y,
       z: t.z + computed.z,
     })
   })

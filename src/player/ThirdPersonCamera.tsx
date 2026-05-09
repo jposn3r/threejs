@@ -4,8 +4,12 @@ import { Vector3 } from 'three'
 import type { RapierRigidBody } from '@react-three/rapier'
 import { cameraState } from './cameraState'
 
-const FOLLOW_DISTANCE = 7
-const CAMERA_HEIGHT = 2.7 // above player base
+// Closer-in third-person — interior scenes don't have room for 7m behind.
+// Real fix is camera-collision raycast (camera pulls in when a wall is
+// between it and the player); for now, smaller default distance avoids
+// most wall-clipping.
+const FOLLOW_DISTANCE = 4
+const CAMERA_HEIGHT = 2 // above player base
 const LOOK_HEIGHT = 1.2 // chest height target
 const FOLLOW_RESPONSIVENESS = 8 // higher = snappier; lower = laggier
 

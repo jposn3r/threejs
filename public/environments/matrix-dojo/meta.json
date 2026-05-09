@@ -1,0 +1,14 @@
+{
+  "id": "env-matrix-dojo",
+  "type": "environment",
+  "title": "Matrix Dojo Replica",
+  "url": "/environments/matrix-dojo/scene.gltf",
+  "source": "sketchfab",
+  "source_url": "https://sketchfab.com/3d-models/matrix-dojo-replica-b311ef14fc7c4c5ab28ba74176c4ffa6",
+  "author": "imanboer",
+  "author_url": "https://sketchfab.com/imanboer",
+  "license": "CC-BY-4.0",
+  "license_url": "http://creativecommons.org/licenses/by/4.0/",
+  "attribution": "This work is based on \"Matrix Dojo Replica\" (https://sketchfab.com/3d-models/matrix-dojo-replica-b311ef14fc7c4c5ab28ba74176c4ffa6) by imanboer (https://sketchfab.com/imanboer) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+  "original_format": "gltf"
+}

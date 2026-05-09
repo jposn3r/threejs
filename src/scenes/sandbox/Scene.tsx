@@ -1,27 +1,27 @@
-import { Grid } from '@react-three/drei'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import { Player } from '@/player/Player'
+import { MatrixDojo } from './MatrixDojo'
 
 /**
- * Sandbox scene — flat floor + lighting + grid + player.
+ * Sandbox scene — Matrix Dojo environment + player.
  *
- * Temporary playground for Milestone 3. Becomes the basis for the hub
- * scene in M5 once we have rooms/walls/doors.
+ * The dojo provides its own floor + walls geometry (loaded as a trimesh
+ * collider). We keep an invisible safety floor far below in case the
+ * player ever falls off or through (kill-plane respawn handles the
+ * extreme case in CharacterController).
  */
 export function SandboxScene() {
   return (
     <>
-      {/* Background + atmospheric fog. Fog blends distant geometry into
-          the background color so the floor edge doesn't cut off as a hard
-          slab on the horizon when looking up. */}
+      {/* Background + atmospheric fog */}
       <color attach="background" args={['#050505']} />
       <fog attach="fog" args={['#050505', 25, 70]} />
 
       {/* Lighting */}
-      <ambientLight intensity={0.35} />
+      <ambientLight intensity={0.45} />
       <directionalLight
         position={[10, 12, 6]}
-        intensity={1.4}
+        intensity={1.2}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -33,33 +33,31 @@ export function SandboxScene() {
         shadow-camera-bottom={-20}
       />
 
-      {/* Visible grid (no collision — purely visual) */}
-      <Grid
-        position={[0, 0.01, 0]}
-        args={[40, 40]}
-        cellSize={1}
-        cellThickness={0.5}
-        cellColor="#1f2937"
-        sectionSize={5}
-        sectionThickness={1}
-        sectionColor="#10b981"
-        fadeDistance={40}
-        fadeStrength={1}
-        infiniteGrid
-      />
+      {/* The dojo — visual only, no collision (trimesh was too heavy and
+          wedged the player). Walls come back as hand-tuned cuboids once
+          movement is confirmed working. */}
+      <MatrixDojo />
 
-      {/* Floor — fixed rigid body. Top sits at y=0.
+      {/* Floor collider. Top at y=0. */}
+      <RigidBody type="fixed" position={[0, -0.5, 0]}>
+        <CuboidCollider args={[50, 0.5, 50]} />
+      </RigidBody>
 
-          Made very wide (200×200) so the edge is well past the fog's full-
-          opacity distance — you can't see it terminate. Collider matches.
-          Explicit CuboidCollider (half-extents) instead of `colliders=
-          "cuboid"` auto-detect — the auto-version has been flaky. */}
-      <RigidBody type="fixed" position={[0, -2, 0]}>
-        <CuboidCollider args={[100, 2, 100]} />
-        <mesh receiveShadow>
-          <boxGeometry args={[200, 4, 200]} />
-          <meshStandardMaterial color="#0a0a0a" roughness={0.9} />
-        </mesh>
+      {/* Walls + ceiling. Pulled 1.5 units inward from the dojo bbox so the
+          player capsule stops with breathing room before the visible
+          geometry. Interior pillars are walk-through for v0; we'll
+          revisit when the asset pipeline lands per-mesh collision. */}
+      <RigidBody type="fixed">
+        {/* Left wall (-X) */}
+        <CuboidCollider args={[0.5, 6, 13.5]} position={[-17, 6, 0.8]} />
+        {/* Right wall (+X) */}
+        <CuboidCollider args={[0.5, 6, 13.5]} position={[17, 6, 0.8]} />
+        {/* Back wall (-Z) */}
+        <CuboidCollider args={[17, 6, 0.5]} position={[0, 6, -13]} />
+        {/* Front wall (+Z) */}
+        <CuboidCollider args={[17, 6, 0.5]} position={[0, 6, 14.5]} />
+        {/* Ceiling */}
+        <CuboidCollider args={[17, 0.5, 13.5]} position={[0, 12.5, 0.8]} />
       </RigidBody>
 
       <Player />
