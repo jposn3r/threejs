@@ -219,9 +219,9 @@ Each milestone is a shippable checkpoint; v1 = milestone 12.
 2. **Scaffold** — Vite + React + TS + Tailwind + R3F + shadcn + Sentry skeleton
 3. **Player sandbox** — flat floor, placeholder avatar, Rapier capsule, camera, WASD
 4. **Input layer** — keyboard + mouse + gamepad producers; `InputState` abstraction
-5. **Hub scene shell** — basic room, lighting, ambient audio, three door portals
-6. **Scene routing + transitions** — URL-per-scene, fade-to-black, deep linking
-7. **Hangar + Dojo shells** — empty rooms, distinct lighting/music
+5. **Interaction system + hub specimens** — raycast-from-reticle, edge-glow outline on look, "Press E to inspect" prompt, detail view UI with CTA. Placeholder hub specimens (vehicle, weapon) demonstrating the pattern. Replaces the originally planned door-portal navigation — see §8.
+6. **Scene routing + transitions + HUD unlock progression** — URL-per-scene, fade-to-black, deep linking. Detail view CTAs wired to navigate. Visited scenes persist to localStorage and surface as fast-travel icons in a top-right HUD row.
+7. **Hangar + Dojo content scenes** — distinct lighting/music. Each holds a collection of items, each item using the same Interactable + DetailView components from M5.
 8. **Asset infrastructure** — R2 bucket + Worker upload endpoint + manifest schema
 9. **Asset Studio v0** — Cloudflare Access gate, multi-format upload (GLB/GLTF/FBX/OBJ + Sketchfab zip auto-parse for license/source/author), gltf-transform, preview with scale + orientation widgets, manifest write
 10. **First real assets** — onboard placeholder avatar properly + 1-2 showcase models per scene
@@ -232,7 +232,24 @@ Estimated rough sequence — adjust as we go.
 
 ---
 
-## 7. Out of Scope for v1
+## 7. Interaction Model
+
+The hub is a museum/gallery, not a hallway with doors. Each space is gated by a **specimen object** in the hub — a hero vehicle, a hero weapon, etc. Walking up and looking at one triggers an outline glow + "Press E to inspect" prompt. E opens a **detail view** with metadata + an explicit CTA ("Visit the Hangar →") that navigates to the full collection.
+
+Once a scene has been visited, it appears as a fast-travel icon in the HUD's top-right row. Clicking the icon uses the same scene-transition pipeline as the CTA. localStorage persists the unlocked set across sessions; this becomes a real backend at 1.0.
+
+**Why this over door portals:** the project IS a 3D model showcase. Specimen-driven discovery turns the hub into a teaser, makes the player curious *about the models* (the actual product), and reuses the same DetailView component for both single-item inspection and per-item interaction inside the hangar/dojo. Portals would bypass the models entirely.
+
+**Reusable components:**
+- `<Interactable id title description ctaLabel onCTA>` — wraps any mesh, registers it with the interaction system
+- `<RaycastTarget>` — per-frame camera-through-reticle raycast, sets store's `targeted`
+- `<InteractTrigger>` — listens for `inputState.interact`, opens detail view of currently-targeted
+- `<DetailView>` — modal overlay subscribing to the interaction store
+- `useIsTargeted(id)` — hook for interactables to render their own outline when targeted
+
+---
+
+## 8. Out of Scope for v1
 
 - Multiplayer (architected for, not built)
 - User accounts / sign-up
