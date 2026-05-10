@@ -2,8 +2,8 @@ import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import { Player } from '@/player/Player'
 import { InteractTrigger } from '@/interaction/InteractTrigger'
 import { RaycastTarget } from '@/interaction/RaycastTarget'
+import { HubSpecimens } from './HubSpecimens'
 import { MatrixDojo } from './MatrixDojo'
-import { TestSpecimen } from './TestSpecimen'
 
 /**
  * Sandbox scene — Matrix Dojo environment + player.
@@ -69,8 +69,10 @@ export function SandboxScene() {
       <RaycastTarget />
       <InteractTrigger />
 
-      {/* Test interactable — replaced by proper specimens next commit */}
-      <TestSpecimen />
+      {/* Hub specimens — vehicle (left) and weapon (right) on pedestals.
+          Each opens a detail view with a CTA that will navigate to the
+          full collection scene once routing lands in M6. */}
+      <HubSpecimens />
     </>
   )
 }

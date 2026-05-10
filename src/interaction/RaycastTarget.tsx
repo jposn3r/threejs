@@ -4,7 +4,7 @@ import { Raycaster, Vector2, type Object3D } from 'three'
 import { useInteractionStore, type InteractionMetadata } from './store'
 
 const RETICLE = new Vector2(0, 0) // screen-center
-const MAX_DISTANCE = 6 // meters — only target objects you could plausibly walk up to
+const MAX_DISTANCE = 7.2 // meters — far enough to spot specimens from a comfortable distance
 
 /**
  * Per-frame: cast a ray from the camera through the screen-center reticle.
