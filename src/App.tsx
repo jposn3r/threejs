@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Physics } from '@react-three/rapier'
 import { KeyboardProducer } from './input/KeyboardProducer'
@@ -5,10 +6,22 @@ import { MouseProducer } from './input/MouseProducer'
 import { usePointerLock } from './input/usePointerLock'
 import { useInteractionStore } from './interaction/store'
 import { SandboxScene } from './scenes/sandbox/Scene'
+import { DetailView } from './ui/DetailView'
 
 export default function App() {
   const locked = usePointerLock()
   const targeted = useInteractionStore((s) => s.targeted)
+  const detailView = useInteractionStore((s) => s.detailView)
+
+  // Release pointer lock when a modal opens so the cursor can interact with it.
+  useEffect(() => {
+    if (detailView && document.pointerLockElement) {
+      document.exitPointerLock()
+    }
+  }, [detailView])
+
+  // Hide in-game HUD when a modal owns the screen.
+  const showHUD = !detailView
 
   return (
     <div className="relative h-full w-full">
@@ -28,7 +41,7 @@ export default function App() {
       </div>
 
       {/* Pointer-lock CTA — center-bottom, only when not locked */}
-      {!locked && (
+      {showHUD && !locked && (
         <div className="pointer-events-none absolute bottom-8 left-1/2 z-10 -translate-x-1/2 select-none rounded-md border border-accent-500/40 bg-black/60 px-4 py-2 backdrop-blur-md">
           <div className="text-xs uppercase tracking-widest text-accent-400">
             Click to look around
@@ -37,7 +50,7 @@ export default function App() {
       )}
 
       {/* Esc-to-release hint — top-right, only when locked */}
-      {locked && (
+      {showHUD && locked && (
         <div className="pointer-events-none absolute right-4 top-4 z-10 select-none rounded-md border border-white/10 bg-black/40 px-3 py-2 backdrop-blur-md">
           <div className="text-[10px] uppercase tracking-widest text-white/40">
             Esc to release mouse
@@ -46,7 +59,7 @@ export default function App() {
       )}
 
       {/* Reticle — center of screen, only when locked. */}
-      {locked && (
+      {showHUD && locked && (
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
           <div className="relative h-5 w-5">
             {/* Outer ring — slightly brighter when targeting an interactable */}
@@ -64,7 +77,7 @@ export default function App() {
       )}
 
       {/* Interact prompt — below reticle when looking at something interactable */}
-      {locked && targeted && (
+      {showHUD && locked && targeted && (
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 mt-10 -translate-x-1/2 select-none rounded-md border border-accent-500/40 bg-black/60 px-3 py-1.5 backdrop-blur-md">
           <div className="text-[11px] uppercase tracking-widest text-white/80">
             <span className="rounded bg-accent-500/20 px-1.5 py-0.5 font-mono text-accent-300">
@@ -106,6 +119,9 @@ export default function App() {
           CC-BY-4.0
         </a>
       </div>
+
+      {/* Detail view modal — renders only when something is open */}
+      <DetailView />
 
       {/* 3D canvas */}
       <Canvas

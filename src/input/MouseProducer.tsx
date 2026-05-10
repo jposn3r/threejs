@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { cameraState, PITCH_MAX, PITCH_MIN } from '@/player/cameraState'
+import { useInteractionStore } from '@/interaction/store'
 
 // Radians per pixel. ~0.002 lands close to standard FPS feel.
 // Settings slider in M11 will expose this.
@@ -17,6 +18,9 @@ const SENSITIVITY = 0.002
 export function MouseProducer() {
   useEffect(() => {
     const onClick = () => {
+      // Don't relock pointer while a modal owns the screen — clicks should
+      // go to the modal (close button, CTA), not be eaten by pointer lock.
+      if (useInteractionStore.getState().detailView) return
       if (!document.pointerLockElement) {
         const canvas = document.querySelector('canvas')
         canvas?.requestPointerLock()
