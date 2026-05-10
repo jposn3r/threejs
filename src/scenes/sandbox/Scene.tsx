@@ -1,6 +1,9 @@
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import { Player } from '@/player/Player'
+import { InteractTrigger } from '@/interaction/InteractTrigger'
+import { RaycastTarget } from '@/interaction/RaycastTarget'
 import { MatrixDojo } from './MatrixDojo'
+import { TestSpecimen } from './TestSpecimen'
 
 /**
  * Sandbox scene — Matrix Dojo environment + player.
@@ -61,6 +64,13 @@ export function SandboxScene() {
       </RigidBody>
 
       <Player />
+
+      {/* Interaction system — raycast each frame, fire E to open detail */}
+      <RaycastTarget />
+      <InteractTrigger />
+
+      {/* Test interactable — replaced by proper specimens next commit */}
+      <TestSpecimen />
     </>
   )
 }

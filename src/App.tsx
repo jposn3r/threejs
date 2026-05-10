@@ -3,10 +3,12 @@ import { Physics } from '@react-three/rapier'
 import { KeyboardProducer } from './input/KeyboardProducer'
 import { MouseProducer } from './input/MouseProducer'
 import { usePointerLock } from './input/usePointerLock'
+import { useInteractionStore } from './interaction/store'
 import { SandboxScene } from './scenes/sandbox/Scene'
 
 export default function App() {
   const locked = usePointerLock()
+  const targeted = useInteractionStore((s) => s.targeted)
 
   return (
     <div className="relative h-full w-full">
@@ -43,15 +45,32 @@ export default function App() {
         </div>
       )}
 
-      {/* Reticle — center of screen, only when locked. Indicates where the
-          camera is looking; later doubles as the interact target. */}
+      {/* Reticle — center of screen, only when locked. */}
       {locked && (
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
           <div className="relative h-5 w-5">
-            {/* Outer ring */}
-            <div className="absolute inset-0 rounded-full border border-accent-400/40" />
+            {/* Outer ring — slightly brighter when targeting an interactable */}
+            <div
+              className={`absolute inset-0 rounded-full border transition-colors ${
+                targeted
+                  ? 'border-accent-400'
+                  : 'border-accent-400/40'
+              }`}
+            />
             {/* Center dot */}
             <div className="absolute left-1/2 top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-400 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
+          </div>
+        </div>
+      )}
+
+      {/* Interact prompt — below reticle when looking at something interactable */}
+      {locked && targeted && (
+        <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 mt-10 -translate-x-1/2 select-none rounded-md border border-accent-500/40 bg-black/60 px-3 py-1.5 backdrop-blur-md">
+          <div className="text-[11px] uppercase tracking-widest text-white/80">
+            <span className="rounded bg-accent-500/20 px-1.5 py-0.5 font-mono text-accent-300">
+              E
+            </span>{' '}
+            <span className="ml-1 text-accent-400">{targeted.title}</span>
           </div>
         </div>
       )}
