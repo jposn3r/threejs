@@ -1,262 +1,170 @@
-# Metakaizen v1 — Spec
+# Metakaizen v2 — Spec
 
-> A web-first, video-game-style 3D experience to showcase 3D models (characters, vehicles, weapons, environments) and demonstrate performant 3D on the web across desktop, mobile, and VR.
+> A web-first 3D world that looks like you walked into an anime: an Edgerunners-style megacity, explored on foot, where every place you can reach means something. One stop is Jake Posner's professional life; the others are showrooms for his 3D collection.
 
-**Live URL:** metakaizen.com
-**Branch:** `reset` (clean rebuild)
-**Status:** spec locked, ready for build
-
----
-
-## 1. Vision & Experience
-
-You spawn into a **hangout** as your avatar. Walk around. Doors/portals lead to a **hangar** (vehicles, planes, spaceships) and a **dojo** (weapons). Each space is a curated showcase of 3D assets you own. Future: friends join your spaces, users upload their own models, gameplay loops to earn more assets.
-
-### v1 Scope
-
-- Three scenes: **hangout (hub)**, **hangar**, **dojo**
-- Third-person avatar movement (walk / run / jump)
-- VR support (first-person, teleport locomotion)
-- Mobile, desktop, gamepad, VR controls
-- **Asset Studio**: admin tool for diagnosing, processing, and integrating 3D assets
-- 2D HUD with first-visit tooltip
-- Single ambient track per scene + spatial SFX
-
-### Future (post-v1, architected for, not built)
-
-- Multiplayer (host-and-guest rooms via PartyKit)
-- User accounts (Supabase Auth)
-- User-uploaded assets
-- Drivable vehicles
-- Game mechanics to earn assets
-- Facial expressions / lipsync (VRM migration)
+**Live URL:** metakaizen.com (links out to jakeposner.com, which stays on Squarespace)
+**Branch:** `v2-central-station` (off `reset`)
+**Status:** v2 direction locked 2026-09-27; Central Station style test approved as the starting point
 
 ---
 
-## 2. Decisions Locked
+## 1. Story
+
+Metakaizen is a megacity at night. A **traveler** rides the elevated **Metakaizen Line**, a maglev whose every station opens onto a different world. The train ride between stations is the loading screen. When a new zone is built, a new station appears on the line map. That is the *kaizen* in the name: the city visibly keeps improving.
+
+- **The traveler** is the visitor's own character (male anime lead, original design in the Edgerunners mold; see §3).
+- **Jake** appears in the world as the **host**: a character who greets the traveler and tells the story at each landmark.
+- **The transit pass** is the visitor's passport. Every landmark stamps it; it doubles as the map and fast travel. Completing a station's stamps unlocks a reward (contact card, hidden overlook).
+
+### Stations
+
+| # | Station | Zone | Status |
+|---|---|---|---|
+| 01 | **Central** 中央 | Career district: Netflix, Meta Reality Labs, fuboTV, Endeavor, ProjectNightOwl, Ronin Ventures, consulting, Vision Quest broadcast tower | building now |
+| 02 | **Garage** | Vehicle showroom from Jake's collection; drive out into the city (arcade physics, doubles as fast travel) | planned |
+| 03 | **Armory** | Firing range for his firearm + melee models: recoil, FX, sound, reload/combos, touch fire button | planned |
+| 04 | **Lab** | Product inspector: orbit, zoom, explode any product model | planned |
+
+### Rules for the world
+
+1. **No filler.** Everything you can walk to is a destination, an exhibit, or something you can open. The dense skyline is backdrop — unreachable, like a painted matte in an anime.
+2. **Walkable space is elevated**: platforms, bridges, plazas above the streets. The city spreads out below and around.
+3. **Every destination has a URL.** Deep links land directly on it (`/#career`, later `/garage`).
+
+---
+
+## 2. Look
+
+Reference: *Cyberpunk: Edgerunners* backgrounds and interiors (Jake's reference frames live in the session history).
+
+| Element | Rule |
+|---|---|
+| Palette | Deep blue-violet everywhere. Color comes from light sources only: amber and cyan windows, a few screens, rare pink. |
+| Shading | Two-tone cel shading (hard ramp), shadows tinted blue/violet, never black. Rim light on characters and hero props, tinted by area. |
+| Neon | Restrained. Thin accent lines, small shop signs, screens with image content. No thick glowing tubes, no glowing building outlines. Bloom tight and subtle. |
+| Buildings | Assembled from parts: podium + shopfronts, setback tiers, ledges, fins, rooftop clutter, antennas with blinking aviation lights. Windows lit in whole floors and runs, one dominant color per building. |
+| Atmosphere | Moon, blue-lit clouds, layered haze with distance, canal reflections, flying traffic, slow searchlights. |
+| Signage | Original brands only (Vision Quest, 浪 Ronin, 改善 Kaizen, メタカイゼン, invented shops). **No CD Projekt / Edgerunners characters, logos or brands.** |
+
+### Stability rules (non-negotiable)
+
+Procedural patterns must never shimmer when the camera moves:
+
+- Window/pattern masks are **box-filtered with `fwidth()`**; patterns smaller than ~5 px fade to their average.
+- Per-object seeds pass as **`flat` varyings**; hashes are **sine-free** (Hoskins).
+- **No animated film grain** or other per-frame noise in post.
+
+---
+
+## 3. Decisions Locked
 
 | # | Area | Decision |
 |---|---|---|
-| 1 | Perspective | 3rd-person desktop/mobile, 1st-person VR, hybrid camera moments for inspection |
-| 2 | Stack | **React Three Fiber + TypeScript** |
-| 3 | Physics | **Rapier** kinematic character controller; capsule; auto-gen colliders; walk/run/jump |
-| 4 | Avatars | **Mixamo humanoid** (GLB); placeholder character to start; humanoid-only players in v1; no facial/lipsync v1; `Avatar` abstraction allows VRM swap later |
-| 5 | Asset hosting | **Cloudflare R2 + CDN**; clean slate from old S3; Meshopt + KTX2 compression; JSON manifest catalog; migrate to Supabase later |
-| 6 | World structure | **Hub-and-spoke + URL-per-scene**; fade-to-black transitions; deep links land straight in; first-visit HUD tooltip in localStorage |
-| 7 | Input | Single `InputState` abstraction; teleport + snap-turn VR; floating left-joystick + drag-to-look mobile; pointer-lock desktop; auto-detect device glyphs; **Fortnite-style lazy-follow camera** |
-| 8 | UI | **Tailwind + shadcn/ui + Framer Motion**; dark glass HUD aesthetic (Cyberpunk 2077 menus); green accent (swappable); **Space Grotesk** display font; **Lucide** icons |
-| 9 | Performance | iPhone 11+ / Pixel 5+ floor; auto quality tiers + Lite-mode fallback; 60 fps desktop/mobile, 30 floor, **90 mandatory in VR**; bloom + tone mapping always; SSAO on High; nothing in VR; dev budget HUD |
-| 10 | Multiplayer hooks | `EntityStore` + `Transport` interface (LocalTransport v1, NetworkTransport later); **Zustand** for state; client-auth movement, server-auth room state; host-and-guest model; **PartyKit** flagged as future networking |
-| 11 | Identity | **Cloudflare Access** for Asset Studio; anonymous device UUID + skippable display name in localStorage ("Wanderer-XXXX" default); Supabase Auth as future migration |
-| 12 | Hosting & pipeline | **Migrate Amplify → Cloudflare Pages + Workers**; manifest as JSON in R2 with versioning; **client-side `gltf-transform` (WASM)** processing in Asset Studio; Pages auto-deploy + GitHub Actions for typecheck/lint |
-| 13 | Audio | drei `<PositionalAudio>` + `<Audio>`; one ambient track per scene; master + per-channel volume; unmuted at 20% on first visit; OGG Vorbis |
-| 14 | Observability | **Sentry** (errors + perf + replays); **Cloudflare Web Analytics** (no cookies); localStorage-only persistence v1; Asset Studio writes straight to manifest in R2 |
+| 1 | Stack | React Three Fiber + TypeScript + Vite; zustand for app state; mutable singletons for per-frame state |
+| 2 | Physics | Rapier kinematic character controller (capsule). Colliders come from each zone's layout data. |
+| 3 | Characters | **VRM** (`@pixiv/three-vrm`, MToon anime shading). Traveler: male anime lead, original design, built in VRoid Studio. Host: stylized Jake, built the same way. Female pixiv sample is a temporary stand-in. |
+| 4 | Animation | Procedural walk/run/idle on the normalized humanoid rig now; Mixamo/VRMA clips later. |
+| 5 | Camera | Third-person orbit (yaw, pitch, zoom), lazy follow, per-zone ceiling clamp. |
+| 6 | Input | One `InputState`. Desktop: WASD/arrows, Shift run, drag to look, click to walk, scroll zoom, E interact. Touch: floating left joystick, drag to look, tap to walk / tap a landmark to walk there and open it. Gamepad + XR producers later. |
+| 7 | Interaction | Proximity prompts (walk up → "E / TAP · Open …") plus tap-to-open on landmark meshes. Tap routes through the zone's walkable graph. |
+| 8 | Zones | Registry of zones; one active zone scene at a time; per-zone lazy loading; train-ride transition between zones. |
+| 9 | City | Pure TypeScript builders produce merged geometry (a few draw calls): parts kit, canal layout, megastructures, far instanced skyline, screens, water, haze. R3F only mounts the result. |
+| 10 | Rendering | Tone mapping: Neutral. Post: bloom (tight) → grade (saturation, blue shadow lift, vignette, slight chromatic aberration) → output. Quality tiers: **High** (DPR ≤ 2, MSAA 4, canal reflections) / **Balanced** (DPR ≤ 1.5, fake water). Auto-picks Balanced on touch devices; remembered per device. |
+| 11 | UI | Tailwind. Angular clip-corner glass panels, CP-yellow `#fcee0a` accent + cyan. Fonts: Chakra Petch (display), IBM Plex Mono (data), Noto Sans JP (subset, signage). HUD: line tag + location chip, prompt, pass, photo mode (H), quality/FPS. |
+| 12 | Content | Typed content modules in `src/content/` — the single source for 3D panels and the future 2D classic view. Vision Quest editions pulled from its RSS later. |
+| 13 | Persistence | localStorage only (pass stamps, quality, settings). Multiplayer later behind an `EntityStore`/`Transport` seam. |
+| 14 | Hosting | Cloudflare Workers static assets (`wrangler.toml`), wrangler pinned **exactly** (4.30.0) — later versions demand `@cloudflare/vite-plugin` + Vite 6. Model files move to R2 when the asset pipeline lands. |
+| 15 | VR | Architected for (input, in-world panels, 72–90 fps budget); shipped after the first launch. |
 
 ---
 
-## 3. Architecture Skeleton
+## 4. Architecture
 
 ```
-metakaizen/
-├── src/
-│   ├── app/                    # App shell, router, providers
-│   │   ├── App.tsx
-│   │   ├── routes.tsx          # / (hub), /hangar, /dojo, /studio
-│   │   └── providers.tsx       # R3F, Sentry, Auth, Audio
-│   ├── core/
-│   │   ├── EntityStore.ts      # Zustand store; player + future remote entities
-│   │   ├── Transport.ts        # interface; LocalTransport v1
-│   │   ├── AssetCatalog.ts     # reads manifest.json from R2
-│   │   ├── AssetLoader.ts      # GLTFLoader + Meshopt + KTX2 decoders
-│   │   ├── DisposalRegistry.ts # tracks GPU resources for clean teardown
-│   │   ├── SceneManager.ts     # mount/unmount, transition coordinator
-│   │   └── QualityTier.ts      # auto-detect + override
-│   ├── input/
-│   │   ├── InputState.ts       # the shared abstraction
-│   │   ├── KeyboardProducer.ts
-│   │   ├── MouseProducer.ts
-│   │   ├── TouchProducer.ts    # @use-gesture
-│   │   ├── GamepadProducer.ts
-│   │   └── XRProducer.ts
-│   ├── player/
-│   │   ├── Avatar.tsx          # interface + Mixamo implementation
-│   │   ├── CharacterController.tsx  # Rapier kinematic, reads InputState
-│   │   ├── ThirdPersonCamera.tsx    # Fortnite lazy-follow
-│   │   └── animations/         # mixamo glb refs + name registry
-│   ├── scenes/
-│   │   ├── hub/
-│   │   ├── hangar/
-│   │   └── dojo/
-│   │       └── each: Scene.tsx, lighting.tsx, props.tsx, audio.ts
-│   ├── components/             # reusable 3D
-│   │   ├── Portal.tsx
-│   │   ├── ShowcasePedestal.tsx
-│   │   └── StarField.tsx       # salvaged from old MetaScene
-│   ├── ui/                     # 2D React UI
-│   │   ├── HUD.tsx
-│   │   ├── Settings.tsx
-│   │   ├── FirstVisitTooltip.tsx
-│   │   ├── InputGlyph.tsx
-│   │   ├── MobileControls.tsx
-│   │   └── primitives/         # shadcn copies
-│   ├── studio/                 # Asset Studio (admin)
-│   │   ├── StudioApp.tsx
-│   │   ├── Uploader.tsx        # gltf-transform WASM
-│   │   ├── Inspector.tsx       # rig + animations + metadata
-│   │   ├── Preview.tsx         # 3D viewer with animation playback
-│   │   └── ManifestEditor.tsx
-│   ├── audio/
-│   │   ├── AudioBus.ts         # master + channels
-│   │   └── tracks.ts           # per-scene refs
-│   └── lib/
-│       ├── deviceUUID.ts
-│       └── env.ts
-├── public/
-│   ├── placeholder-avatar.glb
-│   └── animations/             # mixamo glbs (idle, walk, run, jump_*)
-├── functions/                  # Cloudflare Workers
-│   └── upload.ts               # signed PUT URL for R2
-├── SPEC.md                     # this file
-├── README.md
-├── package.json
-├── tsconfig.json
-├── tailwind.config.ts
-├── vite.config.ts
-└── wrangler.toml               # Cloudflare config
+src/
+  app/            App shell, HUD, panels, loader, photo mode
+  zones/          zone registry + one folder per station
+    central/      station layout, walkable graph, interactables, panels
+  city/           parts kit, buildings, canal city layout, megastructures,
+                  far skyline, screens, water, haze  (pure TS → THREE objects)
+  render/         cel/rim materials, window shaders, sky, post stack, quality
+  player/         traveler controller, VRM avatar + procedural animation,
+                  third-person camera, movement math (+ tests)
+  input/          InputState + keyboard, pointer (mouse/touch/joystick) producers
+  interaction/    proximity targeting, tap routing, detail panel store
+  content/        career, Vision Quest, stations, signage copy
+  lib/            seeded RNG, storage helpers
+public/models/    traveler.vrm (temporary; moves to R2)
 ```
 
-### Key abstractions to honor
+### Seams to honor
 
-- **`Avatar` interface** — swap Mixamo → VRM later by implementing the same shape
-- **`Transport` interface** — swap Local → PartyKit later
-- **`AssetCatalog` interface** — swap R2-JSON → Supabase later
-- **`InputProducer` interface** — every device source plugs in cleanly
-
-These four are the seams that keep "expedite v1" and "scale to north star" both true.
+- **Zone** — `{ id, name, route, build(), walkable, interactables, spawn }`. Adding a station = adding a folder + a registry line.
+- **Avatar** — VRM today; anything with the same `update(dt, motion)` shape later.
+- **InputProducer** — each device writes to `InputState`; nothing reads devices directly.
+- **Transport / EntityStore** — local now, networked later.
+- **AssetCatalog** — manifest-driven model loading when R2 lands.
 
 ---
 
-## 4. Asset Pipeline
+## 5. Asset Pipeline
 
-### Sources
+Jake's 3D inventory (pop-culture avatars, vehicles, firearms, melee weapons) lives in S3 + Dropbox today. S3 stays the source archive; processed copies are served from **Cloudflare R2**.
 
-Primary intake is **third-party marketplaces** (Sketchfab, CGTrader, Quaternius, KayKit, Poly Pizza). Authoring in Blender supported but not required.
-
-**Sketchfab zip ingestion (v1):** Studio accepts the raw `.zip` from a Sketchfab download. It auto-parses bundled `license.txt` / `source.txt` to pre-fill `license`, `source_url`, and `author` in the metadata form. User reviews + confirms before upload. Same logic generalizes to other marketplaces' bundle formats over time.
-
-### Supported input formats
-
-| Format | Pipeline |
-|---|---|
-| **GLB** | direct → `gltf-transform` |
-| **GLTF + buffers** | direct → `gltf-transform` |
-| **FBX** | Three.js `FBXLoader` → `GLTFExporter` → GLB → `gltf-transform` |
-| **OBJ** | `OBJLoader` → `GLTFExporter` → GLB → `gltf-transform` (static only — no rigs) |
-
-### Authoring → live flow
-
-1. Source asset (Sketchfab download, etc.) or author in Blender
-2. Open Asset Studio (`/studio`, behind Cloudflare Access)
-3. Drag-and-drop GLB / GLTF / FBX / OBJ → Studio normalizes to GLB if needed
-4. Studio inspects: rig type, animations, vertex count, draw calls, texture count, materials (flags non-PBR), file size
-5. Preview with animation playback + **scale slider** + **orientation widget** (sketchfab assets vary wildly here; chosen transform bakes into manifest)
-6. Fill license metadata: `license`, `author`, `source_url` (required for attribution; CC-BY etc.)
-7. Click **Process & Upload** → `gltf-transform` runs Meshopt + KTX2 in-browser
-8. Optimized GLB uploads to R2 via signed PUT URL from a Worker
-9. Manifest entry created/updated in R2 (`manifest.json`)
-10. Public app picks it up on next load (CDN-cached, edge TTL ~1h)
-
-### Manifest schema (v1 sketch)
+Processing per model: normalize to GLB → Meshopt geometry + KTX2 textures (`gltf-transform`) → LODs → manifest entry. Every entry records **license, author, source URL** so items can be hidden from public view if their license doesn't allow it. Asset Studio (v1 plan: Cloudflare Access-gated uploader with Sketchfab zip parsing, preview, scale/orientation widgets) remains the long-term tool.
 
 ```ts
 type AssetEntry = {
-  id: string                   // 'avatar-cyberpunk-01'
-  type: 'character' | 'vehicle' | 'weapon' | 'environment' | 'prop'
-  url: string                  // R2 public URL (processed GLB)
+  id: string
+  type: 'character' | 'vehicle' | 'weapon' | 'environment' | 'prop' | 'product'
+  url: string
   size_bytes: number
   triangles: number
   draw_calls: number
   textures: number
-  rig?: 'mixamo' | 'vrm' | 'none'
-  animations: string[]         // ['idle', 'walk', ...]
-  scenes: string[]             // ['hangar', 'dojo'] - which scenes showcase this
-  default_transform?: { position, rotation, scale }  // baked from Studio
+  rig?: 'vrm' | 'mixamo' | 'none'
+  animations: string[]
+  zones: string[]                 // 'garage' | 'armory' | 'lab' | 'central'
+  default_transform?: { position: number[]; rotation: number[]; scale: number }
   tags: string[]
+  source: string
+  source_url?: string
+  author?: string
+  license: string
+  public: boolean                 // false = owner-only
   uploaded_at: string
-
-  // Source & licensing (required — attribution & legal)
-  source: 'sketchfab' | 'cgtrader' | 'quaternius' | 'kaykit' | 'poly-pizza' | 'blender' | 'mixamo' | 'other'
-  source_url?: string          // link back to original (Sketchfab page, etc.)
-  author?: string              // original creator
-  license: string              // 'CC-BY-4.0' | 'CC0' | 'royalty-free' | 'sketchfab-standard' | etc.
-  original_format: 'glb' | 'gltf' | 'fbx' | 'obj'
 }
-
-type Manifest = { version: number; assets: AssetEntry[] }
 ```
 
 ---
 
-## 5. Performance Budgets
+## 6. Performance Budgets
 
-| Scene | Triangles | Draw calls | Lights | Texture mem |
-|---|---|---|---|---|
-| Hub (hangout) | 100k | 30 | 3-4 | 80 MB |
-| Hangar | 200k | 50 | 4-6 | 150 MB |
-| Dojo | 80k | 30 | 3-4 | 80 MB |
+| Zone | Draw calls | Triangles | Page weight (first load) |
+|---|---|---|---|
+| Central (station + city) | ≤ 150 | ≤ 400k | ≤ 10 MB incl. avatar |
+| Showroom zones | ≤ 120 | ≤ 500k | streamed per model |
 
-**Frame rates:** 60 desktop/mobile, 30 floor, **90 VR mandatory**
-
-**Asset Studio enforces** — uploads show "% of scene budget consumed" at upload time.
+60 fps desktop and recent phones, 30 fps floor; 72–90 in VR when it ships. City geometry is merged into ~3 draw calls; far skyline is one instanced draw.
 
 ---
 
-## 6. Build Order (Milestones)
+## 7. Build Order
 
-Each milestone is a shippable checkpoint; v1 = milestone 12.
-
-1. **Hosting cutover** — DNS + CF Pages + disable Amplify
-2. **Scaffold** — Vite + React + TS + Tailwind + R3F + shadcn + Sentry skeleton
-3. **Player sandbox** — flat floor, placeholder avatar, Rapier capsule, camera, WASD
-4. **Input layer** — keyboard + mouse + gamepad producers; `InputState` abstraction
-5. **Interaction system + hub specimens** — raycast-from-reticle, edge-glow outline on look, "Press E to inspect" prompt, detail view UI with CTA. Placeholder hub specimens (vehicle, weapon) demonstrating the pattern. Replaces the originally planned door-portal navigation — see §8.
-6. **Scene routing + transitions + HUD unlock progression** — URL-per-scene, fade-to-black, deep linking. Detail view CTAs wired to navigate. Visited scenes persist to localStorage and surface as fast-travel icons in a top-right HUD row.
-7. **Hangar + Dojo content scenes** — distinct lighting/music. Each holds a collection of items, each item using the same Interactable + DetailView components from M5.
-8. **Asset infrastructure** — R2 bucket + Worker upload endpoint + manifest schema
-9. **Asset Studio v0** — Cloudflare Access gate, multi-format upload (GLB/GLTF/FBX/OBJ + Sketchfab zip auto-parse for license/source/author), gltf-transform, preview with scale + orientation widgets, manifest write
-10. **First real assets** — onboard placeholder avatar properly + 1-2 showcase models per scene
-11. **Mobile controls + UI polish** — floating joystick, settings panel, first-visit tooltip, glyphs
-12. **VR hookup + ship v1** — `@react-three/xr`, teleport locomotion, VR-tier perf, Sentry + Analytics live
-
-Estimated rough sequence — adjust as we go.
+1. **Foundation** *(this branch)* — spec, repo cleanup, pinned deps; port Central Station from the approved prototype into the app: render layer, city, station, VRM traveler, touch + desktop input, proximity/tap interaction, panels from content modules, transit pass, deep links, photo mode, quality tiers.
+2. **Traveler + host** — male traveler in VRoid; Jake as host NPC with dialogue at landmarks; Mixamo/VRMA animation clips.
+3. **Career district** — step through the Central gate into a district scene with one landmark per chapter; 2D classic view generated from the same content.
+4. **Metakaizen Line** — train-ride transition, line map, zone registry routing; sealed stations visible.
+5. **Asset pipeline** — R2, processing script, manifest, license gating.
+6. **Garage** → 7. **Armory** → 8. **Lab**.
+9. **Audio** — ambient city bed, footsteps, UI sounds; opt-in, remembered.
+10. **VR** — WebXR mode on Quest.
 
 ---
 
-## 7. Interaction Model
+## 8. Out of Scope (for now)
 
-The hub is a museum/gallery, not a hallway with doors. Each space is gated by a **specimen object** in the hub — a hero vehicle, a hero weapon, etc. Walking up and looking at one triggers an outline glow + "Press E to inspect" prompt. E opens a **detail view** with metadata + an explicit CTA ("Visit the Hangar →") that navigates to the full collection.
-
-Once a scene has been visited, it appears as a fast-travel icon in the HUD's top-right row. Clicking the icon uses the same scene-transition pipeline as the CTA. localStorage persists the unlocked set across sessions; this becomes a real backend at 1.0.
-
-**Why this over door portals:** the project IS a 3D model showcase. Specimen-driven discovery turns the hub into a teaser, makes the player curious *about the models* (the actual product), and reuses the same DetailView component for both single-item inspection and per-item interaction inside the hangar/dojo. Portals would bypass the models entirely.
-
-**Reusable components:**
-- `<Interactable id title description ctaLabel onCTA>` — wraps any mesh, registers it with the interaction system
-- `<RaycastTarget>` — per-frame camera-through-reticle raycast, sets store's `targeted`
-- `<InteractTrigger>` — listens for `inputState.interact`, opens detail view of currently-targeted
-- `<DetailView>` — modal overlay subscribing to the interaction store
-- `useIsTargeted(id)` — hook for interactables to render their own outline when targeted
-
----
-
-## 8. Out of Scope for v1
-
-- Multiplayer (architected for, not built)
-- User accounts / sign-up
-- User-uploaded assets (only owner uploads via Asset Studio)
-- Drivable vehicles
-- Game mechanics / progression
-- Facial expressions / lipsync
-- VRM avatar support (Mixamo only)
-- Internationalization
-- Save game state beyond localStorage
+- Multiplayer (seam only)
+- Accounts, user uploads
+- Moving jakeposner.com off Squarespace or any DNS changes
+- Using CD Projekt / Edgerunners IP (style inspiration only)
