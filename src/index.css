@@ -7,12 +7,65 @@ body,
 #root {
   height: 100%;
   margin: 0;
-  background: #050505;
-  color: white;
+  overflow: hidden;
+  background: theme('colors.ink.DEFAULT');
+  color: theme('colors.ink.text');
   overscroll-behavior: none;
 }
 
 body {
   font-family: theme('fontFamily.display');
   -webkit-font-smoothing: antialiased;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid theme('colors.neon.yellow');
+  outline-offset: 2px;
+}
+
+@layer components {
+  /* Angular cut-corner silhouette used by every HUD surface. */
+  .cut {
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .chip {
+    background: theme('colors.ink.glass');
+    border: 1px solid rgba(63, 242, 255, 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .hud-btn {
+    @apply inline-flex items-center gap-1.5 px-3 py-[7px] text-[11px] font-semibold tracking-[0.08em];
+  }
+  .kbd {
+    @apply border border-neon-yellow/55 px-[5px] py-0.5 font-mono text-[10.5px] leading-none text-neon-yellow;
+  }
+  .panel {
+    @apply border border-neon-cyan/35 bg-[rgba(9,12,36,0.9)] px-[22px] pb-5 pt-10 backdrop-blur-md;
+  }
+  .panel-title {
+    @apply mb-1 mt-1 text-[28px] font-semibold leading-tight;
+    text-wrap: balance;
+  }
+  .panel-lede {
+    @apply mb-4 font-mono text-[12.5px] leading-relaxed text-ink-muted;
+  }
+  .cta {
+    @apply inline-flex items-center gap-2 bg-neon-yellow px-3.5 py-[9px] text-sm font-semibold tracking-wide text-ink no-underline;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  }
+  .cta-ghost {
+    @apply border border-ink-text/30 bg-transparent text-ink-text;
+  }
+  .stamp {
+    @apply grid aspect-square place-items-center border-[1.5px] border-dashed border-ink-muted/35 p-2 text-center font-mono text-[11px] text-ink-muted;
+  }
+  .stamp-on {
+    @apply border-2 border-solid border-neon-magenta text-ink-text;
+    background: radial-gradient(circle, rgba(255, 63, 164, 0.18), transparent 70%);
+  }
 }

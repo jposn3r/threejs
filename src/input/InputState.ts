@@ -1,33 +1,33 @@
 /**
- * Single shared input state. Multiple producers (keyboard, mouse, touch,
- * gamepad, XR) write to it; consumers (character controller, camera) read
- * from it each frame via `useFrame`.
+ * Single shared input state. Producers (keyboard, pointer/touch, later
+ * gamepad and XR) write to it; consumers (traveler, camera, tap router)
+ * read it every frame in useFrame.
  *
- * This is intentionally a mutable singleton, not a Zustand store — input
- * is read every frame in the render loop, and we don't want React renders
- * on every keypress.
- *
- * See SPEC.md §2 row 7 for the full multi-device contract.
+ * Intentionally a mutable singleton, not a store: input is read every frame
+ * and must never cause React renders.
  */
 import { Vector2 } from 'three'
 
 export interface InputState {
-  /** Movement intent on the camera-relative plane. -1..1 each axis, magnitude ≤ 1. */
+  /** Camera-relative movement intent. y = −1 is forward. Magnitude ≤ 1. */
   move: Vector2
-  /** Look intent (camera rotation). -1..1 each axis. */
-  look: Vector2
-  /** Edge-triggered: true on the frame jump is requested; consumers reset to false. */
+  /** Edge-triggered: consumers reset to false. */
   jump: boolean
-  /** Held: true while sprint key is down. */
+  /** Held. */
   run: boolean
-  /** Edge-triggered: true on the frame interact is requested; consumers reset to false. */
+  /** Edge-triggered: consumers reset to false. */
   interact: boolean
+  /** Accumulated zoom (wheel delta units); the camera consumes and zeroes it. */
+  zoom: number
+  /** Screen-space taps/clicks (CSS px) waiting for the tap router. */
+  taps: { x: number; y: number }[]
 }
 
 export const inputState: InputState = {
   move: new Vector2(),
-  look: new Vector2(),
   jump: false,
   run: false,
   interact: false,
+  zoom: 0,
+  taps: [],
 }

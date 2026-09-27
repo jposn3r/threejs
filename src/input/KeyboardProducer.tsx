@@ -1,5 +1,8 @@
 import { useEffect } from 'react'
+import { clearRoute } from '@/player/playerState'
 import { inputState } from './InputState'
+
+const MOVE_KEYS = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'])
 
 /**
  * Keyboard input producer. Mounts window listeners and writes to inputState.
@@ -8,7 +11,7 @@ import { inputState } from './InputState'
  *  - WASD / Arrow keys → move
  *  - Space             → jump (edge-triggered)
  *  - Shift             → run (held)
- *  - E                 → interact (edge-triggered)
+ *  - E / Enter         → interact (edge-triggered)
  *
  * Renders nothing. Drop one instance somewhere in the tree.
  */
@@ -33,9 +36,11 @@ export function KeyboardProducer() {
       // Ignore key-repeat — edge triggers fire once per physical press
       if (e.repeat) return
       if (e.code === 'Space') inputState.jump = true
-      if (e.code === 'KeyE') inputState.interact = true
+      if (e.code === 'KeyE' || e.code === 'Enter') inputState.interact = true
       keys.add(e.code)
       updateMoveAndRun()
+      // Steering by hand cancels any tap-to-walk route in progress.
+      if (MOVE_KEYS.has(e.code)) clearRoute()
     }
 
     const onUp = (e: KeyboardEvent) => {

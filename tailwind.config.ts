@@ -5,29 +5,24 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+        display: ['"Chakra Petch"', 'Rajdhani', '"Segoe UI"', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', '"Cascadia Mono"', 'Consolas', 'monospace'],
+        jp: ['"Noto Sans JP"', '"Yu Gothic"', '"Hiragino Sans"', 'sans-serif'],
       },
       colors: {
-        // Primary accent — green for now, swappable later (see SPEC.md §2 row 8)
-        accent: {
-          50: '#ecfdf5',
-          100: '#d1fae5',
-          200: '#a7f3d0',
-          300: '#6ee7b7',
-          400: '#34d399',
-          500: '#10b981',
-          600: '#059669',
-          700: '#047857',
-          800: '#065f46',
-          900: '#064e3b',
-          950: '#022c22',
-          DEFAULT: '#10b981',
-        },
-        // Dark glass HUD palette
+        // Night palette (SPEC §2). Neon is for small accents only.
         ink: {
-          DEFAULT: '#050505',
-          subtle: '#0a0a0a',
-          muted: '#171717',
+          DEFAULT: '#070a1f',
+          glass: 'rgba(10, 14, 40, 0.66)',
+          text: '#eaf4ff',
+          muted: '#9fb0d8',
+        },
+        neon: {
+          yellow: '#fcee0a',
+          cyan: '#3ff2ff',
+          magenta: '#ff3fa4',
+          mint: '#3dffc0',
+          lime: '#b8ff3c',
         },
       },
     },

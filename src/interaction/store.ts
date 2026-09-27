@@ -1,40 +1,42 @@
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 /**
- * Metadata that travels with an interactable, displayed in the detail
- * view when E is pressed.
+ * Interaction state: what's close enough to use, and which panel is open.
+ * Panels are identified by id; the zone's panel registry renders them.
  */
-export interface InteractionMetadata {
-  id: string
-  title: string
-  description: string
-  /** Optional CTA shown in the detail view. */
-  ctaLabel?: string
-  /** Fired when the CTA is clicked. M5 logs to console; M6 wires navigation. */
-  onCTA?: () => void
-}
-
 interface InteractionStore {
-  /** Currently targeted (look-at) interactable, or null. Set by RaycastTarget. */
-  targeted: InteractionMetadata | null
-  setTargeted: (m: InteractionMetadata | null) => void
-
-  /** Whatever is currently open in the detail view, or null. */
-  detailView: InteractionMetadata | null
-  openDetailView: (m: InteractionMetadata) => void
-  closeDetailView: () => void
+  /** Interactable in range of the traveler, or null. Set by <Proximity />. */
+  nearby: string | null
+  setNearby: (id: string | null) => void
+  /** Open panel id, or null. */
+  panel: string | null
+  openPanel: (id: string) => void
+  closePanel: () => void
 }
 
-export const useInteractionStore = create<InteractionStore>((set) => ({
-  targeted: null,
-  setTargeted: (m) => set({ targeted: m }),
-
-  detailView: null,
-  openDetailView: (m) => set({ detailView: m }),
-  closeDetailView: () => set({ detailView: null }),
+export const useInteraction = create<InteractionStore>((set) => ({
+  nearby: null,
+  setNearby: (nearby) => set({ nearby }),
+  panel: null,
+  openPanel: (panel) => set({ panel }),
+  closePanel: () => set({ panel: null }),
 }))
 
-/** Hook for interactable components to know if they should render the outline. */
-export function useIsTargeted(id: string): boolean {
-  return useInteractionStore((s) => s.targeted?.id === id)
+/** Transit pass: stamps collected by visiting landmarks. Saved on this device. */
+interface PassStore {
+  stamps: Record<string, number>
+  stamp: (id: string) => void
 }
+
+export const usePass = create<PassStore>()(
+  persist(
+    (set, get) => ({
+      stamps: {},
+      stamp: (id) => {
+        if (!get().stamps[id]) set({ stamps: { ...get().stamps, [id]: Date.now() } })
+      },
+    }),
+    { name: 'mk-pass', storage: createJSONStorage(() => localStorage) },
+  ),
+)
